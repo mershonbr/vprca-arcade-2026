@@ -7,235 +7,216 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #0a0a0f; --surface: #12121c; --surface2: #1a1a28; --border: #2a2a44;
-      --pink: #ff2d78; --cyan: #00f5ff; --yellow: #ffe600; --purple: #b44fff;
-      --green: #00ff88; --gold: #ffd700; --silver: #c0c0c0; --bronze: #cd7f32;
-      --text: #e8e8f0; --muted: #7070a0;
-      --font-mono: 'Courier New', monospace;
-      --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      --radius: 10px;
+      --bg:#0a0a0f; --surface:#12121c; --surface2:#1a1a28; --border:#2a2a44;
+      --pink:#ff2d78; --cyan:#00f5ff; --yellow:#ffe600; --purple:#b44fff;
+      --green:#00ff88; --gold:#ffd700; --silver:#c0c0c0; --bronze:#cd7f32;
+      --text:#e8e8f0; --muted:#7070a0;
+      --mono:'Courier New',monospace; --body:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      --r:10px;
     }
-    html { font-size: 16px; }
-    body { background: var(--bg); color: var(--text); font-family: var(--font-body); min-height: 100dvh; padding-bottom: 3rem; }
-    body::before { content: ""; position: fixed; inset: 0; background: repeating-linear-gradient(to bottom, transparent 0px, transparent 3px, rgba(0,0,0,.15) 3px, rgba(0,0,0,.15) 4px); pointer-events: none; z-index: 1000; }
+    html{font-size:16px;}
+    body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:100dvh;padding-bottom:3rem;}
+    body::before{content:"";position:fixed;inset:0;background:repeating-linear-gradient(to bottom,transparent 0px,transparent 3px,rgba(0,0,0,.15) 3px,rgba(0,0,0,.15) 4px);pointer-events:none;z-index:1000;}
 
-    /* ── Header ── */
-    header { background: linear-gradient(160deg,#0d0d1a,#12122a); border-bottom: 2px solid var(--pink); padding: 1.2rem 1rem 1rem; text-align: center; box-shadow: 0 0 20px rgba(255,45,120,.3); }
-    .eyebrow { font-family: var(--font-mono); font-size: .6rem; letter-spacing: .25em; color: var(--cyan); text-transform: uppercase; margin-bottom: .4rem; }
-    .title { font-family: var(--font-mono); font-size: clamp(1.4rem,5.5vw,2rem); font-weight: 700; letter-spacing: .06em; text-transform: uppercase; line-height: 1.1; text-shadow: -2px 0 var(--pink), 2px 0 var(--cyan), 0 0 20px rgba(255,255,255,.2); }
-    .subtitle { margin-top: .5rem; font-family: var(--font-mono); font-size: .65rem; letter-spacing: .15em; color: var(--yellow); text-transform: uppercase; }
+    header{background:linear-gradient(160deg,#0d0d1a,#12122a);border-bottom:2px solid var(--pink);padding:1.2rem 1rem 1rem;text-align:center;box-shadow:0 0 20px rgba(255,45,120,.3);}
+    .eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.25em;color:var(--cyan);text-transform:uppercase;margin-bottom:.4rem;}
+    .app-title{font-family:var(--mono);font-size:clamp(1.4rem,5.5vw,2rem);font-weight:700;letter-spacing:.06em;text-transform:uppercase;line-height:1.1;text-shadow:-2px 0 var(--pink),2px 0 var(--cyan),0 0 20px rgba(255,255,255,.2);}
+    .subtitle{margin-top:.5rem;font-family:var(--mono);font-size:.65rem;letter-spacing:.15em;color:var(--yellow);text-transform:uppercase;}
 
-    /* ── Nav tabs ── */
-    .nav { display: flex; border-bottom: 1px solid var(--border); background: var(--surface); overflow-x: auto; }
-    .nav-btn { flex: 1; min-width: 70px; padding: .7rem .4rem; border: none; background: none; color: var(--muted); font-family: var(--font-mono); font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; cursor: pointer; border-bottom: 2px solid transparent; transition: all .15s; white-space: nowrap; }
-    .nav-btn.active { color: var(--cyan); border-bottom-color: var(--cyan); }
-    .nav-btn:hover:not(.active) { color: var(--text); }
+    .nav{display:flex;border-bottom:1px solid var(--border);background:var(--surface);overflow-x:auto;}
+    .nav-btn{flex:1;min-width:70px;padding:.7rem .4rem;border:none;background:none;color:var(--muted);font-family:var(--mono);font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap;}
+    .nav-btn.active{color:var(--cyan);border-bottom-color:var(--cyan);}
 
-    /* ── Screens ── */
-    .screen { display: none; max-width: 500px; margin: 0 auto; padding: 1rem; }
-    .screen.active { display: block; }
+    .screen{display:none;max-width:500px;margin:0 auto;padding:1rem;}
+    .screen.active{display:block;}
 
-    /* ── Cards ── */
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 1rem; overflow: hidden; }
-    .card-header { background: var(--surface2); border-bottom: 1px solid var(--border); padding: .7rem 1rem; display: flex; align-items: center; gap: .6rem; }
-    .card-icon { font-size: 1rem; }
-    .card-title { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .15em; text-transform: uppercase; color: var(--cyan); }
-    .card-body { padding: 1rem; display: flex; flex-direction: column; gap: .9rem; }
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin-bottom:1rem;overflow:hidden;}
+    .card-hdr{background:var(--surface2);border-bottom:1px solid var(--border);padding:.7rem 1rem;display:flex;align-items:center;gap:.6rem;}
+    .card-icon{font-size:1rem;}
+    .card-ttl{font-family:var(--mono);font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:var(--cyan);}
+    .card-body{padding:1rem;display:flex;flex-direction:column;gap:.9rem;}
 
-    /* ── Fields ── */
-    .field { display: flex; flex-direction: column; gap: .35rem; }
-    label { font-family: var(--font-mono); font-size: .65rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
-    select, input[type="text"], input[type="number"], input[type="password"] { width: 100%; padding: .75rem .9rem; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-family: var(--font-body); font-size: 1rem; appearance: none; outline: none; transition: border-color .2s, box-shadow .2s; }
-    select:focus, input:focus { border-color: var(--cyan); box-shadow: 0 0 0 2px rgba(0,245,255,.12); }
-    .select-wrap { position: relative; }
-    .select-wrap::after { content: "▾"; position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); color: var(--cyan); pointer-events: none; }
+    .field{display:flex;flex-direction:column;gap:.35rem;}
+    label{font-family:var(--mono);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
+    select,input[type="text"],input[type="number"],input[type="password"]{width:100%;padding:.75rem .9rem;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);color:var(--text);font-family:var(--body);font-size:1rem;appearance:none;outline:none;transition:border-color .2s,box-shadow .2s;}
+    select:focus,input:focus{border-color:var(--cyan);box-shadow:0 0 0 2px rgba(0,245,255,.12);}
+    .sel-wrap{position:relative;}
+    .sel-wrap::after{content:"▾";position:absolute;right:1rem;top:50%;transform:translateY(-50%);color:var(--cyan);pointer-events:none;}
 
-    /* ── Buttons ── */
-    .btn { width: 100%; padding: .95rem; border: none; border-radius: var(--radius); font-family: var(--font-mono); font-size: .9rem; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; cursor: pointer; transition: opacity .15s, transform .1s; }
-    .btn:active { transform: scale(.98); }
-    .btn:disabled { opacity: .4; cursor: not-allowed; }
-    .btn-pink { background: linear-gradient(135deg, var(--pink), var(--purple)); color: #fff; box-shadow: 0 0 20px rgba(255,45,120,.35); }
-    .btn-cyan { background: linear-gradient(135deg, var(--cyan), #0088ff); color: #000; box-shadow: 0 0 20px rgba(0,245,255,.3); }
-    .btn-green { background: linear-gradient(135deg, var(--green), var(--cyan)); color: #000; box-shadow: 0 0 20px rgba(0,255,136,.3); }
-    .btn-yellow { background: linear-gradient(135deg, var(--yellow), #ff8800); color: #000; box-shadow: 0 0 20px rgba(255,230,0,.3); }
-    .btn-purple { background: linear-gradient(135deg, var(--purple), var(--cyan)); color: #fff; box-shadow: 0 0 20px rgba(180,79,255,.35); }
-    .btn-sm { padding: .55rem .9rem; font-size: .7rem; width: auto; }
+    .btn{width:100%;padding:.95rem;border:none;border-radius:var(--r);font-family:var(--mono);font-size:.85rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:opacity .15s,transform .1s;}
+    .btn:active{transform:scale(.98);}
+    .btn:disabled{opacity:.4;cursor:not-allowed;}
+    .btn-pink{background:linear-gradient(135deg,var(--pink),var(--purple));color:#fff;box-shadow:0 0 20px rgba(255,45,120,.35);}
+    .btn-cyan{background:linear-gradient(135deg,var(--cyan),#0088ff);color:#000;box-shadow:0 0 20px rgba(0,245,255,.3);}
+    .btn-green{background:linear-gradient(135deg,var(--green),var(--cyan));color:#000;box-shadow:0 0 20px rgba(0,255,136,.3);}
+    .btn-yellow{background:linear-gradient(135deg,var(--yellow),#ff8800);color:#000;box-shadow:0 0 20px rgba(255,230,0,.3);}
+    .btn-purple{background:linear-gradient(135deg,var(--purple),var(--cyan));color:#fff;box-shadow:0 0 20px rgba(180,79,255,.35);}
+    .btn-ghost{background:none;border:1px solid var(--border);color:var(--muted);box-shadow:none;}
 
-    /* ── Status messages ── */
-    .status { display: none; padding: .7rem 1rem; border-radius: var(--radius); font-family: var(--font-mono); font-size: .75rem; letter-spacing: .06em; text-align: center; }
-    .status.success { background: rgba(0,255,136,.1); border: 1px solid var(--green); color: var(--green); display: block; }
-    .status.error { background: rgba(255,45,120,.1); border: 1px solid var(--pink); color: var(--pink); display: block; }
-    .status.info { background: rgba(0,245,255,.1); border: 1px solid var(--cyan); color: var(--cyan); display: block; }
+    .msg{display:none;padding:.7rem 1rem;border-radius:var(--r);font-family:var(--mono);font-size:.75rem;letter-spacing:.06em;text-align:center;}
+    .msg.success{background:rgba(0,255,136,.1);border:1px solid var(--green);color:var(--green);display:block;}
+    .msg.error{background:rgba(255,45,120,.1);border:1px solid var(--pink);color:var(--pink);display:block;}
+    .msg.info{background:rgba(0,245,255,.1);border:1px solid var(--cyan);color:var(--cyan);display:block;}
+    .msg.warning{background:rgba(255,230,0,.1);border:1px solid var(--yellow);color:var(--yellow);display:block;}
 
-    /* ── Notification banner ── */
-    #notif-banner { display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 2000; background: linear-gradient(135deg, var(--purple), var(--pink)); padding: 1rem; text-align: center; font-family: var(--font-mono); font-size: .8rem; letter-spacing: .1em; color: #fff; animation: slideDown .4s ease; }
-    @keyframes slideDown { from { transform: translateY(-100%); } to { transform: translateY(0); } }
-    #notif-banner .notif-countdown { font-size: 1.2rem; font-weight: 700; color: var(--yellow); }
-    #notif-close { background: none; border: 1px solid rgba(255,255,255,.4); color: #fff; font-family: var(--font-mono); font-size: .65rem; padding: .3rem .6rem; border-radius: 4px; cursor: pointer; margin-top: .4rem; }
+    #notif-banner{display:none;position:fixed;top:0;left:0;right:0;z-index:2000;background:linear-gradient(135deg,var(--purple),var(--pink));padding:1rem;text-align:center;font-family:var(--mono);font-size:.78rem;letter-spacing:.08em;color:#fff;animation:slideDown .4s ease;}
+    @keyframes slideDown{from{transform:translateY(-100%)}to{transform:translateY(0)}}
+    .notif-cd{font-size:1.2rem;font-weight:700;color:var(--yellow);margin:.3rem 0;}
+    .notif-close{background:none;border:1px solid rgba(255,255,255,.4);color:#fff;font-family:var(--mono);font-size:.65rem;padding:.3rem .8rem;border-radius:4px;cursor:pointer;margin-top:.3rem;}
 
-    /* ── Winner celebration ── */
-    #celebration { display: none; position: fixed; inset: 0; z-index: 3000; background: rgba(0,0,0,.92); flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem; }
-    #celebration.show { display: flex; }
-    .celebrate-trophy { font-size: 5rem; animation: bounce 1s infinite; }
-    @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-15px)} }
-    .celebrate-title { font-family: var(--font-mono); font-size: 1rem; letter-spacing: .2em; color: var(--yellow); text-transform: uppercase; margin: 1rem 0 .5rem; }
-    .celebrate-name { font-family: var(--font-mono); font-size: 2rem; font-weight: 700; color: #fff; text-shadow: 0 0 30px var(--gold); }
+    #celebration{display:none;position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.93);flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;}
+    #celebration.show{display:flex;}
+    .cel-trophy{font-size:5rem;animation:bounce 1s infinite;}
+    @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+    .cel-title{font-family:var(--mono);font-size:1rem;letter-spacing:.2em;color:var(--yellow);text-transform:uppercase;margin:1rem 0 .5rem;}
+    .cel-name{font-family:var(--mono);font-size:2rem;font-weight:700;color:#fff;text-shadow:0 0 30px var(--gold);}
+    .cel-close{margin-top:1.5rem;padding:.6rem 1.5rem;background:none;border:1px solid var(--muted);color:var(--muted);font-family:var(--mono);font-size:.7rem;border-radius:var(--r);cursor:pointer;}
 
-    /* ── Match cards ── */
-    .match-card { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: .9rem; margin-bottom: .7rem; }
-    .match-bracket-tag { font-family: var(--font-mono); font-size: .6rem; letter-spacing: .12em; text-transform: uppercase; margin-bottom: .5rem; }
-    .match-bracket-tag.winners { color: var(--gold); }
-    .match-bracket-tag.losers { color: var(--silver); }
-    .match-players { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin: .5rem 0; }
-    .match-player { flex: 1; text-align: center; font-family: var(--font-mono); font-size: .85rem; font-weight: 700; padding: .6rem .4rem; border-radius: 6px; background: var(--bg); border: 1px solid var(--border); }
-    .match-vs { font-family: var(--font-mono); font-size: .7rem; color: var(--muted); }
-    .match-status { font-family: var(--font-mono); font-size: .65rem; letter-spacing: .1em; text-align: center; margin-top: .5rem; }
-    .match-status.pending { color: var(--yellow); }
-    .match-status.complete { color: var(--green); }
-    .match-timer { font-family: var(--font-mono); font-size: .65rem; color: var(--muted); text-align: center; margin-top: .3rem; }
+    .match-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:.9rem;margin-bottom:.7rem;}
+    .match-tag{font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem;}
+    .match-tag.winners{color:var(--gold);}
+    .match-tag.losers{color:var(--silver);}
+    .match-players{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin:.5rem 0;}
+    .match-player{flex:1;text-align:center;font-family:var(--mono);font-size:.82rem;font-weight:700;padding:.6rem .3rem;border-radius:6px;background:var(--bg);border:1px solid var(--border);}
+    .match-vs{font-family:var(--mono);font-size:.7rem;color:var(--muted);flex-shrink:0;}
 
-    /* ── Vote buttons ── */
-    .vote-row { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; margin-top: .6rem; }
-    .vote-btn { padding: .6rem; border: 2px solid var(--border); border-radius: 6px; background: var(--bg); color: var(--text); font-family: var(--font-mono); font-size: .72rem; cursor: pointer; transition: all .15s; text-align: center; }
-    .vote-btn:hover { border-color: var(--cyan); color: var(--cyan); }
-    .vote-btn.voted { border-color: var(--green); background: rgba(0,255,136,.1); color: var(--green); }
-    .vote-btn.locked { opacity: .5; cursor: not-allowed; }
-    .vote-closed { text-align: center; font-family: var(--font-mono); font-size: .65rem; color: var(--pink); letter-spacing: .1em; margin-top: .5rem; border: 1px solid var(--pink); border-radius: 4px; padding: .3rem; }
+    .vote-row{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.6rem;}
+    .vote-btn{padding:.65rem;border:2px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-family:var(--mono);font-size:.7rem;cursor:pointer;transition:all .15s;text-align:center;}
+    .vote-btn:hover:not(.locked){border-color:var(--cyan);color:var(--cyan);}
+    .vote-btn.voted{border-color:var(--green);background:rgba(0,255,136,.1);color:var(--green);}
+    .vote-btn.locked{opacity:.5;cursor:not-allowed;}
 
-    /* ── Outcome pills ── */
-    .outcome-group { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
-    .outcome-label { cursor: pointer; }
-    .outcome-label input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
-    .outcome-pill { display: flex; align-items: center; justify-content: center; gap: .4rem; padding: .85rem; border: 2px solid var(--border); border-radius: var(--radius); background: var(--bg); font-family: var(--font-mono); font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; transition: all .15s; }
-    .outcome-label input:checked + .outcome-pill.win-pill { border-color: var(--cyan); background: rgba(0,245,255,.08); color: var(--cyan); box-shadow: 0 0 12px rgba(0,245,255,.3); }
-    .outcome-label input:checked + .outcome-pill.loss-pill { border-color: var(--pink); background: rgba(255,45,120,.08); color: var(--pink); box-shadow: 0 0 12px rgba(255,45,120,.3); }
+    .outcome-group{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;}
+    .oc-label{cursor:pointer;}
+    .oc-label input[type="radio"]{position:absolute;opacity:0;width:0;height:0;}
+    .oc-pill{display:flex;align-items:center;justify-content:center;gap:.4rem;padding:.85rem;border:2px solid var(--border);border-radius:var(--r);background:var(--bg);font-family:var(--mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;transition:all .15s;}
+    .oc-label input:checked+.oc-pill.win{border-color:var(--cyan);background:rgba(0,245,255,.08);color:var(--cyan);box-shadow:0 0 12px rgba(0,245,255,.25);}
+    .oc-label input:checked+.oc-pill.loss{border-color:var(--pink);background:rgba(255,45,120,.08);color:var(--pink);box-shadow:0 0 12px rgba(255,45,120,.25);}
 
-    /* ── Leaderboard ── */
-    .lb-section-title { font-family: var(--font-mono); font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; padding: .6rem 1rem; border-bottom: 1px solid var(--border); }
-    .lb-section-title.winners { color: var(--gold); background: rgba(255,215,0,.06); }
-    .lb-section-title.losers { color: var(--silver); background: rgba(192,192,192,.04); }
-    .lb-section-title.spectators { color: var(--purple); background: rgba(180,79,255,.06); }
-    .lb-row { display: grid; grid-template-columns: 2.2rem 1fr auto; grid-template-rows: auto auto; column-gap: .6rem; row-gap: .1rem; align-items: center; padding: .8rem 1rem; border-bottom: 1px solid var(--border); }
-    .lb-row:last-child { border-bottom: none; }
-    .lb-row.top-1 { background: rgba(255,215,0,.06); }
-    .lb-row.top-2 { background: rgba(192,192,192,.04); }
-    .lb-row.top-3 { background: rgba(205,127,50,.04); }
-    .lb-rank { grid-row: 1/3; font-family: var(--font-mono); font-size: 1.1rem; text-align: center; color: var(--muted); }
-    .lb-row.top-1 .lb-rank { color: var(--gold); }
-    .lb-row.top-2 .lb-rank { color: var(--silver); }
-    .lb-row.top-3 .lb-rank { color: var(--bronze); }
-    .lb-name { font-family: var(--font-mono); font-size: .9rem; color: var(--text); }
-    .lb-row.top-1 .lb-name { color: var(--yellow); }
-    .lb-pts { grid-row: 1; grid-column: 3; font-family: var(--font-mono); font-size: .95rem; font-weight: 700; color: var(--cyan); text-align: right; white-space: nowrap; }
-    .lb-meta { grid-row: 2; grid-column: 2/4; font-family: var(--font-mono); font-size: .6rem; color: var(--muted); }
-    .lb-empty { padding: 1.5rem 1rem; text-align: center; font-family: var(--font-mono); font-size: .7rem; color: var(--muted); text-transform: uppercase; }
-    .live-bar { display: flex; justify-content: space-between; align-items: center; padding: .45rem 1rem; background: var(--surface2); border-bottom: 1px solid var(--border); }
-    .live-dot-wrap { display: flex; align-items: center; gap: .4rem; font-family: var(--font-mono); font-size: .6rem; color: var(--yellow); }
-    .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--yellow); animation: pulse 1.4s infinite; }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
-    #last-updated { font-family: var(--font-mono); font-size: .58rem; color: var(--muted); }
+    .lb-sec{font-family:var(--mono);font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;padding:.55rem 1rem;border-bottom:1px solid var(--border);}
+    .lb-sec.winners{color:var(--gold);background:rgba(255,215,0,.05);}
+    .lb-sec.losers{color:var(--silver);background:rgba(192,192,192,.04);}
+    .lb-sec.elim{color:var(--pink);background:rgba(255,45,120,.04);}
+    .lb-sec.specs{color:var(--purple);background:rgba(180,79,255,.05);}
+    .lb-row{display:grid;grid-template-columns:2.2rem 1fr auto;grid-template-rows:auto auto;column-gap:.6rem;row-gap:.1rem;align-items:center;padding:.8rem 1rem;border-bottom:1px solid var(--border);}
+    .lb-row:last-child{border-bottom:none;}
+    .lb-row.top-1{background:rgba(255,215,0,.06);}
+    .lb-row.top-2{background:rgba(192,192,192,.04);}
+    .lb-row.top-3{background:rgba(205,127,50,.04);}
+    .lb-rank{grid-row:1/3;font-family:var(--mono);font-size:1.1rem;text-align:center;color:var(--muted);}
+    .lb-row.top-1 .lb-rank{color:var(--gold);}
+    .lb-row.top-2 .lb-rank{color:var(--silver);}
+    .lb-row.top-3 .lb-rank{color:var(--bronze);}
+    .lb-name{font-family:var(--mono);font-size:.88rem;color:var(--text);}
+    .lb-row.top-1 .lb-name{color:var(--yellow);}
+    .lb-pts{grid-row:1;grid-column:3;font-family:var(--mono);font-size:.92rem;font-weight:700;color:var(--cyan);text-align:right;white-space:nowrap;}
+    .lb-meta{grid-row:2;grid-column:2/4;font-family:var(--mono);font-size:.6rem;color:var(--muted);}
+    .lb-empty{padding:1.5rem 1rem;text-align:center;font-family:var(--mono);font-size:.68rem;color:var(--muted);text-transform:uppercase;}
+    .live-bar{display:flex;justify-content:space-between;align-items:center;padding:.45rem 1rem;background:var(--surface2);border-bottom:1px solid var(--border);}
+    .live-dot-wrap{display:flex;align-items:center;gap:.4rem;font-family:var(--mono);font-size:.6rem;color:var(--yellow);}
+    .live-dot{width:7px;height:7px;border-radius:50%;background:var(--yellow);animation:pulse 1.4s infinite;}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+    #last-updated{font-family:var(--mono);font-size:.58rem;color:var(--muted);}
 
-    /* ── Signup list ── */
-    .signup-chip { display: inline-flex; align-items: center; gap: .4rem; background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; padding: .35rem .8rem; margin: .25rem; font-family: var(--font-mono); font-size: .72rem; }
-    .signup-chip.ready { border-color: var(--green); color: var(--green); }
+    .chip{display:inline-flex;align-items:center;gap:.4rem;background:var(--surface2);border:1px solid var(--green);color:var(--green);border-radius:20px;padding:.3rem .7rem;margin:.2rem;font-family:var(--mono);font-size:.68rem;}
+    .chip.late{border-color:var(--yellow);color:var(--yellow);}
 
-    /* ── Bye badge ── */
-    .bye-badge { background: rgba(255,230,0,.1); border: 1px solid var(--yellow); color: var(--yellow); font-family: var(--font-mono); font-size: .65rem; padding: .3rem .7rem; border-radius: 4px; text-align: center; margin-top: .5rem; }
+    .round-badge{display:inline-block;background:rgba(0,245,255,.1);border:1px solid var(--cyan);color:var(--cyan);font-family:var(--mono);font-size:.6rem;letter-spacing:.08em;padding:.25rem .7rem;border-radius:20px;text-transform:uppercase;}
+    .host-match{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:.8rem;margin-bottom:.6rem;}
 
-    /* ── Tiebreaker guess ── */
-    .guess-section { background: rgba(180,79,255,.07); border: 1px solid rgba(180,79,255,.35); border-radius: var(--radius); padding: .9rem; }
-    .guess-label { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .1em; color: var(--purple); text-transform: uppercase; margin-bottom: .5rem; }
-    .guess-hint { font-size: .7rem; color: var(--muted); line-height: 1.5; margin-bottom: .7rem; }
+    .late-warning{background:rgba(255,230,0,.08);border:1px solid var(--yellow);border-radius:var(--r);padding:.8rem;font-family:var(--mono);font-size:.72rem;color:var(--yellow);line-height:1.6;}
+    .guess-box{background:rgba(180,79,255,.07);border:1px solid rgba(180,79,255,.35);border-radius:var(--r);padding:.9rem;}
+    .guess-ttl{font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;color:var(--purple);text-transform:uppercase;margin-bottom:.4rem;}
+    .guess-hint{font-size:.7rem;color:var(--muted);line-height:1.5;margin-bottom:.7rem;}
 
-    /* ── Host panel ── */
-    .host-match { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: .8rem; margin-bottom: .6rem; }
-    .host-match-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: .5rem; }
-    .host-match-players { font-family: var(--font-mono); font-size: .82rem; }
-    .host-match-status { font-family: var(--font-mono); font-size: .65rem; }
-    .round-badge { display: inline-block; background: rgba(0,245,255,.1); border: 1px solid var(--cyan); color: var(--cyan); font-family: var(--font-mono); font-size: .65rem; letter-spacing: .1em; padding: .3rem .8rem; border-radius: 20px; text-transform: uppercase; }
-    .elim-badge { color: var(--pink); font-family: var(--font-mono); font-size: .65rem; }
-
-    footer { max-width: 500px; margin: 1.5rem auto 0; padding: 0 1rem; text-align: center; font-family: var(--font-mono); font-size: .58rem; letter-spacing: .1em; color: var(--muted); text-transform: uppercase; }
+    footer{max-width:500px;margin:1.5rem auto 0;padding:0 1rem;text-align:center;font-family:var(--mono);font-size:.56rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;}
   </style>
 </head>
 <body>
 
-<!-- Notification banner -->
 <div id="notif-banner">
-  <div>🔔 NEW ROUND STARTED — PLACE YOUR VOTES NOW!</div>
-  <div class="notif-countdown" id="notif-countdown">60s remaining</div>
-  <button id="notif-close" onclick="closeNotif()">Got it</button>
+  <div>🔔 NEW ROUND — PLACE YOUR VOTES NOW!</div>
+  <div class="notif-cd" id="notif-cd">60s remaining</div>
+  <button class="notif-close" onclick="closeNotif()">Got it ✓</button>
 </div>
 
-<!-- Celebration overlay -->
 <div id="celebration">
-  <div class="celebrate-trophy">🏆</div>
-  <div class="celebrate-title">Tournament Champion</div>
-  <div class="celebrate-name" id="champ-name"></div>
-  <div style="margin-top:1.5rem;font-family:var(--font-mono);font-size:.7rem;color:var(--muted);">VPRCA Arcade Challenge 2026</div>
+  <div class="cel-trophy">🏆</div>
+  <div class="cel-title">Tournament Champion</div>
+  <div class="cel-name" id="champ-name"></div>
+  <div style="margin-top:1rem;font-family:var(--mono);font-size:.7rem;color:var(--muted);">VPRCA Arcade Challenge 2026</div>
+  <button class="cel-close" onclick="document.getElementById('celebration').classList.remove('show')">Close</button>
 </div>
 
 <header>
   <div class="eyebrow">INSERT COIN TO BEGIN</div>
-  <div class="title">VPRCA ARCADE<br>CHALLENGE 2026</div>
+  <div class="app-title">VPRCA ARCADE<br>CHALLENGE 2026</div>
   <div class="subtitle">Double Elimination Tournament</div>
 </header>
 
-<!-- Nav -->
 <nav class="nav">
-  <button class="nav-btn active" onclick="showScreen('screen-home')">🏠 Home</button>
-  <button class="nav-btn" onclick="showScreen('screen-bracket')">📊 Bracket</button>
-  <button class="nav-btn" onclick="showScreen('screen-standings')">🏆 Standings</button>
-  <button class="nav-btn" onclick="showScreen('screen-host')">🔐 Host</button>
+  <button class="nav-btn active" onclick="showScreen('s-home')">🏠 Home</button>
+  <button class="nav-btn" onclick="showScreen('s-bracket')">📊 Bracket</button>
+  <button class="nav-btn" onclick="showScreen('s-standings')">🏆 Standings</button>
+  <button class="nav-btn" onclick="showScreen('s-host')">🔐 Host</button>
 </nav>
 
-<!-- ── HOME SCREEN ── -->
-<div class="screen active" id="screen-home">
+<!-- HOME -->
+<div class="screen active" id="s-home">
 
-  <!-- Role selector -->
-  <div id="role-selector" class="card" style="margin-top:1rem;">
-    <div class="card-header"><span class="card-icon">👤</span><span class="card-title">Who are you?</span></div>
+  <div id="role-sel" class="card" style="margin-top:1rem;">
+    <div class="card-hdr"><span class="card-icon">👤</span><span class="card-ttl">Welcome — Who are you?</span></div>
     <div class="card-body">
-      <button class="btn btn-pink" onclick="showRolePanel('player')">🎮 I'm a Player</button>
-      <button class="btn btn-purple" onclick="showRolePanel('spectator')">👀 I'm Just Spectating</button>
+      <button class="btn btn-pink" id="player-role-btn" onclick="showRole('player')">🎮 I Want to Play</button>
+      <button class="btn btn-purple" onclick="showRole('spectator')">👀 I'm Just Spectating</button>
     </div>
   </div>
 
-  <!-- Player panel -->
+  <!-- PLAYER PANEL -->
   <div id="player-panel" style="display:none;">
     <div class="card" style="margin-top:1rem;">
-      <div class="card-header"><span class="card-icon">🎮</span><span class="card-title">Player Check-In</span></div>
+      <div class="card-hdr"><span class="card-icon">🎮</span><span class="card-ttl">Player Sign-In</span></div>
       <div class="card-body">
-        <div class="field">
-          <label for="player-select">Select Your Name</label>
-          <div class="select-wrap">
-            <select id="player-select">
-              <option value="" disabled selected>— Select your name —</option>
-            </select>
-          </div>
+        <div id="late-join-warning" class="late-warning" style="display:none;">
+          ⚠️ The tournament has already started. Joining now means you get an automatic loss and start in the Losers Bracket. You can only join before Round 2 begins.
         </div>
-        <div id="player-status" class="status"></div>
-        <button class="btn btn-pink" id="signup-btn" onclick="signUpPlayer()">🕹️ Sign Me Up for the Challenge!</button>
-        <button class="btn btn-cyan" onclick="showRolePanel(null)" style="margin-top:.3rem;background:none;border:1px solid var(--border);color:var(--muted);box-shadow:none;">← Back</button>
+        <div id="player-closed-msg" style="display:none;" class="msg error">
+          The tournament is past Round 1. Player sign-ups are now closed. You can still join as a spectator!
+        </div>
+        <div id="player-signup-form">
+          <div class="field">
+            <label>Select Your Name</label>
+            <div class="sel-wrap">
+              <select id="player-select" onchange="onPlayerSelectChange()">
+                <option value="" disabled selected>— Select your name —</option>
+              </select>
+            </div>
+          </div>
+          <div id="player-custom-field" style="display:none;" class="field">
+            <label>Type Your Name</label>
+            <input type="text" id="player-custom-name" placeholder="Enter your full name" maxlength="40" />
+          </div>
+          <div id="player-msg" class="msg"></div>
+          <button class="btn btn-pink" id="signup-btn" onclick="signUpPlayer()">🕹️ Sign Me Up!</button>
+          <button class="btn btn-ghost" onclick="showRole(null)" style="margin-top:.3rem;">← Back</button>
+        </div>
       </div>
     </div>
 
-    <!-- Player current match -->
     <div id="player-match-card" style="display:none;" class="card">
-      <div class="card-header"><span class="card-icon">⚔️</span><span class="card-title">Your Current Match</span></div>
+      <div class="card-hdr"><span class="card-icon">⚔️</span><span class="card-ttl">Your Current Match</span></div>
       <div class="card-body" id="player-match-body"></div>
     </div>
 
-    <!-- Tiebreaker guess -->
     <div class="card">
-      <div class="card-header"><span class="card-icon">🫙</span><span class="card-title">Tiebreaker Guess</span></div>
+      <div class="card-hdr"><span class="card-icon">🫙</span><span class="card-ttl">Tiebreaker Guess</span></div>
       <div class="card-body">
-        <div class="guess-section">
-          <div class="guess-label">🔢 Guess the number of items in the container</div>
+        <div class="guess-box">
+          <div class="guess-ttl">🔢 Guess the number of items in the container</div>
           <div class="guess-hint">One guess per person. Closest to the correct number wins the tiebreaker. Submit any time before 4:45 PM.</div>
           <div class="field">
-            <div class="select-wrap">
-              <select id="guess-player-select">
+            <div class="sel-wrap">
+              <select id="guess-player-sel">
                 <option value="" disabled selected>— Select your name —</option>
               </select>
             </div>
@@ -244,116 +225,147 @@
             <input type="number" id="guess-input" min="0" placeholder="Enter your guess" />
           </div>
         </div>
-        <div id="guess-status" class="status"></div>
+        <div id="guess-msg" class="msg"></div>
         <button class="btn btn-purple" onclick="submitGuess()">SUBMIT GUESS</button>
       </div>
     </div>
   </div>
 
-  <!-- Spectator panel -->
+  <!-- SPECTATOR PANEL -->
   <div id="spectator-panel" style="display:none;">
     <div class="card" style="margin-top:1rem;">
-      <div class="card-header"><span class="card-icon">👀</span><span class="card-title">Spectator Sign-In</span></div>
+      <div class="card-hdr"><span class="card-icon">👀</span><span class="card-ttl">Spectator Sign-In</span></div>
       <div class="card-body">
         <div class="field">
-          <label for="spectator-name">Your Name</label>
-          <input type="text" id="spectator-name" placeholder="Enter your name" maxlength="30" />
+          <label>Select Your Name</label>
+          <div class="sel-wrap">
+            <select id="spec-select" onchange="onSpecSelectChange()">
+              <option value="" disabled selected>— Select your name —</option>
+            </select>
+          </div>
         </div>
-        <div id="spectator-status" class="status"></div>
+        <div id="spec-custom-field" style="display:none;" class="field">
+          <label>Type Your Name</label>
+          <input type="text" id="spec-custom-name" placeholder="Enter your name" maxlength="40" />
+        </div>
+        <div id="spec-msg" class="msg"></div>
         <button class="btn btn-purple" onclick="signUpSpectator()">👀 Join as Spectator</button>
-        <button class="btn" onclick="showRolePanel(null)" style="margin-top:.3rem;background:none;border:1px solid var(--border);color:var(--muted);box-shadow:none;">← Back</button>
+        <button class="btn btn-ghost" onclick="showRole(null)" style="margin-top:.3rem;">← Back</button>
       </div>
     </div>
 
-    <!-- Active matches to vote on -->
     <div id="vote-section" style="display:none;" class="card">
-      <div class="card-header"><span class="card-icon">🗳️</span><span class="card-title">Vote on Active Matches</span></div>
+      <div class="card-hdr"><span class="card-icon">🗳️</span><span class="card-ttl">Vote on Active Matches</span></div>
       <div id="vote-matches" class="card-body"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-hdr"><span class="card-icon">🫙</span><span class="card-ttl">Tiebreaker Guess</span></div>
+      <div class="card-body">
+        <div class="guess-box">
+          <div class="guess-ttl">🔢 Guess the number of items in the container</div>
+          <div class="guess-hint">Spectators can guess too! Closest guess wins the spectator tiebreaker.</div>
+          <div class="field">
+            <div class="sel-wrap">
+              <select id="spec-guess-sel">
+                <option value="" disabled selected>— Select your name —</option>
+              </select>
+            </div>
+          </div>
+          <div class="field" style="margin-top:.6rem;">
+            <input type="number" id="spec-guess-input" min="0" placeholder="Enter your guess" />
+          </div>
+        </div>
+        <div id="spec-guess-msg" class="msg"></div>
+        <button class="btn btn-purple" onclick="submitSpecGuess()">SUBMIT GUESS</button>
+      </div>
     </div>
   </div>
 
 </div>
 
-<!-- ── BRACKET SCREEN ── -->
-<div class="screen" id="screen-bracket">
+<!-- BRACKET -->
+<div class="screen" id="s-bracket">
   <div class="card" style="margin-top:1rem;">
-    <div class="card-header"><span class="card-icon">🏆</span><span class="card-title">Winners Bracket</span></div>
-    <div id="winners-bracket"></div>
+    <div class="card-hdr"><span class="card-icon">🏆</span><span class="card-ttl">Winners Bracket</span></div>
+    <div id="bracket-winners"></div>
   </div>
   <div class="card">
-    <div class="card-header"><span class="card-icon">💀</span><span class="card-title">Losers Bracket</span></div>
-    <div id="losers-bracket"></div>
+    <div class="card-hdr"><span class="card-icon">💀</span><span class="card-ttl">Losers Bracket</span></div>
+    <div id="bracket-losers"></div>
   </div>
 </div>
 
-<!-- ── STANDINGS SCREEN ── -->
-<div class="screen" id="screen-standings">
+<!-- STANDINGS -->
+<div class="screen" id="s-standings">
   <div class="card" style="margin-top:1rem;">
     <div class="live-bar">
       <div class="live-dot-wrap"><div class="live-dot"></div> Live</div>
       <div id="last-updated">Connecting…</div>
     </div>
-    <div class="lb-section-title winners">🏆 Winners Bracket</div>
-    <div id="lb-winners"></div>
-    <div class="lb-section-title losers">💀 Losers Bracket</div>
-    <div id="lb-losers"></div>
-    <div class="lb-section-title" style="color:var(--pink);background:rgba(255,45,120,.04);">❌ Eliminated</div>
-    <div id="lb-eliminated"></div>
-    <div class="lb-section-title spectators">👀 Spectator Predictions</div>
-    <div id="lb-spectators"></div>
+    <div class="lb-sec winners">🏆 Winners Bracket</div><div id="lb-win"></div>
+    <div class="lb-sec losers">💀 Losers Bracket</div><div id="lb-lose"></div>
+    <div class="lb-sec elim">❌ Eliminated</div><div id="lb-elim"></div>
+    <div class="lb-sec specs">👀 Spectator Predictions</div><div id="lb-spec"></div>
   </div>
 </div>
 
-<!-- ── HOST SCREEN ── -->
-<div class="screen" id="screen-host">
-
-  <!-- PIN gate -->
+<!-- HOST -->
+<div class="screen" id="s-host">
   <div id="host-pin-gate" class="card" style="margin-top:1rem;">
-    <div class="card-header"><span class="card-icon">🔐</span><span class="card-title">Host Access</span></div>
+    <div class="card-hdr"><span class="card-icon">🔐</span><span class="card-ttl">Host Access</span></div>
     <div class="card-body">
       <div class="field">
         <label>Enter Host PIN</label>
-        <input type="password" id="pin-input" placeholder="••••" maxlength="4" />
+        <input type="password" id="pin-input" placeholder="••••" maxlength="4" onkeydown="if(event.key==='Enter')checkPin()" />
       </div>
-      <div id="pin-status" class="status"></div>
+      <div id="pin-msg" class="msg"></div>
       <button class="btn btn-pink" onclick="checkPin()">UNLOCK HOST PANEL</button>
     </div>
   </div>
 
-  <!-- Host panel (hidden until PIN) -->
   <div id="host-panel" style="display:none;">
 
-    <!-- Signup list -->
     <div class="card" style="margin-top:1rem;">
-      <div class="card-header"><span class="card-icon">📋</span><span class="card-title">Signed Up Players</span></div>
+      <div class="card-hdr"><span class="card-icon">📋</span><span class="card-ttl">Signed-Up Players</span></div>
       <div class="card-body">
-        <div id="signup-list">No players signed up yet.</div>
-        <div id="host-status" class="status"></div>
+        <div id="signup-list"><span style="font-family:var(--mono);font-size:.7rem;color:var(--muted);">No players yet.</span></div>
+        <div id="host-msg" class="msg"></div>
         <button class="btn btn-green" id="start-btn" onclick="startTournament()" style="display:none;">🎮 START TOURNAMENT</button>
       </div>
     </div>
 
-    <!-- Round control -->
-    <div class="card" id="round-control" style="display:none;">
-      <div class="card-header"><span class="card-icon">⚙️</span><span class="card-title">Round Control</span></div>
+    <div class="card">
+      <div class="card-hdr"><span class="card-icon">➕</span><span class="card-ttl">Add Player Manually</span></div>
       <div class="card-body">
-        <div id="round-info" class="status info"></div>
-        <div id="host-matches"></div>
-        <button class="btn btn-yellow" id="next-round-btn" onclick="startNextRound()" style="display:none;">▶ START NEXT ROUND</button>
+        <div class="field">
+          <label>Player Name</label>
+          <input type="text" id="host-add-name" placeholder="Full name" maxlength="40" />
+        </div>
+        <div id="add-msg" class="msg"></div>
+        <button class="btn btn-cyan" onclick="hostAddPlayer()">ADD TO TOURNAMENT</button>
+      </div>
+    </div>
+
+    <div class="card" id="round-ctrl" style="display:none;">
+      <div class="card-hdr"><span class="card-icon">⚙️</span><span class="card-ttl">Round Control</span></div>
+      <div class="card-body">
+        <div id="round-info" class="msg info"></div>
+        <div id="host-matches" style="margin-top:.5rem;"></div>
+        <button class="btn btn-yellow" id="next-round-btn" onclick="startNextRound()" style="display:none;margin-top:.5rem;">▶ START NEXT ROUND</button>
         <button class="btn btn-pink" id="undo-btn" onclick="undoLastResult()" style="display:none;margin-top:.5rem;">↩ UNDO LAST RESULT</button>
       </div>
     </div>
 
-    <!-- Correct answer -->
     <div class="card">
-      <div class="card-header"><span class="card-icon">🫙</span><span class="card-title">Set Tiebreaker Answer</span></div>
+      <div class="card-hdr"><span class="card-icon">🫙</span><span class="card-ttl">Set Correct Answer</span></div>
       <div class="card-body">
         <div class="field">
-          <label>Correct Number of Items</label>
-          <input type="number" id="correct-answer-input" min="0" placeholder="Enter correct number" />
+          <label>Correct Number of Items in Container</label>
+          <input type="number" id="correct-answer" min="0" placeholder="Enter the real number" />
         </div>
-        <button class="btn btn-purple" onclick="saveCorrectAnswer()">SAVE ANSWER</button>
-        <div id="answer-status" class="status"></div>
+        <div id="ans-msg" class="msg"></div>
+        <button class="btn btn-purple" onclick="saveAnswer()">SAVE ANSWER</button>
       </div>
     </div>
 
@@ -366,12 +378,10 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
   getFirestore, collection, doc, getDoc, setDoc, updateDoc,
-  runTransaction, onSnapshot, query, orderBy, getDocs, deleteDoc, writeBatch
+  runTransaction, onSnapshot, getDocs, writeBatch, deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// ── SET BEFORE EVENT ────────────────────────────────────────────
 const HOST_PIN = "1804";
-// ───────────────────────────────────────────────────────────────
 
 const firebaseConfig = {
   apiKey:            "AIzaSyCMwwWmb6RcUNovolZNbZ810TnCoMyHjY",
@@ -385,7 +395,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db  = getFirestore(app);
 
-const PLAYERS = [
+const BASE_PLAYERS = [
   "Andy Tucker","Bethany Spurrier","Brian Mershon","Carma West","Chip Rice",
   "Eric Muth","Edwin Frebault","Hillary Snyder","Jason Jolley","Jason Moss",
   "Jennifer Russell","Jenny Whan","Keith Leffler","Kim Littlefield",
@@ -394,43 +404,101 @@ const PLAYERS = [
   "Whitney Dutcher","Vicki Smith"
 ];
 
-// Populate player dropdowns
-['player-select','guess-player-select'].forEach(id => {
-  const sel = document.getElementById(id);
-  PLAYERS.forEach(p => {
-    const o = document.createElement('option');
-    o.value = p; o.textContent = p;
-    sel.appendChild(o);
-  });
-});
-
-// ── State ────────────────────────────────────────────────────────
+// ── State ────────────────────────────────────────────
 let myName = null;
-let myRole = null; // 'player' | 'spectator'
-let tournamentState = null;
+let myRole = null;
+let tState = null; // tournament state doc
 let currentMatches = [];
+let signedUpPlayers = [];
 let myVotes = JSON.parse(localStorage.getItem('myVotes') || '{}');
 let notifTimer = null;
-let roundTimerStart = null;
-let roundTimerInterval = null;
 let lastResultId = null;
+let prevRound = 0;
 
-// ── Screen nav ───────────────────────────────────────────────────
+// ── Populate all dropdowns on load ───────────────────
+function populateDropdowns(excludePlayers = []) {
+  ['player-select','spec-select','guess-player-sel','spec-guess-sel'].forEach(id => {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    const isSpec = id === 'spec-select' || id === 'spec-guess-sel';
+    const curVal = sel.value;
+    sel.innerHTML = `<option value="" disabled selected>— Select your name —</option>`;
+
+    const list = isSpec
+      ? BASE_PLAYERS.filter(p => !excludePlayers.includes(p))
+      : BASE_PLAYERS;
+
+    list.forEach(p => {
+      const o = document.createElement('option');
+      o.value = p; o.textContent = p;
+      sel.appendChild(o);
+    });
+
+    // "Not listed" option
+    const notListed = document.createElement('option');
+    notListed.value = '__custom__';
+    notListed.textContent = '✏️ My name is not listed';
+    sel.appendChild(notListed);
+
+    if (curVal) sel.value = curVal;
+  });
+}
+
+populateDropdowns();
+
+// ── Custom name field toggles ────────────────────────
+window.onPlayerSelectChange = () => {
+  const v = document.getElementById('player-select').value;
+  document.getElementById('player-custom-field').style.display = v === '__custom__' ? 'block' : 'none';
+};
+window.onSpecSelectChange = () => {
+  const v = document.getElementById('spec-select').value;
+  document.getElementById('spec-custom-field').style.display = v === '__custom__' ? 'block' : 'none';
+};
+
+// ── Screen nav ───────────────────────────────────────
 window.showScreen = (id) => {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  const idx = ['screen-home','screen-bracket','screen-standings','screen-host'].indexOf(id);
+  const idx = ['s-home','s-bracket','s-standings','s-host'].indexOf(id);
   document.querySelectorAll('.nav-btn')[idx]?.classList.add('active');
 };
 
-window.showRolePanel = (role) => {
-  document.getElementById('role-selector').style.display = role ? 'none' : 'block';
-  document.getElementById('player-panel').style.display   = role === 'player' ? 'block' : 'none';
+window.showRole = (role) => {
+  document.getElementById('role-sel').style.display        = role ? 'none' : 'block';
+  document.getElementById('player-panel').style.display    = role === 'player' ? 'block' : 'none';
   document.getElementById('spectator-panel').style.display = role === 'spectator' ? 'block' : 'none';
+  if (role === 'player') checkLateJoin();
 };
 
-// ── Notification ─────────────────────────────────────────────────
+function checkLateJoin() {
+  const round = tState?.currentRound || 0;
+  const status = tState?.status || 'waiting';
+  const lateWarn = document.getElementById('late-join-warning');
+  const closedMsg = document.getElementById('player-closed-msg');
+  const signupForm = document.getElementById('player-signup-form');
+
+  if (status === 'waiting' || round === 0) {
+    // Before tournament starts — normal
+    lateWarn.style.display = 'none';
+    closedMsg.style.display = 'none';
+    signupForm.style.display = 'block';
+  } else if (round === 1) {
+    // Round 1 active — late join allowed with penalty
+    lateWarn.style.display = 'block';
+    closedMsg.style.display = 'none';
+    signupForm.style.display = 'block';
+    document.getElementById('signup-btn').textContent = '⚠️ Join Late (Auto-Loss)';
+  } else {
+    // Round 2+ — closed
+    lateWarn.style.display = 'none';
+    closedMsg.style.display = 'block';
+    signupForm.style.display = 'none';
+  }
+}
+
+// ── Notification banner ──────────────────────────────
 window.closeNotif = () => {
   document.getElementById('notif-banner').style.display = 'none';
   clearInterval(notifTimer);
@@ -438,633 +506,595 @@ window.closeNotif = () => {
 
 function showNotif() {
   if (myRole !== 'spectator') return;
-  const banner = document.getElementById('notif-banner');
-  banner.style.display = 'block';
+  document.getElementById('notif-banner').style.display = 'block';
   let secs = 60;
-  document.getElementById('notif-countdown').textContent = secs + 's remaining';
+  document.getElementById('notif-cd').textContent = secs + 's remaining';
   clearInterval(notifTimer);
   notifTimer = setInterval(() => {
     secs--;
-    document.getElementById('notif-countdown').textContent = secs + 's remaining';
-    if (secs <= 0) { closeNotif(); }
+    document.getElementById('notif-cd').textContent = secs + 's remaining';
+    if (secs <= 0) closeNotif();
   }, 1000);
 }
 
-// ── Player signup ─────────────────────────────────────────────────
+// ── Resolve player name from select + custom field ───
+function resolvePlayerName(selectId, customId) {
+  const sel = document.getElementById(selectId).value;
+  if (sel === '__custom__') {
+    const custom = document.getElementById(customId)?.value.trim();
+    return custom || null;
+  }
+  return sel || null;
+}
+
+// ── Player sign-up ───────────────────────────────────
 window.signUpPlayer = async () => {
-  const name = document.getElementById('player-select').value;
-  if (!name) { showMsg('player-status','Select your name first.','error'); return; }
+  const name = resolvePlayerName('player-select','player-custom-name');
+  if (!name) { showMsg('player-msg','Enter or select your name.','error'); return; }
+
+  const round = tState?.currentRound || 0;
+  const status = tState?.status || 'waiting';
+  if (round >= 2) { showMsg('player-msg','Sign-ups are closed after Round 1.','error'); return; }
 
   // Check not already a spectator
   const specSnap = await getDoc(doc(db,'spectators',name));
-  if (specSnap.exists()) { showMsg('player-status','You already joined as a spectator.','error'); return; }
+  if (specSnap.exists()) { showMsg('player-msg','You already joined as a spectator.','error'); return; }
 
   const ref = doc(db,'signups',name);
   const snap = await getDoc(ref);
-  if (snap.exists()) {
-    showMsg('player-status','You are already signed up! ✅','info');
+  const isLate = status === 'active' && round === 1;
+
+  if (snap.exists() && !isLate) {
+    showMsg('player-msg','Already signed up! ✅','info');
   } else {
-    await setDoc(ref, { name, signedUpAt: Date.now() });
-    showMsg('player-status','You\'re signed up! ✅','success');
+    await setDoc(ref, { name, signedUpAt: Date.now(), late: isLate });
+
+    if (isLate) {
+      // Auto-loss — add to losers bracket
+      await setDoc(doc(db,'players',name), {
+        name, totalPoints: 1, wins: 0, losses: 1,
+        bracket: 'losers', eliminated: false, round: 2, guess: null, late: true
+      }, { merge: true });
+      showMsg('player-msg','Joined! You start in the Losers Bracket with one auto-loss.','warning');
+    } else {
+      showMsg('player-msg','Signed up! ✅','success');
+    }
   }
-  myName = name;
-  myRole = 'player';
+
+  myName = name; myRole = 'player';
   localStorage.setItem('myName', name);
   localStorage.setItem('myRole', 'player');
   document.getElementById('signup-btn').textContent = '✅ Signed Up!';
   document.getElementById('signup-btn').disabled = true;
 };
 
-// ── Spectator signup ──────────────────────────────────────────────
+// ── Spectator sign-up ────────────────────────────────
 window.signUpSpectator = async () => {
-  const name = document.getElementById('spectator-name').value.trim();
-  if (!name) { showMsg('spectator-status','Enter your name.','error'); return; }
-  if (PLAYERS.includes(name)) { showMsg('spectator-status','You are a player — choose I\'m a Player instead.','error'); return; }
+  const name = resolvePlayerName('spec-select','spec-custom-name');
+  if (!name) { showMsg('spec-msg','Enter or select your name.','error'); return; }
 
-  const ref = doc(db,'spectators',name);
-  await setDoc(ref, { name, joinedAt: Date.now(), correctPredictions: 0 });
-  myName = name;
-  myRole = 'spectator';
+  // Check not already a player
+  const sigSnap = await getDoc(doc(db,'signups',name));
+  if (sigSnap.exists()) { showMsg('spec-msg','You are signed up as a player!','error'); return; }
+
+  await setDoc(doc(db,'spectators',name), { name, joinedAt: Date.now(), correctPredictions: 0, guess: null }, { merge: true });
+  myName = name; myRole = 'spectator';
   localStorage.setItem('myName', name);
   localStorage.setItem('myRole', 'spectator');
-  showMsg('spectator-status','Welcome! You\'re now spectating. 👀','success');
+  showMsg('spec-msg','Welcome! You\'re now spectating. 👀','success');
   document.getElementById('vote-section').style.display = 'block';
+  // Repopulate spec guess sel with own name
+  const sg = document.getElementById('spec-guess-sel');
+  sg.value = name;
   renderVoteMatches();
 };
 
-// ── Guess submit ──────────────────────────────────────────────────
+// ── Guess submit (player) ────────────────────────────
 window.submitGuess = async () => {
-  const player = document.getElementById('guess-player-select').value;
-  const guess  = parseInt(document.getElementById('guess-input').value);
-  if (!player) { showMsg('guess-status','Select your name.','error'); return; }
-  if (isNaN(guess) || guess < 0) { showMsg('guess-status','Enter a valid number.','error'); return; }
+  const player = document.getElementById('guess-player-sel').value;
+  if (player === '__custom__' || !player) { showMsg('guess-msg','Select your name.','error'); return; }
+  const guess = parseInt(document.getElementById('guess-input').value);
+  if (isNaN(guess) || guess < 0) { showMsg('guess-msg','Enter a valid number.','error'); return; }
   const ref = doc(db,'players',player);
   const snap = await getDoc(ref);
-  if (snap.exists()) {
-    await updateDoc(ref, { guess });
-  } else {
-    await setDoc(ref, { name: player, totalPoints: 0, wins: 0, losses: 0, bracket: 'waiting', eliminated: false, round: 0, guess });
-  }
-  showMsg('guess-status','Guess submitted! 🎯','success');
+  if (snap.exists()) { await updateDoc(ref,{guess}); }
+  else { await setDoc(ref,{name:player,totalPoints:0,wins:0,losses:0,bracket:'waiting',eliminated:false,round:0,guess}); }
+  showMsg('guess-msg','Guess submitted! 🎯','success');
   document.getElementById('guess-input').value = '';
 };
 
-// ── Host PIN ──────────────────────────────────────────────────────
+// ── Guess submit (spectator) ─────────────────────────
+window.submitSpecGuess = async () => {
+  const name = myName || document.getElementById('spec-guess-sel').value;
+  if (!name || name === '__custom__') { showMsg('spec-guess-msg','Select your name.','error'); return; }
+  const guess = parseInt(document.getElementById('spec-guess-input').value);
+  if (isNaN(guess) || guess < 0) { showMsg('spec-guess-msg','Enter a valid number.','error'); return; }
+  await updateDoc(doc(db,'spectators',name),{guess});
+  showMsg('spec-guess-msg','Guess submitted! 🎯','success');
+  document.getElementById('spec-guess-input').value = '';
+};
+
+// ── Host PIN ─────────────────────────────────────────
 window.checkPin = () => {
-  const pin = document.getElementById('pin-input').value;
-  if (pin === HOST_PIN) {
+  if (document.getElementById('pin-input').value === HOST_PIN) {
     document.getElementById('host-pin-gate').style.display = 'none';
     document.getElementById('host-panel').style.display = 'block';
-    showMsg('host-status','Host access granted. ✅','success');
   } else {
-    showMsg('pin-status','Incorrect PIN.','error');
+    showMsg('pin-msg','Incorrect PIN.','error');
   }
 };
 
-// ── Start tournament ──────────────────────────────────────────────
+// ── Host: manually add player ────────────────────────
+window.hostAddPlayer = async () => {
+  const name = document.getElementById('host-add-name').value.trim();
+  if (!name) { showMsg('add-msg','Enter a name.','error'); return; }
+
+  const round = tState?.currentRound || 0;
+  const status = tState?.status || 'waiting';
+  const isLate = status === 'active';
+
+  if (isLate && round >= 2) {
+    showMsg('add-msg','Cannot add players after Round 1.','error'); return;
+  }
+
+  await setDoc(doc(db,'signups',name), { name, signedUpAt: Date.now(), late: isLate }, { merge: true });
+
+  if (isLate) {
+    await setDoc(doc(db,'players',name), {
+      name, totalPoints:1, wins:0, losses:1,
+      bracket:'losers', eliminated:false, round:2, guess:null, late:true
+    }, { merge: true });
+    showMsg('add-msg',`${name} added to Losers Bracket with auto-loss.`,'warning');
+  } else {
+    showMsg('add-msg',`${name} added to signup list.`,'success');
+  }
+  document.getElementById('host-add-name').value = '';
+};
+
+// ── Start tournament ─────────────────────────────────
 window.startTournament = async () => {
   const snap = await getDocs(collection(db,'signups'));
   const players = snap.docs.map(d => d.data().name);
-  if (players.length < 2) { showMsg('host-status','Need at least 2 players.','error'); return; }
+  if (players.length < 2) { showMsg('host-msg','Need at least 2 players.','error'); return; }
 
-  // Shuffle players
   const shuffled = [...players].sort(() => Math.random() - .5);
-
-  // Initialize player docs
   const batch = writeBatch(db);
+
   shuffled.forEach(name => {
-    batch.set(doc(db,'players',name), {
-      name, totalPoints: 0, wins: 0, losses: 0,
-      bracket: 'winners', eliminated: false, round: 1, guess: null
-    }, { merge: true });
+    batch.set(doc(db,'players',name),{
+      name, totalPoints:0, wins:0, losses:0,
+      bracket:'winners', eliminated:false, round:1, guess:null
+    },{merge:true});
   });
 
-  // Create matches
-  const matches = [];
-  let byePlayer = null;
   const pairs = [...shuffled];
-  if (pairs.length % 2 !== 0) { byePlayer = pairs.pop(); }
+  let byePlayer = null;
+  if (pairs.length % 2 !== 0) byePlayer = pairs.pop();
 
-  pairs.forEach((p, i) => {
-    if (i % 2 === 0) {
-      matches.push({
-        id: `r1_m${Math.floor(i/2)}`,
-        round: 1, bracket: 'winners',
-        p1: pairs[i], p2: pairs[i+1],
-        winner: null, loser: null,
-        status: 'pending', reportedBy: null,
-        createdAt: Date.now()
-      });
-    }
-  });
-
-  // Handle bye
-  if (byePlayer) {
-    batch.update(doc(db,'players',byePlayer), { totalPoints: 2, wins: 1, round: 2 });
-    matches.push({
-      id: `r1_bye_${byePlayer.replace(/ /g,'_')}`,
-      round: 1, bracket: 'winners',
-      p1: byePlayer, p2: 'BYE',
-      winner: byePlayer, loser: null,
-      status: 'complete', reportedBy: 'system',
-      createdAt: Date.now()
+  for (let i = 0; i < pairs.length; i += 2) {
+    batch.set(doc(db,'matches',`r1_m${i/2}`), {
+      id:`r1_m${i/2}`, round:1, bracket:'winners',
+      p1:pairs[i], p2:pairs[i+1],
+      winner:null, loser:null, status:'pending',
+      createdAt:Date.now()
     });
   }
 
-  // Save tournament state
-  batch.set(doc(db,'tournament','state'), {
-    status: 'active', currentRound: 1,
-    byePlayer, startedAt: Date.now(),
-    champion: null, correctAnswer: 0
+  if (byePlayer) {
+    batch.update(doc(db,'players',byePlayer),{totalPoints:2,wins:1,round:2});
+    batch.set(doc(db,'matches',`r1_bye`),{
+      id:'r1_bye', round:1, bracket:'winners',
+      p1:byePlayer, p2:'BYE',
+      winner:byePlayer, loser:null, status:'complete',
+      createdAt:Date.now()
+    });
+  }
+
+  batch.set(doc(db,'tournament','state'),{
+    status:'active', currentRound:1,
+    byePlayer:byePlayer||null, startedAt:Date.now(),
+    champion:null, correctAnswer:0
   });
 
-  matches.forEach(m => batch.set(doc(db,'matches',m.id), m));
   await batch.commit();
-
-  showMsg('host-status', byePlayer
-    ? `Tournament started! ${byePlayer} has a bye this round.`
-    : 'Tournament started! ✅', 'success');
-
-  showNotif();
+  showMsg('host-msg', byePlayer ? `Started! ${byePlayer} has a bye.` : 'Tournament started! ✅','success');
+  document.getElementById('start-btn').style.display = 'none';
+  document.getElementById('round-ctrl').style.display = 'block';
 };
 
-// ── Start next round ──────────────────────────────────────────────
+// ── Start next round ─────────────────────────────────
 window.startNextRound = async () => {
   const stateSnap = await getDoc(doc(db,'tournament','state'));
   const state = stateSnap.data();
-  const currentRound = state.currentRound;
-  const nextRound = currentRound + 1;
+  const nextRound = (state.currentRound || 1) + 1;
 
-  // Get all players
   const playerSnaps = await getDocs(collection(db,'players'));
-  const players = playerSnaps.docs.map(d => d.data()).filter(p => !p.eliminated);
+  const allPlayers = playerSnaps.docs.map(d => d.data()).filter(p => !p.eliminated);
 
-  const winners = players.filter(p => p.bracket === 'winners' && p.round === nextRound);
-  const losers  = players.filter(p => p.bracket === 'losers'  && p.round === nextRound);
+  const winners = allPlayers.filter(p => p.bracket === 'winners' && p.round === nextRound);
+  const losers  = allPlayers.filter(p => p.bracket === 'losers'  && p.round === nextRound);
 
-  // Build new matches — shuffle and pair, avoid rematches where possible
-  const newMatches = [];
-  const makeMatches = (group, bracket) => {
-    const shuffled = [...group].sort(() => Math.random() - .5);
+  const batch = writeBatch(db);
+  let matchCount = 0;
+
+  const makePairs = (group, bracket) => {
+    const sh = [...group].sort(() => Math.random() - .5);
     let bye = null;
-    if (shuffled.length % 2 !== 0) bye = shuffled.pop();
-    for (let i = 0; i < shuffled.length; i += 2) {
-      newMatches.push({
-        id: `r${nextRound}_${bracket}_m${i/2}_${Date.now()}`,
-        round: nextRound, bracket,
-        p1: shuffled[i].name, p2: shuffled[i+1].name,
-        winner: null, loser: null,
-        status: 'pending', reportedBy: null,
-        createdAt: Date.now()
+    if (sh.length % 2 !== 0) bye = sh.pop();
+    for (let i = 0; i < sh.length; i += 2) {
+      const id = `r${nextRound}_${bracket}_m${matchCount++}`;
+      batch.set(doc(db,'matches',id),{
+        id, round:nextRound, bracket,
+        p1:sh[i].name, p2:sh[i+1].name,
+        winner:null, loser:null, status:'pending',
+        createdAt:Date.now()
       });
     }
     if (bye) {
-      // Bye in next round
-      newMatches.push({
-        id: `r${nextRound}_${bracket}_bye_${bye.name.replace(/ /g,'_')}`,
-        round: nextRound, bracket,
-        p1: bye.name, p2: 'BYE',
-        winner: bye.name, loser: null,
-        status: 'complete', reportedBy: 'system',
-        createdAt: Date.now()
+      const id = `r${nextRound}_${bracket}_bye_${matchCount++}`;
+      batch.set(doc(db,'matches',id),{
+        id, round:nextRound, bracket,
+        p1:bye.name, p2:'BYE',
+        winner:bye.name, loser:null, status:'complete',
+        createdAt:Date.now()
       });
+      batch.update(doc(db,'players',bye.name),{totalPoints:bye.totalPoints+2,wins:bye.wins+1,round:nextRound+1});
     }
   };
 
-  makeMatches(winners, 'winners');
-  makeMatches(losers, 'losers');
+  makePairs(winners,'winners');
+  makePairs(losers,'losers');
 
-  if (newMatches.filter(m => m.status === 'pending').length === 0 && newMatches.length === 0) {
-    showMsg('host-status','No matches to create. Tournament may be complete.','error');
-    return;
-  }
-
-  const batch = writeBatch(db);
-  newMatches.forEach(m => batch.set(doc(db,'matches',m.id), m));
-  batch.update(doc(db,'tournament','state'), { currentRound: nextRound });
+  batch.update(doc(db,'tournament','state'),{currentRound:nextRound});
   await batch.commit();
 
-  showMsg('host-status',`Round ${nextRound} started! ✅`,'success');
+  showMsg('host-msg',`Round ${nextRound} started! ✅`,'success');
   document.getElementById('next-round-btn').style.display = 'none';
   showNotif();
 };
 
-// ── Undo last result ──────────────────────────────────────────────
-window.undoLastResult = async () => {
-  if (!lastResultId) { showMsg('host-status','Nothing to undo.','error'); return; }
-  const matchRef = doc(db,'matches',lastResultId);
+// ── Log match result ─────────────────────────────────
+window.logResult = async (matchId, winnerName, loserName) => {
+  const matchRef = doc(db,'matches',matchId);
   const snap = await getDoc(matchRef);
   if (!snap.exists()) return;
   const m = snap.data();
+  if (m.status === 'complete') { alert('Already logged.'); return; }
 
   const batch = writeBatch(db);
-  // Reset match
-  batch.update(matchRef, { winner: null, loser: null, status: 'pending', reportedBy: null });
-  // Reset winner
-  if (m.winner && m.winner !== 'BYE') {
-    const wRef = doc(db,'players',m.winner);
-    const wSnap = await getDoc(wRef);
-    if (wSnap.exists()) {
-      const wd = wSnap.data();
-      batch.update(wRef, {
-        totalPoints: Math.max(0, wd.totalPoints - 2),
-        wins: Math.max(0, wd.wins - 1),
-        bracket: m.bracket,
-        round: m.round
+  batch.update(matchRef,{winner:winnerName,loser:loserName,status:'complete',reportedBy:myName||'player'});
+  lastResultId = matchId;
+
+  // Winner
+  const wSnap = await getDoc(doc(db,'players',winnerName));
+  const wd = wSnap.exists() ? wSnap.data() : {totalPoints:0,wins:0,losses:0,bracket:'winners',round:1};
+  batch.set(doc(db,'players',winnerName),{
+    ...wd, name:winnerName,
+    totalPoints:(wd.totalPoints||0)+2, wins:(wd.wins||0)+1,
+    round:(m.round||1)+1, eliminated:false
+  },{merge:true});
+
+  // Loser
+  const lSnap = await getDoc(doc(db,'players',loserName));
+  const ld = lSnap.exists() ? lSnap.data() : {totalPoints:0,wins:0,losses:0,bracket:'winners',round:1};
+  const newLosses = (ld.losses||0)+1;
+  const elim = newLosses >= 2;
+  batch.set(doc(db,'players',loserName),{
+    ...ld, name:loserName,
+    totalPoints:(ld.totalPoints||0)+1, losses:newLosses,
+    bracket: elim ? 'eliminated' : 'losers',
+    round: elim ? ld.round : (m.round||1)+1,
+    eliminated:elim
+  },{merge:true});
+
+  await batch.commit();
+  await scoreVotes(matchId, winnerName);
+  checkChampion();
+};
+
+// ── Undo last result ─────────────────────────────────
+window.undoLastResult = async () => {
+  if (!lastResultId) { showMsg('host-msg','Nothing to undo.','error'); return; }
+  const mRef = doc(db,'matches',lastResultId);
+  const mSnap = await getDoc(mRef);
+  if (!mSnap.exists()) return;
+  const m = mSnap.data();
+  const batch = writeBatch(db);
+  batch.update(mRef,{winner:null,loser:null,status:'pending',reportedBy:null});
+
+  if (m.winner) {
+    const ws = await getDoc(doc(db,'players',m.winner));
+    if (ws.exists()) {
+      const wd = ws.data();
+      batch.update(doc(db,'players',m.winner),{
+        totalPoints:Math.max(0,(wd.totalPoints||0)-2),
+        wins:Math.max(0,(wd.wins||0)-1),
+        round:m.round, bracket:m.bracket
       });
     }
   }
-  // Reset loser
-  if (m.loser && m.loser !== 'BYE') {
-    const lRef = doc(db,'players',m.loser);
-    const lSnap = await getDoc(lRef);
-    if (lSnap.exists()) {
-      const ld = lSnap.data();
-      const wasEliminated = ld.losses >= 2;
-      batch.update(lRef, {
-        totalPoints: Math.max(0, ld.totalPoints - 1),
-        losses: Math.max(0, ld.losses - 1),
-        bracket: m.bracket,
-        eliminated: false,
-        round: m.round
+  if (m.loser) {
+    const ls = await getDoc(doc(db,'players',m.loser));
+    if (ls.exists()) {
+      const ld = ls.data();
+      batch.update(doc(db,'players',m.loser),{
+        totalPoints:Math.max(0,(ld.totalPoints||0)-1),
+        losses:Math.max(0,(ld.losses||0)-1),
+        bracket:m.bracket, round:m.round, eliminated:false
       });
     }
   }
   await batch.commit();
   lastResultId = null;
-  showMsg('host-status','Result undone. ✅','success');
+  showMsg('host-msg','Result undone. ✅','success');
 };
 
-// ── Log match result ──────────────────────────────────────────────
-window.logResult = async (matchId, winnerName) => {
-  const matchRef = doc(db,'matches',matchId);
-  const snap = await getDoc(matchRef);
-  if (!snap.exists()) return;
-  const m = snap.data();
-  if (m.status === 'complete') { alert('This match has already been logged.'); return; }
-
-  const loserName = m.p1 === winnerName ? m.p2 : m.p1;
-  const batch = writeBatch(db);
-
-  // Update match
-  batch.update(matchRef, { winner: winnerName, loser: loserName, status: 'complete', reportedBy: myName });
-  lastResultId = matchId;
-
-  // Update winner
-  const wRef = doc(db,'players',winnerName);
-  const wSnap = await getDoc(wRef);
-  const wd = wSnap.exists() ? wSnap.data() : { totalPoints:0, wins:0, losses:0, bracket:'winners', round:1 };
-  batch.set(wRef, {
-    ...wd, name: winnerName,
-    totalPoints: (wd.totalPoints||0) + 2,
-    wins: (wd.wins||0) + 1,
-    bracket: m.bracket,
-    round: (m.round||1) + 1,
-    eliminated: false
-  }, { merge: true });
-
-  // Update loser
-  const lRef = doc(db,'players',loserName);
-  const lSnap = await getDoc(lRef);
-  const ld = lSnap.exists() ? lSnap.data() : { totalPoints:0, wins:0, losses:0, bracket:'winners', round:1 };
-  const newLosses = (ld.losses||0) + 1;
-  const eliminated = newLosses >= 2;
-  const newBracket = eliminated ? 'eliminated' : 'losers';
-  batch.set(lRef, {
-    ...ld, name: loserName,
-    totalPoints: (ld.totalPoints||0) + 1,
-    losses: newLosses,
-    bracket: newBracket,
-    round: eliminated ? ld.round : (m.round||1) + 1,
-    eliminated
-  }, { merge: true });
-
-  await batch.commit();
-
-  // Score spectator predictions
-  await scoreSpectatorVotes(matchId, winnerName);
-
-  // Check if tournament is over
-  checkTournamentEnd();
-};
-
-// ── Score spectator votes ─────────────────────────────────────────
-async function scoreSpectatorVotes(matchId, winnerName) {
-  const votesSnap = await getDocs(collection(db,'votes'));
-  const batch = writeBatch(db);
-  votesSnap.docs.forEach(vDoc => {
+// ── Score spectator votes ────────────────────────────
+async function scoreVotes(matchId, winnerName) {
+  const snap = await getDocs(collection(db,'votes'));
+  snap.docs.forEach(async vDoc => {
     const v = vDoc.data();
     if (v.matchId === matchId && v.vote === winnerName) {
-      const specRef = doc(db,'spectators',v.spectatorName);
-      // increment correct predictions
-      getDoc(specRef).then(s => {
-        if (s.exists()) {
-          updateDoc(specRef, { correctPredictions: (s.data().correctPredictions||0) + 1 });
-        }
-      });
+      const sRef = doc(db,'spectators',v.spectatorName);
+      const sSnap = await getDoc(sRef);
+      if (sSnap.exists()) {
+        await updateDoc(sRef,{correctPredictions:(sSnap.data().correctPredictions||0)+1});
+      }
     }
   });
 }
 
-// ── Check tournament end ──────────────────────────────────────────
-async function checkTournamentEnd() {
-  const playerSnaps = await getDocs(collection(db,'players'));
-  const active = playerSnaps.docs.map(d => d.data()).filter(p => !p.eliminated);
+// ── Check champion ───────────────────────────────────
+async function checkChampion() {
+  const snap = await getDocs(collection(db,'players'));
+  const active = snap.docs.map(d=>d.data()).filter(p=>!p.eliminated);
   if (active.length === 1) {
-    const champ = active[0];
-    await updateDoc(doc(db,'tournament','state'), { champion: champ.name, status: 'complete' });
-    document.getElementById('champ-name').textContent = champ.name;
+    await updateDoc(doc(db,'tournament','state'),{champion:active[0].name,status:'complete'});
+    document.getElementById('champ-name').textContent = active[0].name;
     document.getElementById('celebration').classList.add('show');
   }
 }
 
-// ── Save correct answer ───────────────────────────────────────────
-window.saveCorrectAnswer = async () => {
-  const val = parseInt(document.getElementById('correct-answer-input').value);
-  if (isNaN(val)) { showMsg('answer-status','Enter a valid number.','error'); return; }
-  await updateDoc(doc(db,'tournament','state'), { correctAnswer: val });
-  showMsg('answer-status',`Correct answer saved: ${val} ✅`,'success');
+// ── Save correct answer ──────────────────────────────
+window.saveAnswer = async () => {
+  const val = parseInt(document.getElementById('correct-answer').value);
+  if (isNaN(val)) { showMsg('ans-msg','Enter a valid number.','error'); return; }
+  const ref = doc(db,'tournament','state');
+  const snap = await getDoc(ref);
+  if (snap.exists()) { await updateDoc(ref,{correctAnswer:val}); }
+  else { await setDoc(ref,{correctAnswer:val}); }
+  showMsg('ans-msg',`Saved: ${val} ✅`,'success');
 };
 
-// ── Vote on match ─────────────────────────────────────────────────
+// ── Vote on match ────────────────────────────────────
 window.voteOnMatch = async (matchId, votedFor) => {
   if (!myName || myRole !== 'spectator') return;
-  if (myVotes[matchId]) return; // already voted
-
-  // Check match still pending
+  if (myVotes[matchId]) return;
   const mSnap = await getDoc(doc(db,'matches',matchId));
-  if (!mSnap.exists() || mSnap.data().status !== 'pending') {
-    alert('Voting is closed for this match.'); return;
-  }
-
-  await setDoc(doc(db,'votes',`${matchId}_${myName.replace(/ /g,'_')}`), {
-    matchId, spectatorName: myName, vote: votedFor, createdAt: Date.now()
-  });
-
+  if (!mSnap.exists() || mSnap.data().status !== 'pending') { alert('Voting closed for this match.'); return; }
+  const voteId = `${matchId}_${myName.replace(/\W/g,'_')}`;
+  await setDoc(doc(db,'votes',voteId),{matchId,spectatorName:myName,vote:votedFor,createdAt:Date.now()});
   myVotes[matchId] = votedFor;
-  localStorage.setItem('myVotes', JSON.stringify(myVotes));
+  localStorage.setItem('myVotes',JSON.stringify(myVotes));
   renderVoteMatches();
 };
 
-// ── Render vote matches ───────────────────────────────────────────
+// ── Renders ──────────────────────────────────────────
 function renderVoteMatches() {
   const container = document.getElementById('vote-matches');
+  if (!container) return;
   const pending = currentMatches.filter(m => m.status === 'pending' && m.p2 !== 'BYE');
-  if (pending.length === 0) {
-    container.innerHTML = '<div class="lb-empty">No active matches to vote on right now.</div>';
-    return;
-  }
+  if (!pending.length) { container.innerHTML = '<div class="lb-empty">No active matches to vote on.</div>'; return; }
   container.innerHTML = pending.map(m => {
     const myVote = myVotes[m.id];
-    const locked = !!myVote || m.status !== 'pending';
-    return `
-      <div class="match-card">
-        <div class="match-bracket-tag ${m.bracket}">${m.bracket === 'winners' ? '🏆 Winners Bracket' : '💀 Losers Bracket'} · Round ${m.round}</div>
-        <div class="match-players">
-          <div class="match-player">${m.p1}</div>
-          <div class="match-vs">VS</div>
-          <div class="match-player">${m.p2}</div>
-        </div>
-        ${myVote ? `<div class="status success" style="display:block;">✅ You picked: ${myVote}</div>` : ''}
-        ${!myVote ? `
-          <div class="vote-row">
-            <button class="vote-btn ${locked?'locked':''}" onclick="voteOnMatch('${m.id}','${m.p1}')">${m.p1}</button>
-            <button class="vote-btn ${locked?'locked':''}" onclick="voteOnMatch('${m.id}','${m.p2}')">${m.p2}</button>
-          </div>` : ''}
-      </div>`;
+    return `<div class="match-card">
+      <div class="match-tag ${m.bracket}">${m.bracket==='winners'?'🏆 Winners':'💀 Losers'} · Round ${m.round}</div>
+      <div class="match-players">
+        <div class="match-player">${m.p1}</div>
+        <div class="match-vs">VS</div>
+        <div class="match-player">${m.p2}</div>
+      </div>
+      ${myVote
+        ? `<div class="msg success" style="display:block;margin-top:.5rem;">✅ You picked: ${myVote}</div>`
+        : `<div class="vote-row">
+            <button class="vote-btn" onclick="voteOnMatch('${m.id}','${m.p1}')">${m.p1}</button>
+            <button class="vote-btn" onclick="voteOnMatch('${m.id}','${m.p2}')">${m.p2}</button>
+           </div>`
+      }
+    </div>`;
   }).join('');
 }
 
-// ── Render player current match ───────────────────────────────────
 function renderPlayerMatch() {
   if (!myName || myRole !== 'player') return;
-  const myMatch = currentMatches.find(m =>
-    (m.p1 === myName || m.p2 === myName) && m.status === 'pending'
-  );
+  const myMatch = currentMatches.find(m => (m.p1===myName||m.p2===myName) && m.status==='pending');
   const card = document.getElementById('player-match-card');
   const body = document.getElementById('player-match-body');
-  if (!myMatch) {
-    card.style.display = 'none'; return;
-  }
+  if (!myMatch) { card.style.display='none'; return; }
   card.style.display = 'block';
-  const opponent = myMatch.p1 === myName ? myMatch.p2 : myMatch.p1;
+  const opp = myMatch.p1===myName ? myMatch.p2 : myMatch.p1;
   body.innerHTML = `
-    <div class="match-bracket-tag ${myMatch.bracket}" style="font-size:.75rem;margin-bottom:.5rem;">
-      ${myMatch.bracket === 'winners' ? '🏆 Winners Bracket' : '💀 Losers Bracket'} · Round ${myMatch.round}
+    <div class="match-tag ${myMatch.bracket}" style="font-size:.75rem;margin-bottom:.5rem;">
+      ${myMatch.bracket==='winners'?'🏆 Winners Bracket':'💀 Losers Bracket'} · Round ${myMatch.round}
     </div>
     <div class="match-players">
       <div class="match-player" style="border-color:var(--cyan);color:var(--cyan);">${myName}</div>
       <div class="match-vs">VS</div>
-      <div class="match-player">${opponent}</div>
+      <div class="match-player">${opp}</div>
     </div>
-    <p style="font-size:.75rem;color:var(--muted);text-align:center;margin:.5rem 0;">After playing, log your result:</p>
+    <p style="font-size:.75rem;color:var(--muted);text-align:center;margin:.5rem 0;">After your game, log the result:</p>
     <div class="outcome-group">
-      <label class="outcome-label" onclick="logResult('${myMatch.id}','${myName}')">
-        <div class="outcome-pill win-pill">⚡ I Won</div>
+      <label class="oc-label" onclick="logResult('${myMatch.id}','${myName}','${opp}')">
+        <div class="oc-pill win">⚡ I Won</div>
       </label>
-      <label class="outcome-label" onclick="logResult('${myMatch.id}','${opponent}')">
-        <div class="outcome-pill loss-pill">💀 I Lost</div>
+      <label class="oc-label" onclick="logResult('${myMatch.id}','${opp}','${myName}')">
+        <div class="oc-pill loss">💀 I Lost</div>
       </label>
-    </div>
-  `;
+    </div>`;
 }
 
-// ── Render bracket ────────────────────────────────────────────────
 function renderBracket() {
-  const wContainer = document.getElementById('winners-bracket');
-  const lContainer = document.getElementById('losers-bracket');
-  const wMatches = currentMatches.filter(m => m.bracket === 'winners');
-  const lMatches = currentMatches.filter(m => m.bracket === 'losers');
-
-  const renderMatches = (matches) => {
-    if (matches.length === 0) return '<div class="lb-empty">No matches yet.</div>';
-    return matches.map(m => `
-      <div class="host-match">
-        <div class="host-match-header">
-          <span class="round-badge">Round ${m.round}</span>
-          <span class="host-match-status ${m.status === 'complete' ? 'complete' : 'pending'}" style="color:${m.status==='complete'?'var(--green)':'var(--yellow)'}">
-            ${m.status === 'complete' ? '✅ Done' : '⏳ Pending'}
-          </span>
-        </div>
-        <div class="host-match-players" style="margin:.4rem 0;">
-          ${m.p1} <span style="color:var(--muted);font-size:.75rem;"> vs </span> ${m.p2}
-        </div>
-        ${m.winner ? `<div style="font-family:var(--font-mono);font-size:.65rem;color:var(--green);">🏆 Winner: ${m.winner}</div>` : ''}
-      </div>
-    `).join('');
-  };
-
-  wContainer.innerHTML = renderMatches(wMatches);
-  lContainer.innerHTML = renderMatches(lMatches);
-}
-
-// ── Render host matches ───────────────────────────────────────────
-function renderHostMatches(state) {
-  const container = document.getElementById('host-matches');
-  const pending = currentMatches.filter(m => m.status === 'pending');
-  const complete = currentMatches.filter(m => m.status === 'complete' && m.p2 !== 'BYE');
-  const allDone = pending.length === 0;
-
-  document.getElementById('round-info').textContent =
-    `Round ${state?.currentRound||1} · ${complete.length} complete · ${pending.length} pending`;
-
-  container.innerHTML = currentMatches.map(m => `
-    <div class="host-match">
-      <div class="host-match-header">
-        <span class="round-badge">${m.bracket==='winners'?'🏆':'💀'} R${m.round}</span>
-        <span style="font-family:var(--font-mono);font-size:.65rem;color:${m.status==='complete'?'var(--green)':'var(--yellow)'}">
-          ${m.status === 'complete' ? '✅ Done' : '⏳ Pending'}
+  const wEl = document.getElementById('bracket-winners');
+  const lEl = document.getElementById('bracket-losers');
+  const wM = currentMatches.filter(m=>m.bracket==='winners');
+  const lM = currentMatches.filter(m=>m.bracket==='losers');
+  const renderM = (arr) => arr.length ? arr.map(m=>`
+    <div class="host-match" style="padding:.8rem 1rem;border-bottom:1px solid var(--border);">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;">
+        <span class="round-badge">Round ${m.round}</span>
+        <span style="font-family:var(--mono);font-size:.62rem;color:${m.status==='complete'?'var(--green)':'var(--yellow)'}">
+          ${m.status==='complete'?'✅ Done':'⏳ Pending'}
         </span>
       </div>
-      <div class="host-match-players" style="margin:.4rem 0;font-size:.85rem;">
-        ${m.p1} vs ${m.p2}
-      </div>
-      ${m.winner ? `<div style="font-family:var(--font-mono);font-size:.65rem;color:var(--green);margin-top:.2rem;">🏆 ${m.winner} won</div>` : ''}
-    </div>
-  `).join('');
-
-  const nextBtn = document.getElementById('next-round-btn');
-  const undoBtn = document.getElementById('undo-btn');
-  nextBtn.style.display = (allDone && currentMatches.length > 0) ? 'block' : 'none';
-  undoBtn.style.display = lastResultId ? 'block' : 'none';
+      <div style="font-family:var(--mono);font-size:.82rem;">${m.p1} <span style="color:var(--muted);font-size:.7rem;">vs</span> ${m.p2}</div>
+      ${m.winner?`<div style="font-family:var(--mono);font-size:.62rem;color:var(--green);margin-top:.3rem;">🏆 ${m.winner}</div>`:''}
+    </div>`).join('') : '<div class="lb-empty">No matches yet.</div>';
+  wEl.innerHTML = renderM(wM);
+  lEl.innerHTML = renderM(lM);
 }
 
-// ── Render standings ──────────────────────────────────────────────
-function renderStandings(players, state) {
-  const correctAnswer = state?.correctAnswer || 0;
-
+function renderStandings(players) {
+  const ca = tState?.correctAnswer || 0;
   const sortFn = (a,b) => {
-    if (b.totalPoints !== a.totalPoints) return b.totalPoints - a.totalPoints;
-    const aDiff = a.guess != null ? Math.abs(a.guess - correctAnswer) : Infinity;
-    const bDiff = b.guess != null ? Math.abs(b.guess - correctAnswer) : Infinity;
-    return aDiff - bDiff;
+    if (b.totalPoints!==a.totalPoints) return b.totalPoints-a.totalPoints;
+    const ad = a.guess!=null?Math.abs(a.guess-ca):Infinity;
+    const bd = b.guess!=null?Math.abs(b.guess-ca):Infinity;
+    return ad-bd;
   };
-
-  const winners  = players.filter(p => p.bracket === 'winners' && !p.eliminated).sort(sortFn);
-  const losers   = players.filter(p => p.bracket === 'losers'  && !p.eliminated).sort(sortFn);
-  const elim     = players.filter(p => p.eliminated).sort(sortFn);
-
-  const makeRow = (p, i) => {
-    const rank = i + 1;
-    const medal = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':rank;
-    const guessStr = p.guess != null ? `Guess: ${p.guess}` : 'No guess';
-    return `<div class="lb-row${rank<=3?' top-'+rank:''}">
+  const win  = players.filter(p=>p.bracket==='winners'&&!p.eliminated).sort(sortFn);
+  const lose = players.filter(p=>p.bracket==='losers' &&!p.eliminated).sort(sortFn);
+  const elim = players.filter(p=>p.eliminated).sort(sortFn);
+  const row = (p,i) => {
+    const r=i+1, medal=r===1?'🥇':r===2?'🥈':r===3?'🥉':r;
+    const g = p.guess!=null?`Guess:${p.guess}`:'No guess';
+    return `<div class="lb-row${r<=3?' top-'+r:''}">
       <span class="lb-rank">${medal}</span>
-      <span class="lb-name">${p.name}</span>
-      <span class="lb-pts">${p.totalPoints}<span style="font-size:.6rem;color:var(--muted);"> PTS</span></span>
-      <span class="lb-meta">${p.wins}W · ${p.losses}L · ${guessStr}</span>
+      <span class="lb-name">${p.name}${p.late?'<span style="font-size:.55rem;color:var(--yellow);"> (late)</span>':''}</span>
+      <span class="lb-pts">${p.totalPoints}<span style="font-size:.55rem;color:var(--muted);"> PTS</span></span>
+      <span class="lb-meta">${p.wins}W·${p.losses}L·${g}</span>
     </div>`;
   };
-
-  document.getElementById('lb-winners').innerHTML   = winners.length ? winners.map(makeRow).join('') : '<div class="lb-empty">None yet</div>';
-  document.getElementById('lb-losers').innerHTML    = losers.length  ? losers.map(makeRow).join('')  : '<div class="lb-empty">None yet</div>';
-  document.getElementById('lb-eliminated').innerHTML = elim.length   ? elim.map(makeRow).join('')    : '<div class="lb-empty">None yet</div>';
-  document.getElementById('last-updated').textContent = 'Updated ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  document.getElementById('lb-win').innerHTML  = win.length  ? win.map(row).join('')  : '<div class="lb-empty">None yet</div>';
+  document.getElementById('lb-lose').innerHTML = lose.length ? lose.map(row).join('') : '<div class="lb-empty">None yet</div>';
+  document.getElementById('lb-elim').innerHTML = elim.length ? elim.map(row).join('') : '<div class="lb-empty">None yet</div>';
+  document.getElementById('last-updated').textContent = 'Updated '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'});
 }
 
-// ── Render spectator standings ────────────────────────────────────
-function renderSpectatorStandings(specs) {
-  const sorted = specs.sort((a,b) => (b.correctPredictions||0) - (a.correctPredictions||0));
-  const container = document.getElementById('lb-spectators');
-  if (!sorted.length) { container.innerHTML = '<div class="lb-empty">No spectators yet</div>'; return; }
-  container.innerHTML = sorted.map((s,i) => {
-    const rank = i+1;
-    const medal = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':rank;
-    return `<div class="lb-row${rank<=3?' top-'+rank:''}">
+function renderSpecStandings(specs) {
+  const ca = tState?.correctAnswer || 0;
+  const sorted = [...specs].sort((a,b)=>{
+    if ((b.correctPredictions||0)!==(a.correctPredictions||0)) return (b.correctPredictions||0)-(a.correctPredictions||0);
+    const ad=a.guess!=null?Math.abs(a.guess-ca):Infinity;
+    const bd=b.guess!=null?Math.abs(b.guess-ca):Infinity;
+    return ad-bd;
+  });
+  const el = document.getElementById('lb-spec');
+  if (!sorted.length) { el.innerHTML='<div class="lb-empty">No spectators yet</div>'; return; }
+  el.innerHTML = sorted.map((s,i)=>{
+    const r=i+1,medal=r===1?'🥇':r===2?'🥈':r===3?'🥉':r;
+    return `<div class="lb-row${r<=3?' top-'+r:''}">
       <span class="lb-rank">${medal}</span>
       <span class="lb-name">${s.name}</span>
-      <span class="lb-pts">${s.correctPredictions||0}<span style="font-size:.6rem;color:var(--muted);"> ✅</span></span>
-      <span class="lb-meta">Correct predictions</span>
+      <span class="lb-pts">${s.correctPredictions||0}<span style="font-size:.55rem;color:var(--muted);"> ✅</span></span>
+      <span class="lb-meta">Correct picks · Guess:${s.guess!=null?s.guess:'—'}</span>
     </div>`;
   }).join('');
 }
 
-// ── Render signup list (host) ─────────────────────────────────────
 function renderSignupList(signups) {
   const el = document.getElementById('signup-list');
-  const startBtn = document.getElementById('start-btn');
-  if (!signups.length) { el.innerHTML = 'No players signed up yet.'; startBtn.style.display='none'; return; }
-  el.innerHTML = `<div style="margin-bottom:.5rem;font-family:var(--font-mono);font-size:.7rem;color:var(--muted);">${signups.length} player(s) signed up:</div>` +
-    signups.map(s => `<span class="signup-chip ready">✅ ${s.name}</span>`).join('');
-  startBtn.style.display = signups.length >= 2 ? 'block' : 'none';
+  const btn = document.getElementById('start-btn');
+  if (!signups.length) { el.innerHTML='<span style="font-family:var(--mono);font-size:.7rem;color:var(--muted);">No players yet.</span>'; btn.style.display='none'; return; }
+  el.innerHTML = `<div style="font-family:var(--mono);font-size:.68rem;color:var(--muted);margin-bottom:.5rem;">${signups.length} signed up:</div>`
+    + signups.map(s=>`<span class="chip${s.late?' late':''}">${s.late?'⏰':'✅'} ${s.name}</span>`).join('');
+  btn.style.display = (signups.length>=2 && tState?.status!=='active') ? 'block' : 'none';
 }
 
-// ── Restore session ───────────────────────────────────────────────
-const savedName = localStorage.getItem('myName');
-const savedRole = localStorage.getItem('myRole');
-if (savedName && savedRole) {
-  myName = savedName; myRole = savedRole;
-  if (savedRole === 'player') {
-    showRolePanel('player');
-    document.getElementById('player-select').value = savedName;
-    document.getElementById('signup-btn').textContent = '✅ Signed Up!';
-    document.getElementById('signup-btn').disabled = true;
-  } else if (savedRole === 'spectator') {
-    showRolePanel('spectator');
-    document.getElementById('spectator-name').value = savedName;
-    document.getElementById('vote-section').style.display = 'block';
+function renderHostMatches() {
+  if (!tState) return;
+  const container = document.getElementById('host-matches');
+  const pending = currentMatches.filter(m=>m.status==='pending');
+  const allDone = pending.length===0 && currentMatches.length>0;
+  document.getElementById('round-info').textContent =
+    `Round ${tState.currentRound||1} · ${currentMatches.filter(m=>m.status==='complete').length} done · ${pending.length} pending`;
+  container.innerHTML = currentMatches.map(m=>`
+    <div class="host-match">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;">
+        <span class="round-badge">${m.bracket==='winners'?'🏆':'💀'} R${m.round}</span>
+        <span style="font-family:var(--mono);font-size:.62rem;color:${m.status==='complete'?'var(--green)':'var(--yellow)'}">
+          ${m.status==='complete'?'✅ Done':'⏳ Pending'}
+        </span>
+      </div>
+      <div style="font-family:var(--mono);font-size:.82rem;">${m.p1} vs ${m.p2}</div>
+      ${m.winner?`<div style="font-family:var(--mono);font-size:.62rem;color:var(--green);margin-top:.3rem;">🏆 ${m.winner}</div>`:''}
+    </div>`).join('');
+  document.getElementById('next-round-btn').style.display = allDone ? 'block' : 'none';
+  document.getElementById('undo-btn').style.display = lastResultId ? 'block' : 'none';
+  document.getElementById('round-ctrl').style.display = currentMatches.length ? 'block' : 'none';
+}
+
+// ── Restore session ──────────────────────────────────
+const sName = localStorage.getItem('myName');
+const sRole = localStorage.getItem('myRole');
+if (sName && sRole) {
+  myName = sName; myRole = sRole;
+  if (sRole==='player') {
+    showRole('player');
+    const ps = document.getElementById('player-select');
+    if ([...ps.options].some(o=>o.value===sName)) ps.value=sName;
+    document.getElementById('signup-btn').textContent='✅ Signed Up!';
+    document.getElementById('signup-btn').disabled=true;
+  } else {
+    showRole('spectator');
+    document.getElementById('spec-custom-name').value=sName;
+    document.getElementById('vote-section').style.display='block';
   }
 }
 
-// ── Firestore listeners ───────────────────────────────────────────
-let prevRound = null;
-
-// Tournament state
-onSnapshot(doc(db,'tournament','state'), (snap) => {
+// ── Firestore listeners ──────────────────────────────
+onSnapshot(doc(db,'tournament','state'), snap => {
   if (!snap.exists()) return;
-  tournamentState = snap.data();
-  if (tournamentState.status === 'complete' && tournamentState.champion) {
-    document.getElementById('champ-name').textContent = tournamentState.champion;
+  tState = snap.data();
+  checkLateJoin();
+  if (tState.status==='complete' && tState.champion) {
+    document.getElementById('champ-name').textContent = tState.champion;
     document.getElementById('celebration').classList.add('show');
   }
 });
 
-// Matches
-onSnapshot(collection(db,'matches'), (snap) => {
-  currentMatches = snap.docs.map(d => d.data());
-
-  // Detect new round for notification
-  if (tournamentState) {
-    const r = tournamentState.currentRound;
-    if (prevRound !== null && r > prevRound) showNotif();
-    prevRound = r;
-  }
-
+onSnapshot(collection(db,'matches'), snap => {
+  currentMatches = snap.docs.map(d=>d.data());
+  const newRound = tState?.currentRound || 0;
+  if (prevRound > 0 && newRound > prevRound) showNotif();
+  prevRound = newRound;
   renderBracket();
   renderPlayerMatch();
   renderVoteMatches();
-  renderHostMatches(tournamentState);
-  document.getElementById('round-control').style.display = currentMatches.length ? 'block' : 'none';
+  renderHostMatches();
 });
 
-// Players
-onSnapshot(collection(db,'players'), (snap) => {
-  const players = snap.docs.map(d => d.data());
-  renderStandings(players, tournamentState);
+onSnapshot(collection(db,'players'), snap => {
+  renderStandings(snap.docs.map(d=>d.data()));
 });
 
-// Signups
-onSnapshot(collection(db,'signups'), (snap) => {
-  renderSignupList(snap.docs.map(d => d.data()));
+onSnapshot(collection(db,'signups'), snap => {
+  signedUpPlayers = snap.docs.map(d=>d.data().name);
+  renderSignupList(snap.docs.map(d=>d.data()));
+  populateDropdowns(signedUpPlayers);
 });
 
-// Spectators
-onSnapshot(collection(db,'spectators'), (snap) => {
-  renderSpectatorStandings(snap.docs.map(d => d.data()));
+onSnapshot(collection(db,'spectators'), snap => {
+  renderSpecStandings(snap.docs.map(d=>d.data()));
 });
 
-// ── Helpers ───────────────────────────────────────────────────────
-window.showMsg = (id, msg, type) => {
+// ── Helpers ──────────────────────────────────────────
+window.showMsg = (id, text, type) => {
   const el = document.getElementById(id);
   if (!el) return;
-  el.textContent = msg;
-  el.className = 'status ' + type;
-  setTimeout(() => { el.className = 'status'; }, 4000);
+  el.textContent = text;
+  el.className = 'msg ' + type;
+  setTimeout(()=>{ el.className='msg'; },4500);
 };
-
-// Make logResult globally accessible
-window.logResult = logResult;
-window.voteOnMatch = voteOnMatch;
 </script>
 </body>
 </html>
