@@ -309,14 +309,27 @@
       </div>
     </div>
     <div class="card">
-      <div class="card-hdr"><span class="card-icon">➕</span><span class="card-ttl">Add Player Manually</span></div>
+      <div class="card-hdr"><span class="card-icon">➕</span><span class="card-ttl">Add Person Manually</span></div>
       <div class="card-body">
         <div class="field">
-          <label>Player name</label>
-          <input type="text" id="host-add-name" placeholder="Full name" maxlength="40" />
+          <label>Full name</label>
+          <input type="text" id="host-add-name" placeholder="Enter full name" maxlength="40" />
+        </div>
+        <div class="field">
+          <label>Role</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:.2rem;">
+            <label style="cursor:pointer;display:flex;align-items:center;gap:.5rem;">
+              <input type="radio" name="host-add-role" value="player" checked style="width:auto;" />
+              <span style="font-family:var(--mono);font-size:.75rem;color:var(--text);">&#127918; Player</span>
+            </label>
+            <label style="cursor:pointer;display:flex;align-items:center;gap:.5rem;">
+              <input type="radio" name="host-add-role" value="spectator" style="width:auto;" />
+              <span style="font-family:var(--mono);font-size:.75rem;color:var(--text);">&#128064; Spectator</span>
+            </label>
+          </div>
         </div>
         <div id="add-msg" class="msg"></div>
-        <button class="btn btn-cyan" onclick="hostAddPlayer()">ADD TO TOURNAMENT</button>
+        <button class="btn btn-cyan" onclick="hostAddPlayer()">ADD PERSON</button>
       </div>
     </div>
     <div class="card" id="round-ctrl" style="display:none;">
@@ -337,6 +350,70 @@
         </div>
         <div id="ans-msg" class="msg"></div>
         <button class="btn btn-purple" onclick="saveAnswer()">SAVE ANSWER</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-hdr"><span class="card-icon">✏️</span><span class="card-ttl">Edit Submitted Data</span></div>
+      <div class="card-body">
+        <div class="field">
+          <label>Select person to edit</label>
+          <div class="sel-wrap">
+            <select id="edit-person-select" onchange="loadEditPerson()">
+              <option value="" disabled selected>— Select a person —</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="edit-panel" style="display:none;">
+          <div id="edit-type-badge" style="font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem;"></div>
+
+          <!-- Player edit fields -->
+          <div id="edit-player-fields">
+            <div class="field">
+              <label>Total Points</label>
+              <input type="number" id="edit-points" min="0" />
+            </div>
+            <div class="field">
+              <label>Wins</label>
+              <input type="number" id="edit-wins" min="0" />
+            </div>
+            <div class="field">
+              <label>Losses</label>
+              <input type="number" id="edit-losses" min="0" />
+            </div>
+            <div class="field">
+              <label>Bracket</label>
+              <div class="sel-wrap">
+                <select id="edit-bracket">
+                  <option value="winners">Winners Bracket</option>
+                  <option value="losers">Losers Bracket</option>
+                  <option value="eliminated">Eliminated</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label>Container Guess</label>
+              <input type="number" id="edit-player-guess" min="0" placeholder="Leave blank to clear" />
+            </div>
+          </div>
+
+          <!-- Spectator edit fields -->
+          <div id="edit-spec-fields" style="display:none;">
+            <div class="field">
+              <label>Correct Predictions</label>
+              <input type="number" id="edit-predictions" min="0" />
+            </div>
+            <div class="field">
+              <label>Container Guess</label>
+              <input type="number" id="edit-spec-guess" min="0" placeholder="Leave blank to clear" />
+            </div>
+          </div>
+
+          <div id="edit-msg" class="msg"></div>
+          <button class="btn btn-yellow" onclick="saveEditPerson()" style="margin-top:.3rem;">💾 SAVE CHANGES</button>
+          <button class="btn btn-pink" onclick="deleteEditPerson()" style="margin-top:.5rem;">🗑️ REMOVE THIS PERSON</button>
+        </div>
       </div>
     </div>
   </div>
@@ -661,17 +738,28 @@ window.checkPin = () => {
 
 // ── Host: add player ───────────────────────────────────
 window.hostAddPlayer = async () => {
-  const name=document.getElementById('host-add-name').value.trim();
-  if(!name){showMsg('add-msg','Enter a name.','error');return;}
-  const round=tState?.currentRound||0,status=tState?.status||'waiting';
-  if(status==='active'&&round>=2){showMsg('add-msg','Cannot add players after Round 1.','error');return;}
-  const isLate=status==='active';
-  await setDoc(doc(db,'signups',name),{name,signedUpAt:Date.now(),late:isLate},{merge:true});
-  if(isLate){
-    await setDoc(doc(db,'players',name),{name,totalPoints:1,wins:0,losses:1,bracket:'losers',eliminated:false,round:2,guess:null,late:true},{merge:true});
-    showMsg('add-msg',`${name} added to Losers Bracket.`,'warning');
-  } else showMsg('add-msg',`${name} added! ✅`,'success');
-  document.getElementById('host-add-name').value='';
+  const name = document.getElementById('host-add-name').value.trim();
+  if (!name) { showMsg('add-msg','Enter a name.','error'); return; }
+  const role = document.querySelector('input[name="host-add-role"]:checked')?.value || 'player';
+  const round = tState?.currentRound || 0, status = tState?.status || 'waiting';
+
+  if (role === 'spectator') {
+    // Add as spectator — no tournament restrictions
+    await setDoc(doc(db,'spectators',name), {name, joinedAt:Date.now(), correctPredictions:0, guess:null}, {merge:true});
+    showMsg('add-msg', `${name} added as spectator. ✅`, 'success');
+  } else {
+    // Add as player
+    if (status === 'active' && round >= 2) { showMsg('add-msg','Cannot add players after Round 1.','error'); return; }
+    const isLate = status === 'active';
+    await setDoc(doc(db,'signups',name), {name, signedUpAt:Date.now(), late:isLate}, {merge:true});
+    if (isLate) {
+      await setDoc(doc(db,'players',name), {name,totalPoints:1,wins:0,losses:1,bracket:'losers',eliminated:false,round:2,guess:null,late:true}, {merge:true});
+      showMsg('add-msg', `${name} added to Losers Bracket (late join). ⚠️`, 'warning');
+    } else {
+      showMsg('add-msg', `${name} added as player. ✅`, 'success');
+    }
+  }
+  document.getElementById('host-add-name').value = '';
 };
 
 // ── Start tournament ───────────────────────────────────
@@ -778,6 +866,138 @@ async function checkChampion() {
 }
 
 // ── Save correct answer ────────────────────────────────
+// ── Edit panel ─────────────────────────────────────────
+let editPersonRole = null;
+let editPersonName = null;
+
+function populateEditSelect(players, spectators) {
+  const sel = document.getElementById('edit-person-select');
+  const cur = sel.value;
+  sel.innerHTML = '<option value="" disabled selected>— Select a person —</option>';
+
+  if (players.length) {
+    const og = document.createElement('optgroup');
+    og.label = '🎮 Players';
+    players.forEach(p => {
+      const o = document.createElement('option');
+      o.value = 'player::' + p.name;
+      o.textContent = p.name + ' (' + p.totalPoints + ' pts · ' + p.bracket + ')';
+      og.appendChild(o);
+    });
+    sel.appendChild(og);
+  }
+
+  if (spectators.length) {
+    const og = document.createElement('optgroup');
+    og.label = '👀 Spectators';
+    spectators.forEach(s => {
+      const o = document.createElement('option');
+      o.value = 'spectator::' + s.name;
+      o.textContent = s.name + ' (' + (s.correctPredictions||0) + ' correct picks)';
+      og.appendChild(o);
+    });
+    sel.appendChild(og);
+  }
+
+  if (cur) try { sel.value = cur; } catch(e){}
+}
+
+window.loadEditPerson = async () => {
+  const val = document.getElementById('edit-person-select').value;
+  if (!val) return;
+  const [role, name] = val.split('::');
+  editPersonRole = role;
+  editPersonName = name;
+
+  const panel = document.getElementById('edit-panel');
+  const badge = document.getElementById('edit-type-badge');
+  const playerFields = document.getElementById('edit-player-fields');
+  const specFields = document.getElementById('edit-spec-fields');
+
+  panel.style.display = 'block';
+
+  if (role === 'player') {
+    badge.textContent = '🎮 Editing player: ' + name;
+    badge.style.color = 'var(--cyan)';
+    playerFields.style.display = 'block';
+    specFields.style.display = 'none';
+    const snap = await getDoc(doc(db,'players',name));
+    if (snap.exists()) {
+      const d = snap.data();
+      document.getElementById('edit-points').value  = d.totalPoints || 0;
+      document.getElementById('edit-wins').value    = d.wins || 0;
+      document.getElementById('edit-losses').value  = d.losses || 0;
+      document.getElementById('edit-bracket').value = d.bracket || 'winners';
+      document.getElementById('edit-player-guess').value = d.guess != null ? d.guess : '';
+    }
+  } else {
+    badge.textContent = '👀 Editing spectator: ' + name;
+    badge.style.color = 'var(--purple)';
+    playerFields.style.display = 'none';
+    specFields.style.display = 'block';
+    const snap = await getDoc(doc(db,'spectators',name));
+    if (snap.exists()) {
+      const d = snap.data();
+      document.getElementById('edit-predictions').value = d.correctPredictions || 0;
+      document.getElementById('edit-spec-guess').value  = d.guess != null ? d.guess : '';
+    }
+  }
+};
+
+window.saveEditPerson = async () => {
+  if (!editPersonName || !editPersonRole) return;
+
+  try {
+    if (editPersonRole === 'player') {
+      const points  = parseInt(document.getElementById('edit-points').value) || 0;
+      const wins    = parseInt(document.getElementById('edit-wins').value) || 0;
+      const losses  = parseInt(document.getElementById('edit-losses').value) || 0;
+      const bracket = document.getElementById('edit-bracket').value;
+      const gRaw    = document.getElementById('edit-player-guess').value;
+      const guess   = gRaw !== '' ? parseInt(gRaw) : null;
+      const elim    = bracket === 'eliminated';
+      await updateDoc(doc(db,'players',editPersonName), {
+        totalPoints:points, wins, losses, bracket, eliminated:elim,
+        guess: guess
+      });
+    } else {
+      const preds  = parseInt(document.getElementById('edit-predictions').value) || 0;
+      const gRaw   = document.getElementById('edit-spec-guess').value;
+      const guess  = gRaw !== '' ? parseInt(gRaw) : null;
+      await updateDoc(doc(db,'spectators',editPersonName), {
+        correctPredictions:preds, guess
+      });
+    }
+    showMsg('edit-msg', '✅ Saved! Changes are live immediately.', 'success');
+  } catch(err) {
+    console.error(err);
+    showMsg('edit-msg', '❌ Error saving — try again.', 'error');
+  }
+};
+
+window.deleteEditPerson = async () => {
+  if (!editPersonName || !editPersonRole) return;
+  if (!confirm(`Remove ${editPersonName} completely? This cannot be undone.`)) return;
+
+  try {
+    if (editPersonRole === 'player') {
+      const { deleteDoc } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+      await deleteDoc(doc(db,'players',editPersonName));
+      await deleteDoc(doc(db,'signups',editPersonName));
+    } else {
+      const { deleteDoc } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+      await deleteDoc(doc(db,'spectators',editPersonName));
+    }
+    document.getElementById('edit-panel').style.display = 'none';
+    document.getElementById('edit-person-select').value = '';
+    editPersonName = null; editPersonRole = null;
+    showMsg('edit-msg', `${editPersonName} removed.`, 'success');
+  } catch(err) {
+    console.error(err);
+    showMsg('edit-msg', '❌ Error removing — try again.', 'error');
+  }
+};
+
 window.saveAnswer = async () => {
   const val=parseInt(document.getElementById('correct-answer').value);
   if(isNaN(val)){showMsg('ans-msg','Enter a valid number.','error');return;}
@@ -957,9 +1177,19 @@ onSnapshot(collection(db,'matches'), snap => {
   renderHostMatches();
 });
 
-onSnapshot(collection(db,'players'), snap => renderStandings(snap.docs.map(d=>d.data())));
+onSnapshot(collection(db,'players'), snap => {
+  const players = snap.docs.map(d=>d.data());
+  renderStandings(players);
+  window._cachedPlayers = players;
+  if (window._cachedSpectators) populateEditSelect(players, window._cachedSpectators);
+});
 onSnapshot(collection(db,'signups'), snap => { signedUpPlayers=snap.docs.map(d=>d.data().name); renderSignupList(snap.docs.map(d=>d.data())); populateMainSelect(signedUpPlayers); });
-onSnapshot(collection(db,'spectators'), snap => renderSpecStandings(snap.docs.map(d=>d.data())));
+onSnapshot(collection(db,'spectators'), snap => {
+  const specs = snap.docs.map(d=>d.data());
+  renderSpecStandings(specs);
+  window._cachedSpectators = specs;
+  if (window._cachedPlayers) populateEditSelect(window._cachedPlayers, specs);
+});
 
 // ── Helper ─────────────────────────────────────────────
 window.showMsg = (id,text,type) => {
