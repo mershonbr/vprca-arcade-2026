@@ -425,6 +425,47 @@
         </div>
       </div>
     </div>
+
+    <div class="card" style="border-color:rgba(255,230,0,.3);">
+      <div class="card-hdr" style="background:rgba(255,230,0,.06);">
+        <span class="card-icon">🎲</span>
+        <span class="card-ttl" style="color:var(--yellow);">Simulation Mode</span>
+      </div>
+      <div class="card-body">
+        <div style="font-family:var(--mono);font-size:.68rem;color:var(--muted);line-height:1.7;background:rgba(255,230,0,.06);border:1px solid rgba(255,230,0,.2);border-radius:var(--r);padding:.8rem;">
+          🎲 Creates fake players &amp; spectators, runs rounds with random results so you can test the full tournament flow from one screen.
+        </div>
+        <div class="field">
+          <label>Number of simulated players</label>
+          <div class="sel-wrap">
+            <select id="sim-player-count">
+              <option value="4">4 players</option>
+              <option value="6">6 players</option>
+              <option value="8" selected>8 players</option>
+              <option value="10">10 players</option>
+              <option value="12">12 players</option>
+              <option value="16">16 players</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label>Number of simulated spectators</label>
+          <div class="sel-wrap">
+            <select id="sim-spec-count">
+              <option value="0">0 spectators</option>
+              <option value="3" selected>3 spectators</option>
+              <option value="5">5 spectators</option>
+            </select>
+          </div>
+        </div>
+        <div id="sim-msg" class="msg"></div>
+        <div id="sim-log" style="display:none;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:.8rem;max-height:200px;overflow-y:auto;font-family:var(--mono);font-size:.65rem;color:var(--text);line-height:1.9;"></div>
+        <button class="btn btn-yellow" id="sim-setup-btn" onclick="simSetup()">🎲 POPULATE SIMULATION</button>
+        <button class="btn" id="sim-run-btn" onclick="simRunRound()" style="display:none;margin-top:.5rem;background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;box-shadow:0 0 20px rgba(180,79,255,.3);">▶ AUTO-PLAY NEXT ROUND</button>
+        <button class="btn btn-ghost" id="sim-clear-btn" onclick="simClear()" style="display:none;margin-top:.5rem;">🗑 CLEAR SIMULATION DATA</button>
+      </div>
+    </div>
+
   </div>
 </div>
 
