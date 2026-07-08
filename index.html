@@ -81,13 +81,23 @@
     .notif-close{background:none;border:1px solid rgba(255,255,255,.4);color:#fff;font-family:var(--mono);font-size:.65rem;padding:.3rem .8rem;border-radius:4px;cursor:pointer;margin-top:.3rem;}
 
     /* ── Celebration ── */
-    #celebration{display:none;position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.93);flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;}
+    #celebration{display:none;position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.95);flex-direction:column;align-items:flex-start;justify-content:flex-start;overflow-y:auto;padding:1rem 0;}
     #celebration.show{display:flex;}
-    .cel-trophy{font-size:5rem;animation:bounce 1s infinite;}
-    @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
-    .cel-title{font-family:var(--mono);font-size:1rem;letter-spacing:.2em;color:var(--yellow);text-transform:uppercase;margin:1rem 0 .5rem;}
-    .cel-name{font-family:var(--mono);font-size:2rem;font-weight:700;color:#fff;}
-    .cel-close{margin-top:1.5rem;padding:.6rem 1.5rem;background:none;border:1px solid var(--muted);color:var(--muted);font-family:var(--mono);font-size:.7rem;border-radius:var(--r);cursor:pointer;}
+    .cel-trophy{font-size:4rem;animation:bounce 1s infinite;}
+    @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+    .cel-title{font-family:var(--mono);font-size:.85rem;letter-spacing:.2em;color:var(--yellow);text-transform:uppercase;margin:.8rem 0 .3rem;}
+    .cel-name{font-family:var(--mono);font-size:clamp(1.4rem,5vw,2.2rem);font-weight:700;color:#fff;text-shadow:0 0 30px var(--gold);}
+    .cel-close{padding:.7rem 1.5rem;background:none;border:1px solid var(--muted);color:var(--muted);font-family:var(--mono);font-size:.75rem;border-radius:var(--r);cursor:pointer;}
+    .cel-row{display:grid;grid-template-columns:2.2rem 1fr auto;grid-template-rows:auto auto;column-gap:.6rem;row-gap:.1rem;align-items:center;padding:.75rem 1rem;border-bottom:1px solid var(--border);}
+    .cel-row:last-child{border-bottom:none;}
+    .cel-row.top-1{background:rgba(255,215,0,.08);}
+    .cel-row.top-2{background:rgba(192,192,192,.04);}
+    .cel-row.top-3{background:rgba(205,127,50,.04);}
+    .cel-rank{grid-row:1/3;font-size:1.1rem;text-align:center;}
+    .cel-rname{font-family:var(--mono);font-size:.88rem;color:var(--text);}
+    .cel-row.top-1 .cel-rname{color:var(--yellow);}
+    .cel-pts{grid-row:1;grid-column:3;font-family:var(--mono);font-size:.9rem;font-weight:700;color:var(--cyan);text-align:right;}
+    .cel-meta{grid-row:2;grid-column:2/4;font-family:var(--mono);font-size:.6rem;color:var(--muted);}
 
     /* ── Match cards ── */
     .match-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:.9rem;margin-bottom:.7rem;}
@@ -154,6 +164,48 @@
     .guess-locked-lbl{font-size:.65rem;letter-spacing:.15em;color:var(--muted);text-transform:uppercase;}
 
     footer{max-width:500px;margin:1.5rem auto 0;padding:0 1rem;text-align:center;font-family:var(--mono);font-size:.56rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;}
+
+    /* ── Projection screen ── */
+    #s-projection{max-width:100% !important;padding:0 !important;}
+    .proj-wrap{background:var(--bg);min-height:100dvh;padding:.8rem;}
+    .proj-header{text-align:center;padding:.8rem 1rem 1rem;border-bottom:2px solid var(--pink);margin-bottom:1rem;background:linear-gradient(160deg,#0d0d1a,#12122a);box-shadow:0 0 20px rgba(255,45,120,.3);}
+    .proj-eyebrow{font-family:var(--mono);font-size:.55rem;letter-spacing:.25em;color:var(--cyan);text-transform:uppercase;margin-bottom:.3rem;}
+    .proj-title{font-family:var(--mono);font-size:clamp(1.2rem,3vw,2rem);font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-shadow:-2px 0 var(--pink),2px 0 var(--cyan);}
+    .proj-stripe{height:3px;background:linear-gradient(90deg,var(--pink)50%,var(--cyan)50%);margin-bottom:.8rem;}
+    .proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:.8rem;}
+    @media(max-width:600px){.proj-grid{grid-template-columns:1fr;}}
+    .proj-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+    .proj-panel-hdr{padding:.65rem 1rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
+    .proj-panel-ttl{font-family:var(--mono);font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;}
+    .proj-panel-count{font-family:var(--mono);font-size:.65rem;color:var(--muted);}
+    .proj-player-row{display:grid;grid-template-columns:2rem 1fr auto;align-items:center;gap:.5rem;padding:.65rem 1rem;border-bottom:1px solid var(--border);transition:background .2s;}
+    .proj-player-row:last-child{border-bottom:none;}
+    .proj-player-row.active-w{border-left:3px solid var(--gold);}
+    .proj-player-row.active-l{border-left:3px solid var(--silver);}
+    .proj-player-row.elim-row{opacity:.45;border-left:3px solid var(--pink);}
+    .proj-rank{font-family:var(--mono);font-size:1rem;text-align:center;}
+    .proj-name{font-family:var(--mono);font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .proj-name-sub{font-family:var(--mono);font-size:.58rem;color:var(--muted);margin-top:.1rem;}
+    .proj-score{font-family:var(--mono);font-size:1rem;font-weight:700;color:var(--cyan);text-align:right;white-space:nowrap;}
+    .proj-score-sub{font-family:var(--mono);font-size:.58rem;color:var(--muted);text-align:right;}
+    .proj-badge{display:inline-block;font-family:var(--mono);font-size:.5rem;letter-spacing:.08em;text-transform:uppercase;padding:.15rem .45rem;border-radius:10px;margin-top:.15rem;}
+    .proj-badge.w{background:rgba(255,215,0,.15);color:var(--gold);border:1px solid rgba(255,215,0,.3);}
+    .proj-badge.l{background:rgba(192,192,192,.1);color:var(--silver);border:1px solid rgba(192,192,192,.2);}
+    .proj-badge.e{background:rgba(255,45,120,.1);color:var(--pink);border:1px solid rgba(255,45,120,.2);}
+    .proj-spec-row{display:grid;grid-template-columns:2rem 1fr auto;align-items:center;gap:.5rem;padding:.65rem 1rem;border-bottom:1px solid var(--border);}
+    .proj-spec-row:last-child{border-bottom:none;}
+    .proj-bottom{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;margin-bottom:.8rem;}
+    @media(max-width:600px){.proj-bottom{grid-template-columns:1fr;}}
+    .proj-stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:.8rem 1rem;text-align:center;}
+    .proj-stat-val{font-family:var(--mono);font-size:1.6rem;font-weight:700;color:var(--cyan);}
+    .proj-stat-lbl{font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin-top:.2rem;}
+    .proj-live{display:flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.6rem;color:var(--yellow);}
+    .proj-live-dot{width:7px;height:7px;border-radius:50%;background:var(--yellow);animation:pulse 1.4s infinite;}
+    .proj-empty{padding:1.5rem;text-align:center;font-family:var(--mono);font-size:.68rem;color:var(--muted);text-transform:uppercase;}
+    .proj-round-banner{background:linear-gradient(135deg,rgba(0,245,255,.08),rgba(180,79,255,.08));border:1px solid var(--border);border-radius:var(--r);padding:.7rem 1rem;display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;}
+    .proj-round-txt{font-family:var(--mono);font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan);}
+    .proj-round-sub{font-family:var(--mono);font-size:.6rem;color:var(--muted);}
+    .proj-updated{font-family:var(--mono);font-size:.58rem;color:var(--muted);}
   </style>
 </head>
 <body>
@@ -165,11 +217,39 @@
 </div>
 
 <div id="celebration">
-  <div class="cel-trophy">🏆</div>
-  <div class="cel-title">Tournament Champion</div>
-  <div class="cel-name" id="champ-name"></div>
-  <div style="margin-top:1rem;font-family:var(--mono);font-size:.7rem;color:var(--muted);">VPRCA Arcade Challenge 2026</div>
-  <button class="cel-close" onclick="document.getElementById('celebration').classList.remove('show')">Close</button>
+  <div style="width:100%;max-width:520px;margin:0 auto;padding:1rem;">
+
+    <!-- Fireworks canvas behind everything -->
+    <canvas id="fw-canvas" style="position:fixed;inset:0;pointer-events:none;z-index:3001;"></canvas>
+
+    <!-- Tournament Champion -->
+    <div style="text-align:center;margin-bottom:1.5rem;">
+      <div class="cel-trophy">🏆</div>
+      <div class="cel-title">Tournament Champion</div>
+      <div class="cel-name" id="champ-name"></div>
+      <div style="font-family:var(--mono);font-size:.65rem;letter-spacing:.15em;color:var(--muted);margin-top:.5rem;">VPRCA ARCADE CHALLENGE 2026</div>
+    </div>
+
+    <!-- Player Podium -->
+    <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--r);margin-bottom:1rem;overflow:hidden;">
+      <div style="font-family:var(--mono);font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;padding:.55rem 1rem;color:var(--gold);background:rgba(255,215,0,.06);border-bottom:1px solid var(--border);">🎮 Player Final Standings</div>
+      <div id="cel-player-standings"></div>
+    </div>
+
+    <!-- Spectator Podium -->
+    <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--r);margin-bottom:1rem;overflow:hidden;">
+      <div style="font-family:var(--mono);font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;padding:.55rem 1rem;color:var(--purple);background:rgba(180,79,255,.06);border-bottom:1px solid var(--border);">👀 Top Spectator Predictor</div>
+      <div id="cel-spec-standings"></div>
+    </div>
+
+    <!-- Tiebreaker winner -->
+    <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--r);margin-bottom:1.5rem;overflow:hidden;">
+      <div style="font-family:var(--mono);font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;padding:.55rem 1rem;color:var(--purple);background:rgba(180,79,255,.06);border-bottom:1px solid var(--border);">🫙 Closest Container Guess</div>
+      <div id="cel-tiebreaker"></div>
+    </div>
+
+    <button class="cel-close" style="width:100%;" onclick="document.getElementById('celebration').classList.remove('show');cancelAnimationFrame(fwRAF);">✕ Close</button>
+  </div>
 </div>
 
 <header>
@@ -182,6 +262,7 @@
   <button class="nav-btn active" onclick="showScreen('s-home')">🏠 Home</button>
   <button class="nav-btn" onclick="showScreen('s-bracket')">📊 Bracket</button>
   <button class="nav-btn" onclick="showScreen('s-standings')">🏆 Standings</button>
+  <button class="nav-btn" onclick="showScreen('s-projection')">📺 Live</button>
   <button class="nav-btn" onclick="showScreen('s-host')">🔐 Host</button>
 </nav>
 
@@ -348,6 +429,7 @@
         <div id="host-matches" style="margin-top:.5rem;"></div>
         <button class="btn btn-yellow" id="next-round-btn" onclick="startNextRound()" style="display:none;margin-top:.5rem;">▶ START NEXT ROUND</button>
         <button class="btn btn-pink" id="undo-btn" onclick="undoLastResult()" style="display:none;margin-top:.5rem;">↩ UNDO LAST RESULT</button>
+        <button class="btn btn-green" onclick="showCelebration()" style="margin-top:.5rem;">🏆 SHOW WINNER SCREEN</button>
       </div>
     </div>
     <div class="card">
@@ -469,6 +551,88 @@
   </div>
 </div>
 
+<!-- ── PROJECTION ── -->
+<div class="screen" id="s-projection">
+  <div class="proj-wrap">
+
+    <div class="proj-header">
+      <div class="proj-eyebrow">Live Tournament Display</div>
+      <div class="proj-title">VPRCA Arcade Challenge 2026</div>
+    </div>
+    <div class="proj-stripe"></div>
+
+    <!-- Round banner -->
+    <div class="proj-round-banner">
+      <div>
+        <div class="proj-round-txt" id="proj-round-txt">Waiting for tournament to start</div>
+        <div class="proj-round-sub" id="proj-round-sub">Players are signing up</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.3rem;">
+        <div class="proj-live"><div class="proj-live-dot"></div> LIVE</div>
+        <div class="proj-updated" id="proj-updated">—</div>
+      </div>
+    </div>
+
+    <!-- Stats row -->
+    <div class="proj-bottom" id="proj-stats">
+      <div class="proj-stat">
+        <div class="proj-stat-val" id="proj-active-count">—</div>
+        <div class="proj-stat-lbl">Players Active</div>
+      </div>
+      <div class="proj-stat">
+        <div class="proj-stat-val" id="proj-elim-count">—</div>
+        <div class="proj-stat-lbl">Eliminated</div>
+      </div>
+      <div class="proj-stat">
+        <div class="proj-stat-val" id="proj-spec-count">—</div>
+        <div class="proj-stat-lbl">Spectators</div>
+      </div>
+    </div>
+
+    <!-- Main grid: Players | Spectators -->
+    <div class="proj-grid">
+
+      <!-- Players panel -->
+      <div class="proj-panel">
+        <div class="proj-panel-hdr" style="background:rgba(255,215,0,.05);border-bottom-color:rgba(255,215,0,.2);">
+          <span class="proj-panel-ttl" style="color:var(--gold);">🎮 Players</span>
+          <span class="proj-panel-count" id="proj-player-count">0 competing</span>
+        </div>
+
+        <!-- Active players sub-header -->
+        <div style="font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;padding:.4rem 1rem;color:var(--cyan);background:rgba(0,245,255,.04);border-bottom:1px solid var(--border);">
+          🏆 Winners Bracket
+        </div>
+        <div id="proj-winners-list"></div>
+
+        <div style="font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;padding:.4rem 1rem;color:var(--silver);background:rgba(192,192,192,.03);border-bottom:1px solid var(--border);border-top:1px solid var(--border);">
+          💀 Losers Bracket
+        </div>
+        <div id="proj-losers-list"></div>
+
+        <div style="font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;padding:.4rem 1rem;color:var(--pink);background:rgba(255,45,120,.03);border-bottom:1px solid var(--border);border-top:1px solid var(--border);">
+          ❌ Eliminated
+        </div>
+        <div id="proj-elim-list"></div>
+      </div>
+
+      <!-- Spectators panel -->
+      <div class="proj-panel">
+        <div class="proj-panel-hdr" style="background:rgba(180,79,255,.05);border-bottom-color:rgba(180,79,255,.2);">
+          <span class="proj-panel-ttl" style="color:var(--purple);">👀 Spectator Predictions</span>
+          <span class="proj-panel-count" id="proj-spec-panel-count">0 spectators</span>
+        </div>
+        <div style="font-family:var(--mono);font-size:.62rem;color:var(--muted);padding:.5rem 1rem;border-bottom:1px solid var(--border);line-height:1.5;">
+          Ranked by correct match predictions · Tiebreaker: closest jar guess
+        </div>
+        <div id="proj-spec-list"></div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
 <footer>VPRCA Arcade Challenge 2026 · Double Elimination · Tiebreaker: Guess the Container</footer>
 
 <script type="module">
@@ -546,7 +710,7 @@ window.showScreen = (id) => {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  ['s-home','s-bracket','s-standings','s-host'].forEach((s,i) => {
+  ['s-home','s-bracket','s-standings','s-projection','s-host'].forEach((s,i) => {
     if (s === id) document.querySelectorAll('.nav-btn')[i].classList.add('active');
   });
 };
@@ -842,22 +1006,67 @@ window.startTournament = async () => {
 // ── Next round ─────────────────────────────────────────
 window.startNextRound = async () => {
   const stSnap=await getDoc(doc(db,'tournament','state'));
-  const st=stSnap.data();const nextRound=(st.currentRound||1)+1;
+  const st=stSnap.data();
+  const nextRound=(st.currentRound||1)+1;
+
   const pSnaps=await getDocs(collection(db,'players'));
   const allP=pSnaps.docs.map(d=>d.data()).filter(p=>!p.eliminated);
-  const winners=allP.filter(p=>p.bracket==='winners'&&p.round===nextRound);
-  const losers=allP.filter(p=>p.bracket==='losers'&&p.round===nextRound);
-  const batch=writeBatch(db);let mc=0;
+
+  // Get players who have no pending match this round
+  const matchSnaps=await getDocs(collection(db,'matches'));
+  const activeMatches=matchSnaps.docs.map(d=>d.data()).filter(m=>m.status==='pending');
+  const inActiveMatch=new Set();
+  activeMatches.forEach(m=>{inActiveMatch.add(m.p1);inActiveMatch.add(m.p2);});
+
+  // Available players = active + not currently in a pending match
+  const available=allP.filter(p=>!inActiveMatch.has(p.name));
+  const winners=available.filter(p=>p.bracket==='winners');
+  const losers=available.filter(p=>p.bracket==='losers');
+
+  if(winners.length===0&&losers.length===0){
+    showMsg('host-msg','No available players for next round yet.','error');
+    return;
+  }
+
+  const batch=writeBatch(db);
+  let mc=0;
+
   const makePairs=(group,bracket)=>{
-    const sh=[...group].sort(()=>Math.random()-.5);let bye=null;
+    if(group.length===0)return;
+    const sh=[...group].sort(()=>Math.random()-.5);
+    let bye=null;
     if(sh.length%2!==0)bye=sh.pop();
-    for(let i=0;i<sh.length;i+=2){const id=`r${nextRound}_${bracket}_m${mc++}`;batch.set(doc(db,'matches',id),{id,round:nextRound,bracket,p1:sh[i].name,p2:sh[i+1].name,winner:null,loser:null,status:'pending',createdAt:Date.now()});}
-    if(bye){const id=`r${nextRound}_${bracket}_bye_${mc++}`;batch.set(doc(db,'matches',id),{id,round:nextRound,bracket,p1:bye.name,p2:'BYE',winner:bye.name,loser:null,status:'complete',createdAt:Date.now()});batch.update(doc(db,'players',bye.name),{totalPoints:bye.totalPoints+2,wins:bye.wins+1,round:nextRound+1});}
+    for(let i=0;i<sh.length;i+=2){
+      const id=`r${nextRound}_${bracket}_m${mc++}_${Date.now()}`;
+      batch.set(doc(db,'matches',id),{
+        id,round:nextRound,bracket,
+        p1:sh[i].name,p2:sh[i+1].name,
+        winner:null,loser:null,status:'pending',createdAt:Date.now()
+      });
+    }
+    if(bye){
+      const id=`r${nextRound}_${bracket}_bye_${mc++}`;
+      batch.set(doc(db,'matches',id),{
+        id,round:nextRound,bracket,
+        p1:bye.name,p2:'BYE',
+        winner:bye.name,loser:null,status:'complete',createdAt:Date.now()
+      });
+      batch.update(doc(db,'players',bye.name),{
+        totalPoints:(bye.totalPoints||0)+2,
+        wins:(bye.wins||0)+1,
+        round:(bye.round||nextRound)+1
+      });
+    }
   };
-  makePairs(winners,'winners');makePairs(losers,'losers');
+
+  makePairs(winners,'winners');
+  makePairs(losers,'losers');
+
   batch.update(doc(db,'tournament','state'),{currentRound:nextRound});
   await batch.commit();
-  showMsg('host-msg',`Round ${nextRound} started! ✅`,'success');
+
+  const wCount=winners.length, lCount=losers.length;
+  showMsg('host-msg',`Round ${nextRound} started! ${wCount} winners bracket, ${lCount} losers bracket. ✅`,'success');
   document.getElementById('next-round-btn').style.display='none';
   showNotif();
 };
@@ -867,16 +1076,41 @@ window.logResult = async (matchId, winnerName, loserName) => {
   const mRef=doc(db,'matches',matchId);
   const snap=await getDoc(mRef);
   if(!snap.exists()||snap.data().status==='complete'){alert('Already logged.');return;}
-  const m=snap.data();const batch=writeBatch(db);
+  const m=snap.data();
+  const batch=writeBatch(db);
   batch.update(mRef,{winner:winnerName,loser:loserName,status:'complete',reportedBy:myName||'player'});
   lastResultId=matchId;
+
+  // Winner stays in same bracket, advances one round
   const wSnap=await getDoc(doc(db,'players',winnerName));
   const wd=wSnap.exists()?wSnap.data():{totalPoints:0,wins:0,losses:0,bracket:'winners',round:1};
-  batch.set(doc(db,'players',winnerName),{...wd,name:winnerName,totalPoints:(wd.totalPoints||0)+2,wins:(wd.wins||0)+1,round:(m.round||1)+1,eliminated:false},{merge:true});
+  batch.set(doc(db,'players',winnerName),{
+    ...wd, name:winnerName,
+    totalPoints:(wd.totalPoints||0)+2,
+    wins:(wd.wins||0)+1,
+    bracket:m.bracket,           // stays in same bracket
+    round:(m.round||1)+1,
+    eliminated:false
+  },{merge:true});
+
+  // Loser — first loss drops to losers bracket, second loss = eliminated
   const lSnap=await getDoc(doc(db,'players',loserName));
   const ld=lSnap.exists()?lSnap.data():{totalPoints:0,wins:0,losses:0,bracket:'winners',round:1};
-  const newL=(ld.losses||0)+1,elim=newL>=2;
-  batch.set(doc(db,'players',loserName),{...ld,name:loserName,totalPoints:(ld.totalPoints||0)+1,losses:newL,bracket:elim?'eliminated':'losers',round:elim?ld.round:(m.round||1)+1,eliminated:elim},{merge:true});
+  const newL=(ld.losses||0)+1;
+  const elim=newL>=2;
+  // If losing from winners bracket → go to losers bracket at same round
+  // If losing from losers bracket → eliminated
+  const newBracket = elim ? 'eliminated' : 'losers';
+  const newRound = elim ? ld.round : (m.round||1)+1;
+  batch.set(doc(db,'players',loserName),{
+    ...ld, name:loserName,
+    totalPoints:(ld.totalPoints||0)+1,
+    losses:newL,
+    bracket:newBracket,
+    round:newRound,
+    eliminated:elim
+  },{merge:true});
+
   await batch.commit();
   await scoreVotes(matchId,winnerName);
   checkChampion();
@@ -910,12 +1144,131 @@ async function scoreVotes(matchId, winnerName) {
 // ── Champion check ─────────────────────────────────────
 async function checkChampion() {
   const snap=await getDocs(collection(db,'players'));
-  const active=snap.docs.map(d=>d.data()).filter(p=>!p.eliminated);
+  const players=snap.docs.map(d=>d.data());
+  const active=players.filter(p=>!p.eliminated);
   if(active.length===1){
     await updateDoc(doc(db,'tournament','state'),{champion:active[0].name,status:'complete'});
-    document.getElementById('champ-name').textContent=active[0].name;
-    document.getElementById('celebration').classList.add('show');
+    populateCelebration(players);
   }
+}
+
+async function populateCelebration(players) {
+  const stSnap = await getDoc(doc(db,'tournament','state'));
+  const st = stSnap.exists() ? stSnap.data() : {};
+  const ca = st.correctAnswer || 0;
+  const champName = st.champion || (players.find(p=>!p.eliminated)||{}).name || '';
+
+  document.getElementById('champ-name').textContent = champName;
+
+  // Sort players
+  const sortFn = (a,b) => {
+    if(b.totalPoints!==a.totalPoints) return b.totalPoints-a.totalPoints;
+    const ad=a.guess!=null?Math.abs(a.guess-ca):Infinity;
+    const bd=b.guess!=null?Math.abs(b.guess-ca):Infinity;
+    return ad-bd;
+  };
+  const sorted = [...players].sort(sortFn);
+
+  // Player standings — show top 6
+  const psEl = document.getElementById('cel-player-standings');
+  psEl.innerHTML = sorted.slice(0,6).map((p,i) => {
+    const r=i+1, medal=r===1?'🥇':r===2?'🥈':r===3?'🥉':r;
+    return `<div class="cel-row${r<=3?' top-'+r:''}">
+      <span class="cel-rank">${medal}</span>
+      <span class="cel-rname">${p.name}</span>
+      <span class="cel-pts">${p.totalPoints}<span style="font-size:.55rem;color:var(--muted);"> PTS</span></span>
+      <span class="cel-meta">${p.wins}W · ${p.losses}L</span>
+    </div>`;
+  }).join('');
+
+  // Spectator standings — top 3
+  const specSnap = await getDocs(collection(db,'spectators'));
+  const specs = specSnap.docs.map(d=>d.data()).sort((a,b)=>{
+    if((b.correctPredictions||0)!==(a.correctPredictions||0)) return (b.correctPredictions||0)-(a.correctPredictions||0);
+    const ad=a.guess!=null?Math.abs(a.guess-ca):Infinity;
+    const bd=b.guess!=null?Math.abs(b.guess-ca):Infinity;
+    return ad-bd;
+  });
+  const ssEl = document.getElementById('cel-spec-standings');
+  ssEl.innerHTML = specs.slice(0,3).map((s,i) => {
+    const r=i+1, medal=r===1?'🥇':r===2?'🥈':r===3?'🥉':r;
+    return `<div class="cel-row${r<=3?' top-'+r:''}">
+      <span class="cel-rank">${medal}</span>
+      <span class="cel-rname">${s.name}</span>
+      <span class="cel-pts">${s.correctPredictions||0}<span style="font-size:.55rem;color:var(--muted);"> ✅</span></span>
+      <span class="cel-meta">Correct picks</span>
+    </div>`;
+  }).join('') || '<div style="padding:1rem;font-family:var(--mono);font-size:.7rem;color:var(--muted);text-align:center;">No spectators</div>';
+
+  // Tiebreaker — closest guess among all
+  const everyone = [...sorted, ...specs];
+  const withGuess = everyone.filter(p=>p.guess!=null&&ca>0).sort((a,b)=>Math.abs(a.guess-ca)-Math.abs(b.guess-ca));
+  const tbEl = document.getElementById('cel-tiebreaker');
+  if(withGuess.length && ca>0){
+    const winner = withGuess[0];
+    const diff = Math.abs(winner.guess-ca);
+    tbEl.innerHTML = `<div class="cel-row top-1">
+      <span class="cel-rank">🎯</span>
+      <span class="cel-rname">${winner.name}</span>
+      <span class="cel-pts">${winner.guess}<span style="font-size:.55rem;color:var(--muted);"> guess</span></span>
+      <span class="cel-meta">Actual: ${ca} · Off by ${diff}</span>
+    </div>`;
+  } else {
+    tbEl.innerHTML = `<div style="padding:1rem;font-family:var(--mono);font-size:.7rem;color:var(--muted);text-align:center;">Set correct answer to show tiebreaker winner</div>`;
+  }
+
+  document.getElementById('celebration').classList.add('show');
+  startFireworks();
+}
+
+// Also expose so host can trigger manually
+window.showCelebration = async () => {
+  const snap = await getDocs(collection(db,'players'));
+  populateCelebration(snap.docs.map(d=>d.data()));
+};
+
+// Fireworks
+let fwRAF = null;
+function startFireworks() {
+  const canvas = document.getElementById('fw-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const COLORS = ['#ff2d78','#00f5ff','#ffe600','#b44fff','#00ff88','#ffffff'];
+  const particles = [];
+
+  class FWParticle {
+    constructor(x,y,color){
+      this.x=x; this.y=y; this.color=color;
+      this.vx=(Math.random()-0.5)*8;
+      this.vy=(Math.random()-0.5)*8-4;
+      this.life=1; this.decay=0.015+Math.random()*0.015;
+      this.size=2+Math.random()*3;
+    }
+    update(){ this.x+=this.vx; this.y+=this.vy; this.vy+=0.12; this.life-=this.decay; }
+    draw(){ ctx.globalAlpha=this.life; ctx.fillStyle=this.color; ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,Math.PI*2); ctx.fill(); ctx.globalAlpha=1; }
+  }
+
+  let tick=0;
+  function loop(){
+    if(!document.getElementById('celebration').classList.contains('show')){ cancelAnimationFrame(fwRAF); return; }
+    tick++;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    if(tick%18===0){
+      const x=100+Math.random()*(canvas.width-200);
+      const y=50+Math.random()*(canvas.height*0.5);
+      const color=COLORS[Math.floor(Math.random()*COLORS.length)];
+      for(let i=0;i<40;i++) particles.push(new FWParticle(x,y,color));
+    }
+    for(let i=particles.length-1;i>=0;i--){
+      particles[i].update(); particles[i].draw();
+      if(particles[i].life<=0) particles.splice(i,1);
+    }
+    fwRAF=requestAnimationFrame(loop);
+  }
+  if(fwRAF) cancelAnimationFrame(fwRAF);
+  loop();
 }
 
 // ── Save correct answer ────────────────────────────────
@@ -1290,6 +1643,99 @@ function renderStandings(players) {
   document.getElementById('last-updated').textContent='Updated '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'});
 }
 
+function renderProjection(players, specs) {
+  if (!document.getElementById('s-projection').classList.contains('active')) return;
+
+  const ca = tState?.correctAnswer || 0;
+  const sortFn = (a,b) => {
+    if(b.totalPoints!==a.totalPoints) return b.totalPoints-a.totalPoints;
+    const ad=a.guess!=null?Math.abs(a.guess-ca):Infinity;
+    const bd=b.guess!=null?Math.abs(b.guess-ca):Infinity;
+    return ad-bd;
+  };
+
+  const winners = players.filter(p=>p.bracket==='winners'&&!p.eliminated).sort(sortFn);
+  const losers  = players.filter(p=>p.bracket==='losers' &&!p.eliminated).sort(sortFn);
+  const elim    = players.filter(p=>p.eliminated).sort(sortFn);
+  const active  = [...winners,...losers];
+
+  // Stats
+  document.getElementById('proj-active-count').textContent = active.length;
+  document.getElementById('proj-elim-count').textContent   = elim.length;
+  document.getElementById('proj-spec-count').textContent   = specs.length;
+  document.getElementById('proj-player-count').textContent = active.length + ' competing';
+  document.getElementById('proj-spec-panel-count').textContent = specs.length + ' spectator' + (specs.length!==1?'s':'');
+  document.getElementById('proj-updated').textContent = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+
+  // Round info
+  if (tState?.status === 'active') {
+    document.getElementById('proj-round-txt').textContent = 'Round ' + (tState.currentRound||1) + ' — In Progress';
+    const pending = currentMatches.filter(m=>m.status==='pending').length;
+    const done    = currentMatches.filter(m=>m.status==='complete'&&m.p2!=='BYE').length;
+    document.getElementById('proj-round-sub').textContent = done + ' match' + (done!==1?'es':'') + ' complete · ' + pending + ' pending';
+  } else if (tState?.status === 'complete') {
+    document.getElementById('proj-round-txt').textContent = '🏆 Tournament Complete!';
+    document.getElementById('proj-round-sub').textContent = 'Champion: ' + (tState.champion||'');
+  } else {
+    document.getElementById('proj-round-txt').textContent = 'Waiting for tournament to start';
+    document.getElementById('proj-round-sub').textContent = players.length + ' player' + (players.length!==1?'s':'') + ' signed up';
+  }
+
+  const playerRow = (p, i, bracketClass) => {
+    const rank=i+1, medal=rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':'';
+    const myMatch = currentMatches.find(m=>(m.p1===p.name||m.p2===p.name)&&m.status==='pending');
+    const opp = myMatch ? (myMatch.p1===p.name?myMatch.p2:myMatch.p1) : null;
+    return `<div class="proj-player-row ${bracketClass}">
+      <span class="proj-rank">${medal||rank}</span>
+      <div>
+        <div class="proj-name">${p.name}</div>
+        <div class="proj-name-sub">${opp?'⚔️ vs '+opp:(p.eliminated?'Eliminated':'Waiting')}</div>
+      </div>
+      <div>
+        <div class="proj-score">${p.totalPoints}<span style="font-size:.55rem;color:var(--muted);"> pts</span></div>
+        <div class="proj-score-sub">${p.wins}W · ${p.losses}L</div>
+      </div>
+    </div>`;
+  };
+
+  document.getElementById('proj-winners-list').innerHTML =
+    winners.length ? winners.map((p,i)=>playerRow(p,i,'active-w')).join('') :
+    '<div class="proj-empty">None yet</div>';
+
+  document.getElementById('proj-losers-list').innerHTML =
+    losers.length ? losers.map((p,i)=>playerRow(p,i,'active-l')).join('') :
+    '<div class="proj-empty">None yet</div>';
+
+  document.getElementById('proj-elim-list').innerHTML =
+    elim.length ? elim.map((p,i)=>playerRow(p,i,'elim-row')).join('') :
+    '<div class="proj-empty">None yet</div>';
+
+  // Spectators
+  const specSortFn = (a,b) => {
+    if((b.correctPredictions||0)!==(a.correctPredictions||0)) return (b.correctPredictions||0)-(a.correctPredictions||0);
+    const ad=a.guess!=null?Math.abs(a.guess-ca):Infinity;
+    const bd=b.guess!=null?Math.abs(b.guess-ca):Infinity;
+    return ad-bd;
+  };
+  const sortedSpecs = [...specs].sort(specSortFn);
+  document.getElementById('proj-spec-list').innerHTML = sortedSpecs.length
+    ? sortedSpecs.map((s,i)=>{
+        const r=i+1, medal=r===1?'🥇':r===2?'🥈':r===3?'🥉':'';
+        return `<div class="proj-spec-row">
+          <span class="proj-rank">${medal||r}</span>
+          <div>
+            <div class="proj-name">${s.name}</div>
+            <div class="proj-name-sub">Guess: ${s.guess!=null?s.guess:'—'}</div>
+          </div>
+          <div>
+            <div class="proj-score" style="color:var(--purple);">${s.correctPredictions||0}<span style="font-size:.55rem;color:var(--muted);"> ✅</span></div>
+            <div class="proj-score-sub">correct</div>
+          </div>
+        </div>`;
+      }).join('')
+    : '<div class="proj-empty">No spectators yet</div>';
+}
+
 function renderSpecStandings(specs) {
   const ca=tState?.correctAnswer||0;
   const sorted=[...specs].sort((a,b)=>{if((b.correctPredictions||0)!==(a.correctPredictions||0))return(b.correctPredictions||0)-(a.correctPredictions||0);const ad=a.guess!=null?Math.abs(a.guess-ca):Infinity,bd=b.guess!=null?Math.abs(b.guess-ca):Infinity;return ad-bd;});
@@ -1408,20 +1854,29 @@ onSnapshot(collection(db,'matches'), snap => {
   renderPlayerMatch();
   renderVoteMatches();
   renderHostMatches();
+  if (window._cachedPlayers && window._cachedSpectators) {
+    renderProjection(window._cachedPlayers, window._cachedSpectators);
+  }
 });
 
 onSnapshot(collection(db,'players'), snap => {
   const players = snap.docs.map(d=>d.data());
   renderStandings(players);
   window._cachedPlayers = players;
-  if (window._cachedSpectators) populateEditSelect(players, window._cachedSpectators);
+  if (window._cachedSpectators) {
+    populateEditSelect(players, window._cachedSpectators);
+    renderProjection(players, window._cachedSpectators);
+  }
 });
 onSnapshot(collection(db,'signups'), snap => { signedUpPlayers=snap.docs.map(d=>d.data().name); renderSignupList(snap.docs.map(d=>d.data())); populateMainSelect(signedUpPlayers); });
 onSnapshot(collection(db,'spectators'), snap => {
   const specs = snap.docs.map(d=>d.data());
   renderSpecStandings(specs);
   window._cachedSpectators = specs;
-  if (window._cachedPlayers) populateEditSelect(window._cachedPlayers, specs);
+  if (window._cachedPlayers) {
+    populateEditSelect(window._cachedPlayers, specs);
+    renderProjection(window._cachedPlayers, specs);
+  }
 });
 
 // ── Helper ─────────────────────────────────────────────
