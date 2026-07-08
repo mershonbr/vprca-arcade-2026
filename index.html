@@ -144,6 +144,10 @@
     .host-match{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:.8rem;margin-bottom:.6rem;}
     .late-warning{background:rgba(255,230,0,.08);border:1px solid var(--yellow);border-radius:var(--r);padding:.8rem;font-family:var(--mono);font-size:.72rem;color:var(--yellow);line-height:1.6;}
 
+    /* ── Logout button ── */
+    #logout-btn{display:none;width:100%;padding:.7rem;border:1px solid rgba(255,45,120,.4);border-radius:var(--r);background:rgba(255,45,120,.08);color:var(--pink);font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;margin-top:.5rem;transition:all .15s;}
+    #logout-btn:hover{background:rgba(255,45,120,.18);border-color:var(--pink);}
+
     /* ── Guess locked state ── */
     .guess-locked{background:rgba(0,255,136,.07);border:1px solid var(--green);border-radius:var(--r);padding:1rem;text-align:center;font-family:var(--mono);}
     .guess-locked-val{font-size:1.8rem;font-weight:700;color:var(--green);margin:.3rem 0;}
@@ -256,6 +260,11 @@
   <div id="vote-section" style="display:none;" class="card">
     <div class="card-hdr"><span class="card-icon">🗳️</span><span class="card-ttl">Vote on Active Matches</span></div>
     <div id="vote-matches" class="card-body"></div>
+  </div>
+
+  <!-- Logout button — visible once signed in -->
+  <div style="max-width:500px;margin:.5rem auto 0;padding:0 1rem;">
+    <button id="logout-btn" onclick="logOut()">↩ Log Out / Switch Name</button>
   </div>
 
 </div>
@@ -549,6 +558,9 @@ window.chooseRole = async (role) => {
   } else {
     await setDoc(doc(db,'spectators',name),{name,joinedAt:Date.now(),correctPredictions:0,guess:null},{merge:true});
   }
+
+  // Show logout button now that user is signed in
+  document.getElementById('logout-btn').style.display = 'block';
 
   // Check if already guessed
   const collection_name = role === 'player' ? 'players' : 'spectators';
@@ -1117,11 +1129,45 @@ function renderHostMatches() {
 }
 
 // ── Restore session on load ────────────────────────────
+
+// ── Log out ────────────────────────────────────────────
+window.logOut = async () => {
+  if (!confirm('Log out and remove yourself from the list? You can sign back in with a different name.')) return;
+  if (myName && myRole) {
+    try {
+      const { deleteDoc } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+      if (myRole === 'player') {
+        await deleteDoc(doc(db,'signups',myName)).catch(()=>{});
+        await deleteDoc(doc(db,'players',myName)).catch(()=>{});
+      } else {
+        await deleteDoc(doc(db,'spectators',myName)).catch(()=>{});
+      }
+    } catch(err){ console.error('Logout:',err); }
+  }
+  myName=null;myRole=null;myGuess=null;myVotes={};
+  localStorage.removeItem('myName');localStorage.removeItem('myRole');
+  localStorage.removeItem('myGuess');localStorage.removeItem('myVotes');
+  stopAttractCanvas();
+  document.getElementById('logout-btn').style.display='none';
+  document.getElementById('main-name-select').value='';
+  document.getElementById('main-custom-field').style.display='none';
+  document.getElementById('main-custom-name').value='';
+  document.getElementById('guess-input').value='';
+  document.getElementById('guess-entry').style.display='block';
+  document.getElementById('guess-locked-display').style.display='none';
+  document.getElementById('guess-btn').disabled=false;
+  document.getElementById('guess-btn').textContent='LOCK IN MY GUESS';
+  showStep('role');
+};
+
 function restoreSession() {
   if (!myName || !myRole) return;
   // Restore name in dropdown
   const sel = document.getElementById('main-name-select');
   if ([...sel.options].some(o => o.value === myName)) sel.value = myName;
+
+  // Show logout button since user is already signed in
+  document.getElementById('logout-btn').style.display = 'block';
 
   if (myGuess !== null) {
     // Show locked guess in guess step visually but skip straight to attract/active
