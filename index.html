@@ -378,6 +378,8 @@
 
 <!-- ── HOST ── -->
 <div class="screen" id="s-host">
+
+  <!-- PIN gate -->
   <div id="host-pin-gate" class="card" style="margin-top:1rem;">
     <div class="card-hdr"><span class="card-icon">🔐</span><span class="card-ttl">Host Access</span></div>
     <div class="card-body">
@@ -389,164 +391,170 @@
       <button class="btn btn-pink" onclick="checkPin()">UNLOCK HOST PANEL</button>
     </div>
   </div>
+
   <div id="host-panel" style="display:none;">
-    <div class="card" style="margin-top:1rem;">
-      <div class="card-hdr"><span class="card-icon">📋</span><span class="card-ttl">Signed-Up Players</span></div>
+
+    <!-- ══ 1. TOURNAMENT CONTROLS — most used, always visible ══ -->
+    <div class="card" style="margin-top:1rem;border-color:rgba(0,255,136,.35);">
+      <div class="card-hdr" style="background:rgba(0,255,136,.05);">
+        <span class="card-icon">🎮</span>
+        <span class="card-ttl" style="color:var(--green);">Tournament Controls</span>
+      </div>
       <div class="card-body">
+        <div style="font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem;">Signed-Up Players</div>
         <div id="signup-list"><span style="font-family:var(--mono);font-size:.7rem;color:var(--muted);">No players yet.</span></div>
         <div id="host-msg" class="msg"></div>
+        <!-- Start button -->
         <button class="btn btn-green" id="start-btn" onclick="startTournament()" style="display:none;">🎮 START TOURNAMENT</button>
+        <!-- Round controls — appear once tournament starts -->
+        <div id="round-ctrl-inline" style="display:none;">
+          <div id="round-info" class="msg info" style="margin-bottom:.6rem;"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;">
+            <button class="btn btn-yellow" id="next-round-btn" onclick="startNextRound()" style="display:none;">▶ NEXT ROUND</button>
+            <button class="btn btn-pink" id="undo-btn" onclick="undoLastResult()" style="display:none;">↩ UNDO</button>
+          </div>
+          <button class="btn btn-green" onclick="showCelebration()" style="margin-top:.5rem;">🏆 SHOW WINNER SCREEN</button>
+        </div>
+        <!-- Match list hidden inside toggle -->
+        <details style="margin-top:.6rem;">
+          <summary style="font-family:var(--mono);font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan);cursor:pointer;padding:.3rem 0;">📋 View Current Matches ▾</summary>
+          <div id="host-matches" style="margin-top:.5rem;"></div>
+        </details>
       </div>
     </div>
+
+    <!-- ══ 2. ADD PERSON — used at start of event ══ -->
     <div class="card">
       <div class="card-hdr"><span class="card-icon">➕</span><span class="card-ttl">Add Person Manually</span></div>
       <div class="card-body">
-        <div class="field">
-          <label>Full name</label>
-          <input type="text" id="host-add-name" placeholder="Enter full name" maxlength="40" />
-        </div>
-        <div class="field">
-          <label>Role</label>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:.2rem;">
-            <label style="cursor:pointer;display:flex;align-items:center;gap:.5rem;">
-              <input type="radio" name="host-add-role" value="player" checked style="width:auto;" />
-              <span style="font-family:var(--mono);font-size:.75rem;color:var(--text);">&#127918; Player</span>
-            </label>
-            <label style="cursor:pointer;display:flex;align-items:center;gap:.5rem;">
-              <input type="radio" name="host-add-role" value="spectator" style="width:auto;" />
-              <span style="font-family:var(--mono);font-size:.75rem;color:var(--text);">&#128064; Spectator</span>
-            </label>
+        <div style="display:grid;grid-template-columns:1fr auto;gap:.5rem;align-items:flex-end;">
+          <div class="field">
+            <label>Full name</label>
+            <input type="text" id="host-add-name" placeholder="Enter full name" maxlength="40" onkeydown="if(event.key==='Enter')hostAddPlayer()" />
           </div>
+          <button class="btn btn-cyan" onclick="hostAddPlayer()" style="width:auto;padding:.75rem 1.2rem;">ADD</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;">
+          <label style="cursor:pointer;display:flex;align-items:center;gap:.5rem;">
+            <input type="radio" name="host-add-role" value="player" checked style="width:auto;" />
+            <span style="font-family:var(--mono);font-size:.75rem;color:var(--text);">🎮 Player</span>
+          </label>
+          <label style="cursor:pointer;display:flex;align-items:center;gap:.5rem;">
+            <input type="radio" name="host-add-role" value="spectator" style="width:auto;" />
+            <span style="font-family:var(--mono);font-size:.75rem;color:var(--text);">👀 Spectator</span>
+          </label>
         </div>
         <div id="add-msg" class="msg"></div>
-        <button class="btn btn-cyan" onclick="hostAddPlayer()">ADD PERSON</button>
       </div>
     </div>
-    <div class="card" id="round-ctrl" style="display:none;">
-      <div class="card-hdr"><span class="card-icon">⚙️</span><span class="card-ttl">Round Control</span></div>
-      <div class="card-body">
-        <div id="round-info" class="msg info"></div>
-        <div id="host-matches" style="margin-top:.5rem;"></div>
-        <button class="btn btn-yellow" id="next-round-btn" onclick="startNextRound()" style="display:none;margin-top:.5rem;">▶ START NEXT ROUND</button>
-        <button class="btn btn-pink" id="undo-btn" onclick="undoLastResult()" style="display:none;margin-top:.5rem;">↩ UNDO LAST RESULT</button>
-        <button class="btn btn-green" onclick="showCelebration()" style="margin-top:.5rem;">🏆 SHOW WINNER SCREEN</button>
-      </div>
-    </div>
+
+    <!-- ══ 3. TIEBREAKER ANSWER — set before event ══ -->
     <div class="card">
       <div class="card-hdr"><span class="card-icon">🫙</span><span class="card-ttl">Set Correct Answer</span></div>
       <div class="card-body">
-        <div class="field">
-          <label>Correct number of items in container</label>
-          <input type="number" id="correct-answer" min="0" placeholder="Enter the real number" />
+        <div style="display:grid;grid-template-columns:1fr auto;gap:.5rem;align-items:flex-end;">
+          <div class="field">
+            <label>Correct number of items in container</label>
+            <input type="number" id="correct-answer" min="0" placeholder="Enter the real number" />
+          </div>
+          <button class="btn btn-purple" onclick="saveAnswer()" style="width:auto;padding:.75rem 1.2rem;">SAVE</button>
         </div>
         <div id="ans-msg" class="msg"></div>
-        <button class="btn btn-purple" onclick="saveAnswer()">SAVE ANSWER</button>
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-hdr"><span class="card-icon">✏️</span><span class="card-ttl">Edit Submitted Data</span></div>
-      <div class="card-body">
-        <div class="field">
-          <label>Select person to edit</label>
-          <div class="sel-wrap">
-            <select id="edit-person-select" onchange="loadEditPerson()">
-              <option value="" disabled selected>— Select a person —</option>
-            </select>
+    <!-- ══ 4. EDIT DATA — collapsible, used occasionally ══ -->
+    <details>
+      <summary style="font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--yellow);cursor:pointer;padding:.75rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;list-style:none;">
+        <span>✏️ &nbsp;Edit Submitted Data</span>
+        <span style="margin-left:auto;color:var(--muted);font-size:.58rem;">tap to expand</span>
+      </summary>
+      <div class="card" style="margin-top:-.3rem;">
+        <div class="card-body">
+          <div class="field">
+            <label>Select person to edit</label>
+            <div class="sel-wrap">
+              <select id="edit-person-select" onchange="loadEditPerson()">
+                <option value="" disabled selected>— Select a person —</option>
+              </select>
+            </div>
+          </div>
+          <div id="edit-panel" style="display:none;">
+            <div id="edit-type-badge" style="font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem;"></div>
+            <div id="edit-player-fields">
+              <div class="field"><label>Total Points</label><input type="number" id="edit-points" min="0" /></div>
+              <div class="field"><label>Wins</label><input type="number" id="edit-wins" min="0" /></div>
+              <div class="field"><label>Losses</label><input type="number" id="edit-losses" min="0" /></div>
+              <div class="field">
+                <label>Bracket</label>
+                <div class="sel-wrap">
+                  <select id="edit-bracket">
+                    <option value="winners">Winners Bracket</option>
+                    <option value="losers">Losers Bracket</option>
+                    <option value="eliminated">Eliminated</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field"><label>Container Guess</label><input type="number" id="edit-player-guess" min="0" placeholder="Leave blank to clear" /></div>
+            </div>
+            <div id="edit-spec-fields" style="display:none;">
+              <div class="field"><label>Correct Predictions</label><input type="number" id="edit-predictions" min="0" /></div>
+              <div class="field"><label>Container Guess</label><input type="number" id="edit-spec-guess" min="0" placeholder="Leave blank to clear" /></div>
+            </div>
+            <div id="edit-msg" class="msg"></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.5rem;">
+              <button class="btn btn-yellow" onclick="saveEditPerson()">💾 SAVE</button>
+              <button class="btn btn-pink" onclick="deleteEditPerson()">🗑️ REMOVE</button>
+            </div>
           </div>
         </div>
+      </div>
+    </details>
 
-        <div id="edit-panel" style="display:none;">
-          <div id="edit-type-badge" style="font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem;"></div>
-
-          <!-- Player edit fields -->
-          <div id="edit-player-fields">
+    <!-- ══ 5. SIMULATION — collapsible, testing only ══ -->
+    <details>
+      <summary style="font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--yellow);cursor:pointer;padding:.75rem 1rem;background:var(--surface);border:1px solid rgba(255,230,0,.35);border-radius:var(--r);margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;list-style:none;">
+        <span>🎲 &nbsp;Simulation Mode</span>
+        <span style="margin-left:auto;color:var(--muted);font-size:.58rem;">tap to expand</span>
+      </summary>
+      <div class="card" style="border-color:rgba(255,230,0,.3);margin-top:-.3rem;">
+        <div class="card-body">
+          <div style="font-family:var(--mono);font-size:.68rem;color:var(--muted);line-height:1.7;background:rgba(255,230,0,.06);border:1px solid rgba(255,230,0,.2);border-radius:var(--r);padding:.8rem;margin-bottom:.6rem;">
+            🎲 Creates fake players &amp; spectators and runs through the tournament automatically so you can test the full flow.
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;">
             <div class="field">
-              <label>Total Points</label>
-              <input type="number" id="edit-points" min="0" />
-            </div>
-            <div class="field">
-              <label>Wins</label>
-              <input type="number" id="edit-wins" min="0" />
-            </div>
-            <div class="field">
-              <label>Losses</label>
-              <input type="number" id="edit-losses" min="0" />
-            </div>
-            <div class="field">
-              <label>Bracket</label>
+              <label>Players</label>
               <div class="sel-wrap">
-                <select id="edit-bracket">
-                  <option value="winners">Winners Bracket</option>
-                  <option value="losers">Losers Bracket</option>
-                  <option value="eliminated">Eliminated</option>
+                <select id="sim-player-count">
+                  <option value="4">4 players</option>
+                  <option value="6">6 players</option>
+                  <option value="8" selected>8 players</option>
+                  <option value="10">10 players</option>
+                  <option value="12">12 players</option>
+                  <option value="16">16 players</option>
                 </select>
               </div>
             </div>
             <div class="field">
-              <label>Container Guess</label>
-              <input type="number" id="edit-player-guess" min="0" placeholder="Leave blank to clear" />
+              <label>Spectators</label>
+              <div class="sel-wrap">
+                <select id="sim-spec-count">
+                  <option value="0">0</option>
+                  <option value="3" selected>3</option>
+                  <option value="5">5</option>
+                </select>
+              </div>
             </div>
           </div>
-
-          <!-- Spectator edit fields -->
-          <div id="edit-spec-fields" style="display:none;">
-            <div class="field">
-              <label>Correct Predictions</label>
-              <input type="number" id="edit-predictions" min="0" />
-            </div>
-            <div class="field">
-              <label>Container Guess</label>
-              <input type="number" id="edit-spec-guess" min="0" placeholder="Leave blank to clear" />
-            </div>
-          </div>
-
-          <div id="edit-msg" class="msg"></div>
-          <button class="btn btn-yellow" onclick="saveEditPerson()" style="margin-top:.3rem;">💾 SAVE CHANGES</button>
-          <button class="btn btn-pink" onclick="deleteEditPerson()" style="margin-top:.5rem;">🗑️ REMOVE THIS PERSON</button>
+          <div id="sim-msg" class="msg"></div>
+          <div id="sim-log" style="display:none;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:.8rem;max-height:180px;overflow-y:auto;font-family:var(--mono);font-size:.65rem;color:var(--text);line-height:1.9;margin-bottom:.5rem;"></div>
+          <button class="btn btn-yellow" id="sim-setup-btn" onclick="simSetup()">🎲 POPULATE SIMULATION</button>
+          <button class="btn" id="sim-run-btn" onclick="simRunRound()" style="display:none;margin-top:.5rem;background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;">▶ AUTO-PLAY NEXT ROUND</button>
+          <button class="btn btn-ghost" id="sim-clear-btn" onclick="simClear()" style="margin-top:.5rem;">🗑 CLEAR ALL DATA</button>
         </div>
       </div>
-    </div>
-
-    <div class="card" style="border-color:rgba(255,230,0,.3);">
-      <div class="card-hdr" style="background:rgba(255,230,0,.06);">
-        <span class="card-icon">🎲</span>
-        <span class="card-ttl" style="color:var(--yellow);">Simulation Mode</span>
-      </div>
-      <div class="card-body">
-        <div style="font-family:var(--mono);font-size:.68rem;color:var(--muted);line-height:1.7;background:rgba(255,230,0,.06);border:1px solid rgba(255,230,0,.2);border-radius:var(--r);padding:.8rem;">
-          🎲 Creates fake players &amp; spectators, runs rounds with random results so you can test the full tournament flow from one screen.
-        </div>
-        <div class="field">
-          <label>Number of simulated players</label>
-          <div class="sel-wrap">
-            <select id="sim-player-count">
-              <option value="4">4 players</option>
-              <option value="6">6 players</option>
-              <option value="8" selected>8 players</option>
-              <option value="10">10 players</option>
-              <option value="12">12 players</option>
-              <option value="16">16 players</option>
-            </select>
-          </div>
-        </div>
-        <div class="field">
-          <label>Number of simulated spectators</label>
-          <div class="sel-wrap">
-            <select id="sim-spec-count">
-              <option value="0">0 spectators</option>
-              <option value="3" selected>3 spectators</option>
-              <option value="5">5 spectators</option>
-            </select>
-          </div>
-        </div>
-        <div id="sim-msg" class="msg"></div>
-        <div id="sim-log" style="display:none;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:.8rem;max-height:200px;overflow-y:auto;font-family:var(--mono);font-size:.65rem;color:var(--text);line-height:1.9;"></div>
-        <button class="btn btn-yellow" id="sim-setup-btn" onclick="simSetup()">🎲 POPULATE SIMULATION</button>
-        <button class="btn" id="sim-run-btn" onclick="simRunRound()" style="display:none;margin-top:.5rem;background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;box-shadow:0 0 20px rgba(180,79,255,.3);">▶ AUTO-PLAY NEXT ROUND</button>
-        <button class="btn btn-ghost" id="sim-clear-btn" onclick="simClear()" style="display:none;margin-top:.5rem;">🗑 CLEAR SIMULATION DATA</button>
-      </div>
-    </div>
+    </details>
 
   </div>
 </div>
@@ -1752,13 +1760,33 @@ function renderSignupList(signups) {
 function renderHostMatches() {
   if(!tState)return;
   const container=document.getElementById('host-matches');
+  if(!container)return;
   const pending=currentMatches.filter(m=>m.status==='pending');
+  const complete=currentMatches.filter(m=>m.status==='complete'&&m.p2!=='BYE');
   const allDone=pending.length===0&&currentMatches.length>0;
-  document.getElementById('round-info').textContent=`Round ${tState.currentRound||1} · ${currentMatches.filter(m=>m.status==='complete').length} done · ${pending.length} pending`;
-  container.innerHTML=currentMatches.map(m=>`<div class="host-match"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;"><span class="round-badge">${m.bracket==='winners'?'🏆':'💀'} R${m.round}</span><span style="font-family:var(--mono);font-size:.62rem;color:${m.status==='complete'?'var(--green)':'var(--yellow)'};">${m.status==='complete'?'✅ Done':'⏳ Pending'}</span></div><div style="font-family:var(--mono);font-size:.82rem;">${m.p1} vs ${m.p2}</div>${m.winner?`<div style="font-family:var(--mono);font-size:.62rem;color:var(--green);margin-top:.3rem;">🏆 ${m.winner}</div>`:''}</div>`).join('');
-  document.getElementById('next-round-btn').style.display=allDone?'block':'none';
-  document.getElementById('undo-btn').style.display=lastResultId?'block':'none';
-  document.getElementById('round-ctrl').style.display=currentMatches.length?'block':'none';
+
+  const roundInfoEl=document.getElementById('round-info');
+  if(roundInfoEl) roundInfoEl.textContent=
+    `Round ${tState.currentRound||1}  ·  ${complete.length} complete  ·  ${pending.length} pending`;
+
+  container.innerHTML=currentMatches.map(m=>`
+    <div class="host-match">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;">
+        <span class="round-badge">${m.bracket==='winners'?'🏆':'💀'} Round ${m.round}</span>
+        <span style="font-family:var(--mono);font-size:.62rem;color:${m.status==='complete'?'var(--green)':'var(--yellow)'};">
+          ${m.status==='complete'?'✅ Done':'⏳ Pending'}
+        </span>
+      </div>
+      <div style="font-family:var(--mono);font-size:.82rem;">${m.p1} vs ${m.p2}</div>
+      ${m.winner&&m.p2!=='BYE'?`<div style="font-family:var(--mono);font-size:.62rem;color:var(--green);margin-top:.2rem;">🏆 ${m.winner} wins</div>`:''}
+    </div>`).join('');
+
+  const nextBtn=document.getElementById('next-round-btn');
+  const undoBtn=document.getElementById('undo-btn');
+  const inlineCtrl=document.getElementById('round-ctrl-inline');
+  if(nextBtn) nextBtn.style.display=allDone?'block':'none';
+  if(undoBtn) undoBtn.style.display=lastResultId?'block':'none';
+  if(inlineCtrl) inlineCtrl.style.display=currentMatches.length?'block':'none';
 }
 
 // ── Restore session on load ────────────────────────────
