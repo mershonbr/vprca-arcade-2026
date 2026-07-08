@@ -1010,6 +1010,152 @@ window.deleteEditPerson = async () => {
   }
 };
 
+
+// ── Simulation mode ────────────────────────────────────────────────────────────
+const SIM_PLAYERS = [
+  "Alex Rivera","Jordan Chen","Sam Patel","Morgan Lee","Casey Kim",
+  "Taylor Brown","Drew Martinez","Quinn Johnson","Avery Williams","Blake Davis",
+  "Reese Garcia","Sage Thompson","Quinn Foster","Marlowe Hayes","Remy Collins",
+  "Harlow Reed","Emery Stone","Rowan Cross"
+];
+const SIM_SPECS = ["Spectator_Aria","Spectator_Finn","Spectator_Nova","Spectator_Zara","Spectator_Luca"];
+
+function simLog(msg) {
+  const log = document.getElementById('sim-log');
+  log.style.display = 'block';
+  log.innerHTML += `<div>${msg}</div>`;
+  log.scrollTop = log.scrollHeight;
+}
+
+window.simSetup = async () => {
+  const pCount = parseInt(document.getElementById('sim-player-count').value);
+  const sCount = parseInt(document.getElementById('sim-spec-count').value);
+  const btn = document.getElementById('sim-setup-btn');
+  btn.disabled = true; btn.textContent = 'Setting up…';
+  document.getElementById('sim-log').innerHTML = '';
+  document.getElementById('sim-log').style.display = 'block';
+
+  const batch = writeBatch(db);
+  const players = SIM_PLAYERS.slice(0, pCount);
+  const specs   = SIM_SPECS.slice(0, sCount);
+  const correctAnswer = tState?.correctAnswer || 147;
+
+  // Add simulated players to signups
+  players.forEach(name => {
+    batch.set(doc(db,'signups',name), {name, signedUpAt:Date.now(), late:false, sim:true});
+    batch.set(doc(db,'players',name), {
+      name, totalPoints:0, wins:0, losses:0,
+      bracket:'winners', eliminated:false, round:1,
+      guess: Math.floor(Math.random() * 200) + 50,
+      sim: true
+    }, {merge:true});
+  });
+
+  // Add simulated spectators
+  specs.forEach(name => {
+    batch.set(doc(db,'spectators',name), {
+      name, joinedAt:Date.now(),
+      correctPredictions:0,
+      guess: Math.floor(Math.random() * 200) + 50,
+      sim: true
+    });
+  });
+
+  await batch.commit();
+
+  simLog(`✅ Created ${pCount} simulated players`);
+  simLog(`✅ Created ${sCount} simulated spectators`);
+  simLog(`💡 Hit "Start Tournament" above, then use "Auto-Play Next Round" to run through it`);
+
+  btn.disabled = false; btn.textContent = '🎲 POPULATE SIMULATION';
+  document.getElementById('sim-run-btn').style.display = 'block';
+  document.getElementById('sim-clear-btn').style.display = 'block';
+  showMsg('sim-msg', `Simulation ready! Hit Start Tournament above, then Auto-Play each round.`, 'success');
+};
+
+window.simRunRound = async () => {
+  const btn = document.getElementById('sim-run-btn');
+  btn.disabled = true; btn.textContent = 'Running round…';
+
+  // Find all pending matches
+  const matchSnaps = await getDocs(collection(db,'matches'));
+  const pending = matchSnaps.docs.map(d=>d.data()).filter(m=>m.status==='pending'&&m.p2!=='BYE');
+
+  if (!pending.length) {
+    simLog('⚠️ No pending matches found. Check if tournament has started or all rounds are complete.');
+    btn.disabled = false; btn.textContent = '▶ AUTO-PLAY NEXT ROUND';
+    return;
+  }
+
+  simLog(`
+🎮 Auto-playing ${pending.length} match(es)…`);
+
+  for (const match of pending) {
+    // Random winner
+    const winnerName = Math.random() < 0.5 ? match.p1 : match.p2;
+    const loserName  = winnerName === match.p1 ? match.p2 : match.p1;
+
+    // Simulate spectator votes before result
+    const specSnaps = await getDocs(collection(db,'spectators'));
+    const specVoteBatch = writeBatch(db);
+    specSnaps.docs.forEach(sDoc => {
+      const s = sDoc.data();
+      const vote = Math.random() < 0.5 ? match.p1 : match.p2;
+      const voteId = `${match.id}_${s.name.replace(/\W/g,'_')}`;
+      specVoteBatch.set(doc(db,'votes',voteId), {
+        matchId:match.id, spectatorName:s.name, vote, createdAt:Date.now()
+      });
+    });
+    await specVoteBatch.commit();
+
+    // Log the result
+    await logResult(match.id, winnerName, loserName);
+    simLog(`  ⚔️ ${match.p1} vs ${match.p2} → 🏆 <strong style="color:var(--green)">${winnerName}</strong> wins`);
+
+    // Small delay between matches for realism
+    await new Promise(r => setTimeout(r, 300));
+  }
+
+  simLog(`✅ Round complete! Check Bracket and Standings tabs.`);
+  simLog(`💡 Click "Start Next Round" in Round Control above, then "Auto-Play" again.`);
+
+  btn.disabled = false; btn.textContent = '▶ AUTO-PLAY NEXT ROUND';
+};
+
+window.simClear = async () => {
+  if (!confirm('Clear ALL simulation data? This removes all sim players, spectators, matches and resets the tournament.')) return;
+
+  const btn = document.getElementById('sim-clear-btn');
+  btn.disabled = true; btn.textContent = 'Clearing…';
+
+  try {
+    const { deleteDoc } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+
+    const collections = ['signups','players','spectators','matches','votes'];
+    for (const col of collections) {
+      const snap = await getDocs(collection(db, col));
+      for (const d of snap.docs) await deleteDoc(doc(db, col, d.id));
+    }
+
+    // Reset tournament state
+    await setDoc(doc(db,'tournament','state'), {
+      status:'waiting', currentRound:0,
+      byePlayer:null, champion:null, correctAnswer:0
+    });
+
+    document.getElementById('sim-log').innerHTML = '';
+    document.getElementById('sim-log').style.display = 'none';
+    document.getElementById('sim-run-btn').style.display = 'none';
+    document.getElementById('sim-clear-btn').style.display = 'none';
+    showMsg('sim-msg','✅ All simulation data cleared. Fresh start!','success');
+  } catch(err) {
+    console.error(err);
+    showMsg('sim-msg','Error clearing data.','error');
+  }
+
+  btn.disabled = false; btn.textContent = '🗑 CLEAR SIMULATION DATA';
+};
+
 window.saveAnswer = async () => {
   const val=parseInt(document.getElementById('correct-answer').value);
   if(isNaN(val)){showMsg('ans-msg','Enter a valid number.','error');return;}
