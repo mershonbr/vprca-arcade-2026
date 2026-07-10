@@ -158,10 +158,7 @@
     #logout-btn{display:none;width:100%;padding:.7rem;border:1px solid rgba(255,45,120,.4);border-radius:var(--r);background:rgba(255,45,120,.08);color:var(--pink);font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;margin-top:.5rem;transition:all .15s;}
     #logout-btn:hover{background:rgba(255,45,120,.18);border-color:var(--pink);}
 
-    /* ── Guess locked state ── */
-    .guess-locked{background:rgba(0,255,136,.07);border:1px solid var(--green);border-radius:var(--r);padding:1rem;text-align:center;font-family:var(--mono);}
-    .guess-locked-val{font-size:1.8rem;font-weight:700;color:var(--green);margin:.3rem 0;}
-    .guess-locked-lbl{font-size:.65rem;letter-spacing:.15em;color:var(--muted);text-transform:uppercase;}
+
 
     footer{max-width:500px;margin:1.5rem auto 0;padding:0 1rem;text-align:center;font-family:var(--mono);font-size:.56rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;}
 
@@ -242,11 +239,7 @@
       <div id="cel-spec-standings"></div>
     </div>
 
-    <!-- Tiebreaker winner -->
-    <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--r);margin-bottom:1.5rem;overflow:hidden;">
-      <div style="font-family:var(--mono);font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;padding:.55rem 1rem;color:var(--purple);background:rgba(180,79,255,.06);border-bottom:1px solid var(--border);">🫙 Closest Container Guess</div>
-      <div id="cel-tiebreaker"></div>
-    </div>
+    <button class="cel-close"
 
     <button class="cel-close" style="width:100%;" onclick="document.getElementById('celebration').classList.remove('show');cancelAnimationFrame(fwRAF);">✕ Close</button>
   </div>
@@ -258,16 +251,47 @@
   <div class="subtitle">Double Elimination Tournament</div>
 </header>
 
-<nav class="nav">
+<nav class="nav" id="main-nav" style="display:none;">
   <button class="nav-btn active" onclick="showScreen('s-home')">🏠 Home</button>
-  <button class="nav-btn" onclick="showScreen('s-bracket')">📊 Bracket</button>
-  <button class="nav-btn" onclick="showScreen('s-standings')">🏆 Standings</button>
-  <button class="nav-btn" onclick="showScreen('s-projection')">📺 Live</button>
+  <button class="nav-btn" onclick="showScreen('s-bracket')">📊 Matches</button>
+  <button class="nav-btn" onclick="showScreen('s-standings')">🏆 My Rank</button>
+  <button class="nav-btn" onclick="showScreen('s-projection')">📺 Big Screen</button>
   <button class="nav-btn" onclick="showScreen('s-host')">🔐 Host</button>
 </nav>
 
 <!-- ── HOME ── -->
 <div class="screen active" id="s-home">
+
+  <!-- How to Play — shown only before sign-in -->
+  <div id="how-to-play" class="card" style="margin-top:1rem;">
+    <div class="card-hdr" style="background:rgba(255,45,120,.08);border-bottom-color:rgba(255,45,120,.25);">
+      <span class="card-icon">📋</span>
+      <span class="card-ttl" style="color:var(--pink);">How to Play — 3 Simple Steps</span>
+    </div>
+    <div class="card-body" style="gap:.6rem;">
+      <div style="display:flex;align-items:flex-start;gap:.8rem;">
+        <div style="width:28px;height:28px;border-radius:50%;background:rgba(255,45,120,.15);border:1px solid var(--pink);color:var(--pink);font-family:var(--mono);font-size:.75rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+        <div>
+          <div style="font-family:var(--mono);font-size:.75rem;font-weight:700;color:var(--text);margin-bottom:.2rem;">Sign in</div>
+          <div style="font-size:.72rem;color:var(--muted);line-height:1.5;">Select your name, choose Player or Spectator, then wait for the host to start the tournament.</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:.8rem;">
+        <div style="width:28px;height:28px;border-radius:50%;background:rgba(0,245,255,.1);border:1px solid var(--cyan);color:var(--cyan);font-family:var(--mono);font-size:.75rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+        <div>
+          <div style="font-family:var(--mono);font-size:.75rem;font-weight:700;color:var(--text);margin-bottom:.2rem;">Wait for the host to start</div>
+          <div style="font-size:.72rem;color:var(--muted);line-height:1.5;">You'll see an arcade screen while the host sets up. Your match appears automatically the moment the tournament begins.</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:.8rem;">
+        <div style="width:28px;height:28px;border-radius:50%;background:rgba(255,230,0,.1);border:1px solid var(--yellow);color:var(--yellow);font-family:var(--mono);font-size:.75rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+        <div>
+          <div style="font-family:var(--mono);font-size:.75rem;font-weight:700;color:var(--text);margin-bottom:.2rem;">Play &amp; log your result</div>
+          <div style="font-size:.72rem;color:var(--muted);line-height:1.5;">After each game, come back to this app and tap <strong style="color:var(--cyan);">I Won</strong> or <strong style="color:var(--pink);">I Lost</strong>. The leaderboard updates instantly for everyone.</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- STEP 1: Role + name selection -->
   <div id="step-role" class="card" style="margin-top:1rem;">
@@ -291,31 +315,8 @@
     </div>
   </div>
 
-  <!-- STEP 2: Guess the jar -->
-  <div id="step-guess" style="display:none;">
-    <div class="card" style="margin-top:1rem;">
-      <div class="card-hdr"><span class="card-icon">🫙</span><span class="card-ttl">Tiebreaker — Guess the Container</span></div>
-      <div class="card-body">
-        <div style="font-family:var(--mono);font-size:.78rem;color:var(--text);line-height:1.6;background:rgba(180,79,255,.08);border:1px solid rgba(180,79,255,.3);border-radius:var(--r);padding:.9rem;">
-          <div style="color:var(--purple);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.4rem;">🔢 Guess the number of items in the container</div>
-          One guess per person · Closest to the correct number wins the tiebreaker · You cannot change your guess after submitting
-        </div>
-        <div id="guess-locked-display" class="guess-locked" style="display:none;">
-          <div class="guess-locked-lbl">Your guess is locked in</div>
-          <div class="guess-locked-val" id="guess-locked-val">—</div>
-          <div class="guess-locked-lbl">Good luck!</div>
-        </div>
-        <div id="guess-entry">
-          <div class="field">
-            <label>Your guess</label>
-            <input type="number" id="guess-input" min="0" placeholder="Enter a number" />
-          </div>
-          <div id="guess-msg" class="msg"></div>
-          <button class="btn btn-purple" id="guess-btn" onclick="submitGuess()">LOCK IN MY GUESS</button>
-        </div>
-      </div>
-    </div>
-  </div>
+
+  <!-- ATTRACT
 
   <!-- ATTRACT SCREEN (waiting room) -->
   <div id="attract-wrap">
@@ -326,6 +327,10 @@
       <div class="a-title">VPRCA ARCADE<br>CHALLENGE 2026</div>
       <div class="a-blink">— Waiting for host to start —</div>
       <div class="a-badge" id="a-badge">Loading…</div>
+      <div style="margin-top:.8rem;background:rgba(0,0,0,.5);border:1px solid rgba(255,230,0,.4);border-radius:8px;padding:.6rem 1rem;max-width:320px;margin-left:auto;margin-right:auto;">
+        <div style="font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--yellow);margin-bottom:.3rem;">⚡ Remember</div>
+        <div style="font-family:var(--mono);font-size:.65rem;color:rgba(255,255,255,.8);line-height:1.6;">After each game, open this app and tap <span style="color:#00f5ff;">I Won</span> or <span style="color:#ff2d78;">I Lost</span> to log your result.</div>
+      </div>
     </div>
     <div class="a-scanlines"></div>
     <div class="a-stripe-b"></div>
@@ -448,20 +453,7 @@
       </div>
     </div>
 
-    <!-- ══ 3. TIEBREAKER ANSWER — set before event ══ -->
-    <div class="card">
-      <div class="card-hdr"><span class="card-icon">🫙</span><span class="card-ttl">Set Correct Answer</span></div>
-      <div class="card-body">
-        <div style="display:grid;grid-template-columns:1fr auto;gap:.5rem;align-items:flex-end;">
-          <div class="field">
-            <label>Correct number of items in container</label>
-            <input type="number" id="correct-answer" min="0" placeholder="Enter the real number" />
-          </div>
-          <button class="btn btn-purple" onclick="saveAnswer()" style="width:auto;padding:.75rem 1.2rem;">SAVE</button>
-        </div>
-        <div id="ans-msg" class="msg"></div>
-      </div>
-    </div>
+    <!-- ══ 4
 
     <!-- ══ 4. EDIT DATA — collapsible, used occasionally ══ -->
     <details>
@@ -495,11 +487,9 @@
                   </select>
                 </div>
               </div>
-              <div class="field"><label>Container Guess</label><input type="number" id="edit-player-guess" min="0" placeholder="Leave blank to clear" /></div>
             </div>
             <div id="edit-spec-fields" style="display:none;">
               <div class="field"><label>Correct Predictions</label><input type="number" id="edit-predictions" min="0" /></div>
-              <div class="field"><label>Container Guess</label><input type="number" id="edit-spec-guess" min="0" placeholder="Leave blank to clear" /></div>
             </div>
             <div id="edit-msg" class="msg"></div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.5rem;">
@@ -631,7 +621,7 @@
           <span class="proj-panel-count" id="proj-spec-panel-count">0 spectators</span>
         </div>
         <div style="font-family:var(--mono);font-size:.62rem;color:var(--muted);padding:.5rem 1rem;border-bottom:1px solid var(--border);line-height:1.5;">
-          Ranked by correct match predictions · Tiebreaker: closest jar guess
+          Ranked by correct match predictions by correct match predictions
         </div>
         <div id="proj-spec-list"></div>
       </div>
@@ -641,7 +631,7 @@
   </div>
 </div>
 
-<footer>VPRCA Arcade Challenge 2026 · Double Elimination · Tiebreaker: Guess the Container</footer>
+<footer>VPRCA Arcade Challenge 2026 · Double Elimination Tournament</footer>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -674,7 +664,7 @@ const BASE_PLAYERS = [
 // ── State ─────────────────────────────────────────────
 let myName      = localStorage.getItem('myName')  || null;
 let myRole      = localStorage.getItem('myRole')  || null;
-let myGuess     = localStorage.getItem('myGuess') ? parseInt(localStorage.getItem('myGuess')) : null;
+let myGuess     = null;
 let tState      = null;
 let currentMatches = [];
 let signedUpPlayers = [];
@@ -726,7 +716,7 @@ window.showScreen = (id) => {
 // ── Step controllers ───────────────────────────────────
 function showStep(step) {
   document.getElementById('step-role').style.display    = step === 'role'    ? 'block' : 'none';
-  document.getElementById('step-guess').style.display   = step === 'guess'   ? 'block' : 'none';
+
   document.getElementById('attract-wrap').style.display = step === 'attract' ? 'block' : 'none';
   document.getElementById('player-match-card').style.display = step === 'active-player' ? 'block' : 'none';
   document.getElementById('vote-section').style.display      = step === 'active-spec'   ? 'block' : 'none';
@@ -772,7 +762,9 @@ window.chooseRole = async (role) => {
     await setDoc(doc(db,'spectators',name),{name,joinedAt:Date.now(),correctPredictions:0,guess:null},{merge:true});
   }
 
-  // Show logout button now that user is signed in
+  // Show nav bar and logout button now that user is signed in
+  document.getElementById('main-nav').style.display = 'flex';
+  document.getElementById('how-to-play').style.display = 'none';
   document.getElementById('logout-btn').style.display = 'block';
 
   // Check if already guessed
@@ -785,46 +777,12 @@ window.chooseRole = async (role) => {
     updateAttractBadge();
     checkIfShouldSkipAttract();
   } else {
-    showStep('guess');
+    showStep('attract'); updateAttractBadge(); checkIfShouldSkipAttract();
   }
 };
 
 // ── Submit guess ───────────────────────────────────────
-window.submitGuess = async () => {
-  const guess = parseInt(document.getElementById('guess-input').value);
-  if (isNaN(guess) || guess < 0) { showMsg('guess-msg','Enter a valid number.','error'); return; }
-
-  const btn = document.getElementById('guess-btn');
-  btn.disabled = true; btn.textContent = 'SAVING…';
-
-  try {
-    if (myRole === 'player') {
-      const ref = doc(db,'players',myName);
-      const snap = await getDoc(ref);
-      if (snap.exists()) {
-        await updateDoc(ref,{guess});
-      } else {
-        await setDoc(ref,{name:myName,totalPoints:0,wins:0,losses:0,bracket:'winners',eliminated:false,round:1,guess});
-      }
-    } else {
-      await updateDoc(doc(db,'spectators',myName),{guess});
-    }
-
-    myGuess = guess;
-    localStorage.setItem('myGuess', guess);
-    showMsg('guess-msg','Locked in! ✅','success');
-
-    setTimeout(() => {
-      showStep('attract');
-      updateAttractBadge();
-      checkIfShouldSkipAttract();
-    }, 1000);
-  } catch(err) {
-    console.error(err);
-    showMsg('guess-msg','Error saving — try again.','error');
-    btn.disabled = false; btn.textContent = 'LOCK IN MY GUESS';
-  }
-};
+window.submitGuess = async () => {};
 
 function updateAttractBadge() {
   const badge = document.getElementById('a-badge');
@@ -911,7 +869,7 @@ function startAttractCanvas() {
   const lasers=Array.from({length:5},()=>new Laser());
   const pops=Array.from({length:8},()=>new Pop());
   const parts=Array.from({length:35},()=>new Particle());
-  const marquee='  VPRCA ARCADE CHALLENGE 2026  ✦  DOUBLE ELIMINATION  ✦  GUESS THE JAR  ✦  WIN = 2 PTS  ✦  LOSS = 1 PT  ✦  ';
+  const marquee='  VPRCA ARCADE CHALLENGE 2026  ✦  DOUBLE ELIMINATION  ✦  WIN = 2 PTS  ✦  LOSS = 1 PT  ✦  ';
   let mX=0,tick=0,popT=0;
 
   function loop(){
@@ -958,6 +916,8 @@ window.checkPin = () => {
   if(document.getElementById('pin-input').value===HOST_PIN){
     document.getElementById('host-pin-gate').style.display='none';
     document.getElementById('host-panel').style.display='block';
+    document.getElementById('main-nav').style.display='flex';
+    document.getElementById('how-to-play').style.display='none';
   } else showMsg('pin-msg','Incorrect PIN.','error');
 };
 
@@ -1163,18 +1123,13 @@ async function checkChampion() {
 async function populateCelebration(players) {
   const stSnap = await getDoc(doc(db,'tournament','state'));
   const st = stSnap.exists() ? stSnap.data() : {};
-  const ca = st.correctAnswer || 0;
+  const ca = 0;
   const champName = st.champion || (players.find(p=>!p.eliminated)||{}).name || '';
 
   document.getElementById('champ-name').textContent = champName;
 
   // Sort players
-  const sortFn = (a,b) => {
-    if(b.totalPoints!==a.totalPoints) return b.totalPoints-a.totalPoints;
-    const ad=a.guess!=null?Math.abs(a.guess-ca):Infinity;
-    const bd=b.guess!=null?Math.abs(b.guess-ca):Infinity;
-    return ad-bd;
-  };
+  const sortFn = (a,b) => b.totalPoints - a.totalPoints;
   const sorted = [...players].sort(sortFn);
 
   // Player standings — show top 6
@@ -1206,23 +1161,7 @@ async function populateCelebration(players) {
       <span class="cel-pts">${s.correctPredictions||0}<span style="font-size:.55rem;color:var(--muted);"> ✅</span></span>
       <span class="cel-meta">Correct picks</span>
     </div>`;
-  }).join('') || '<div style="padding:1rem;font-family:var(--mono);font-size:.7rem;color:var(--muted);text-align:center;">No spectators</div>';
-
-  // Tiebreaker — closest guess among all
-  const everyone = [...sorted, ...specs];
-  const withGuess = everyone.filter(p=>p.guess!=null&&ca>0).sort((a,b)=>Math.abs(a.guess-ca)-Math.abs(b.guess-ca));
-  const tbEl = document.getElementById('cel-tiebreaker');
-  if(withGuess.length && ca>0){
-    const winner = withGuess[0];
-    const diff = Math.abs(winner.guess-ca);
-    tbEl.innerHTML = `<div class="cel-row top-1">
-      <span class="cel-rank">🎯</span>
-      <span class="cel-rname">${winner.name}</span>
-      <span class="cel-pts">${winner.guess}<span style="font-size:.55rem;color:var(--muted);"> guess</span></span>
-      <span class="cel-meta">Actual: ${ca} · Off by ${diff}</span>
-    </div>`;
-  } else {
-    tbEl.innerHTML = `<div style="padding:1rem;font-family:var(--mono);font-size:.7rem;color:var(--muted);text-align:center;">Set correct answer to show tiebreaker winner</div>`;
+  }).join('') || '<div style="padding:1rem;font-family:var(--mono);font-size:.7rem;color:var(--muted);text-align:center;">No spectators</div>'; else {
   }
 
   document.getElementById('celebration').classList.add('show');
@@ -1448,7 +1387,7 @@ window.simSetup = async () => {
     batch.set(doc(db,'players',name), {
       name, totalPoints:0, wins:0, losses:0,
       bracket:'winners', eliminated:false, round:1,
-      guess: Math.floor(Math.random() * 200) + 50,
+      
       sim: true
     }, {merge:true});
   });
@@ -1458,7 +1397,7 @@ window.simSetup = async () => {
     batch.set(doc(db,'spectators',name), {
       name, joinedAt:Date.now(),
       correctPredictions:0,
-      guess: Math.floor(Math.random() * 200) + 50,
+      
       sim: true
     });
   });
@@ -1558,15 +1497,7 @@ window.simClear = async () => {
   btn.disabled = false; btn.textContent = '🗑 CLEAR SIMULATION DATA';
 };
 
-window.saveAnswer = async () => {
-  const val=parseInt(document.getElementById('correct-answer').value);
-  if(isNaN(val)){showMsg('ans-msg','Enter a valid number.','error');return;}
-  const ref=doc(db,'tournament','state');
-  const snap=await getDoc(ref);
-  if(snap.exists())await updateDoc(ref,{correctAnswer:val});
-  else await setDoc(ref,{correctAnswer:val});
-  showMsg('ans-msg',`Saved: ${val} ✅`,'success');
-};
+window.saveAnswer = async () => {};
 
 // ── Vote on match ──────────────────────────────────────
 window.voteOnMatch = async (matchId, votedFor) => {
@@ -1644,7 +1575,7 @@ function renderBracket() {
 function renderStandings(players) {
   const ca=tState?.correctAnswer||0;
   const sortFn=(a,b)=>{if(b.totalPoints!==a.totalPoints)return b.totalPoints-a.totalPoints;const ad=a.guess!=null?Math.abs(a.guess-ca):Infinity,bd=b.guess!=null?Math.abs(b.guess-ca):Infinity;return ad-bd;};
-  const row=(p,i)=>{const r=i+1,medal=r===1?'🥇':r===2?'🥈':r===3?'🥉':r,g=p.guess!=null?`Guess:${p.guess}`:'No guess';return `<div class="lb-row${r<=3?' top-'+r:''}"><span class="lb-rank">${medal}</span><span class="lb-name">${p.name}${p.late?'<span style="font-size:.55rem;color:var(--yellow);"> (late)</span>':''}</span><span class="lb-pts">${p.totalPoints}<span style="font-size:.55rem;color:var(--muted);"> PTS</span></span><span class="lb-meta">${p.wins}W·${p.losses}L·${g}</span></div>`;};
+  const row=(p,i)=>{const r=i+1,medal=r===1?'🥇':r===2?'🥈':r===3?'🥉':r,g=p.guess!=null?`Guess:${p.guess}`:'No guess';return `<div class="lb-row${r<=3?' top-'+r:''}"><span class="lb-rank">${medal}</span><span class="lb-name">${p.name}${p.late?'<span style="font-size:.55rem;color:var(--yellow);"> (late)</span>':''}</span><span class="lb-pts">${p.totalPoints}<span style="font-size:.55rem;color:var(--muted);"> PTS</span></span><span class="lb-meta">${p.wins}W · ${p.losses}L</span></div>`;};
   document.getElementById('lb-win').innerHTML=players.filter(p=>p.bracket==='winners'&&!p.eliminated).sort(sortFn).map(row).join('')||'<div class="lb-empty">None yet</div>';
   document.getElementById('lb-lose').innerHTML=players.filter(p=>p.bracket==='losers'&&!p.eliminated).sort(sortFn).map(row).join('')||'<div class="lb-empty">None yet</div>';
   document.getElementById('lb-elim').innerHTML=players.filter(p=>p.eliminated).sort(sortFn).map(row).join('')||'<div class="lb-empty">None yet</div>';
@@ -1655,12 +1586,7 @@ function renderProjection(players, specs) {
   if (!document.getElementById('s-projection').classList.contains('active')) return;
 
   const ca = tState?.correctAnswer || 0;
-  const sortFn = (a,b) => {
-    if(b.totalPoints!==a.totalPoints) return b.totalPoints-a.totalPoints;
-    const ad=a.guess!=null?Math.abs(a.guess-ca):Infinity;
-    const bd=b.guess!=null?Math.abs(b.guess-ca):Infinity;
-    return ad-bd;
-  };
+  const sortFn = (a,b) => b.totalPoints - a.totalPoints;
 
   const winners = players.filter(p=>p.bracket==='winners'&&!p.eliminated).sort(sortFn);
   const losers  = players.filter(p=>p.bracket==='losers' &&!p.eliminated).sort(sortFn);
@@ -1719,12 +1645,7 @@ function renderProjection(players, specs) {
     '<div class="proj-empty">None yet</div>';
 
   // Spectators
-  const specSortFn = (a,b) => {
-    if((b.correctPredictions||0)!==(a.correctPredictions||0)) return (b.correctPredictions||0)-(a.correctPredictions||0);
-    const ad=a.guess!=null?Math.abs(a.guess-ca):Infinity;
-    const bd=b.guess!=null?Math.abs(b.guess-ca):Infinity;
-    return ad-bd;
-  };
+  const specSortFn = (a,b) => (b.correctPredictions||0) - (a.correctPredictions||0);
   const sortedSpecs = [...specs].sort(specSortFn);
   document.getElementById('proj-spec-list').innerHTML = sortedSpecs.length
     ? sortedSpecs.map((s,i)=>{
@@ -1733,7 +1654,7 @@ function renderProjection(players, specs) {
           <span class="proj-rank">${medal||r}</span>
           <div>
             <div class="proj-name">${s.name}</div>
-            <div class="proj-name-sub">Guess: ${s.guess!=null?s.guess:'—'}</div>
+            
           </div>
           <div>
             <div class="proj-score" style="color:var(--purple);">${s.correctPredictions||0}<span style="font-size:.55rem;color:var(--muted);"> ✅</span></div>
@@ -1747,7 +1668,7 @@ function renderProjection(players, specs) {
 function renderSpecStandings(specs) {
   const ca=tState?.correctAnswer||0;
   const sorted=[...specs].sort((a,b)=>{if((b.correctPredictions||0)!==(a.correctPredictions||0))return(b.correctPredictions||0)-(a.correctPredictions||0);const ad=a.guess!=null?Math.abs(a.guess-ca):Infinity,bd=b.guess!=null?Math.abs(b.guess-ca):Infinity;return ad-bd;});
-  document.getElementById('lb-spec').innerHTML=sorted.length?sorted.map((s,i)=>{const r=i+1,medal=r===1?'🥇':r===2?'🥈':r===3?'🥉':r;return `<div class="lb-row${r<=3?' top-'+r:''}"><span class="lb-rank">${medal}</span><span class="lb-name">${s.name}</span><span class="lb-pts">${s.correctPredictions||0}<span style="font-size:.55rem;color:var(--muted);"> ✅</span></span><span class="lb-meta">Correct picks · Guess:${s.guess!=null?s.guess:'—'}</span></div>`;}).join(''):'<div class="lb-empty">No spectators yet</div>';
+  document.getElementById('lb-spec').innerHTML=sorted.length?sorted.map((s,i)=>{const r=i+1,medal=r===1?'🥇':r===2?'🥈':r===3?'🥉':r;return `<div class="lb-row${r<=3?' top-'+r:''}"><span class="lb-rank">${medal}</span><span class="lb-name">${s.name}</span><span class="lb-pts">${s.correctPredictions||0}<span style="font-size:.55rem;color:var(--muted);"> ✅</span></span><span class="lb-meta">Correct picks</span></div>`;}).join(''):'<div class="lb-empty">No spectators yet</div>';
 }
 
 function renderSignupList(signups) {
@@ -1807,17 +1728,16 @@ window.logOut = async () => {
   }
   myName=null;myRole=null;myGuess=null;myVotes={};
   localStorage.removeItem('myName');localStorage.removeItem('myRole');
-  localStorage.removeItem('myGuess');localStorage.removeItem('myVotes');
+  localStorage.removeItem('myVotes');
   stopAttractCanvas();
   document.getElementById('logout-btn').style.display='none';
+  document.getElementById('main-nav').style.display='none';
+  document.getElementById('how-to-play').style.display='block';
   document.getElementById('main-name-select').value='';
   document.getElementById('main-custom-field').style.display='none';
   document.getElementById('main-custom-name').value='';
-  document.getElementById('guess-input').value='';
   document.getElementById('guess-entry').style.display='block';
   document.getElementById('guess-locked-display').style.display='none';
-  document.getElementById('guess-btn').disabled=false;
-  document.getElementById('guess-btn').textContent='LOCK IN MY GUESS';
   showStep('role');
 };
 
@@ -1827,7 +1747,9 @@ function restoreSession() {
   const sel = document.getElementById('main-name-select');
   if ([...sel.options].some(o => o.value === myName)) sel.value = myName;
 
-  // Show logout button since user is already signed in
+  // Show nav bar and logout button since user is already signed in
+  document.getElementById('main-nav').style.display = 'flex';
+  document.getElementById('how-to-play').style.display = 'none';
   document.getElementById('logout-btn').style.display = 'block';
 
   if (myGuess !== null) {
@@ -1846,7 +1768,7 @@ function restoreSession() {
     updateAttractBadge();
     startAttractCanvas();
   } else {
-    showStep('guess');
+    showStep('attract'); updateAttractBadge(); checkIfShouldSkipAttract();
   }
   // Hide role selector since already registered
   document.getElementById('step-role').style.display = 'none';
