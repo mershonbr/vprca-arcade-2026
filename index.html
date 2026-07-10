@@ -210,7 +210,7 @@
 <div id="notif-banner">
   <div>🔔 NEW ROUND — PLACE YOUR VOTES NOW!</div>
   <div class="notif-cd" id="notif-cd">60s remaining</div>
-  <button class="notif-close" onclick="_call('closeNotif')">Got it ✓</button>
+  <button class="notif-close" onclick="closeNotif()">Got it ✓</button>
 </div>
 
 <div id="celebration">
@@ -252,11 +252,11 @@
 </header>
 
 <nav class="nav" id="main-nav" style="display:none;">
-  <button class="nav-btn active" onclick="_call('showScreen','s-home')">🏠 Home</button>
-  <button class="nav-btn" onclick="_call('showScreen','s-bracket')">📊 Matches</button>
-  <button class="nav-btn" onclick="_call('showScreen','s-standings')">🏆 My Rank</button>
-  <button class="nav-btn" onclick="_call('showScreen','s-projection')">📺 Big Screen</button>
-  <button class="nav-btn" onclick="_call('showScreen','s-host')">🔐 Host</button>
+  <button class="nav-btn active" onclick="showScreen('s-home')">🏠 Home</button>
+  <button class="nav-btn" onclick="showScreen('s-bracket')">📊 Matches</button>
+  <button class="nav-btn" onclick="showScreen('s-standings')">🏆 My Rank</button>
+  <button class="nav-btn" onclick="showScreen('s-projection')">📺 Big Screen</button>
+  <button class="nav-btn" onclick="showScreen('s-host')">🔐 Host</button>
 </nav>
 
 <!-- ── HOME ── -->
@@ -310,16 +310,16 @@
         <input type="text" id="main-custom-name" placeholder="Enter your full name" maxlength="40" />
       </div>
       <div id="role-msg" class="msg"></div>
-      <button class="btn btn-pink" onclick="_call('chooseRole','player')">🎮 I Want to Play</button>
-      <button class="btn btn-purple" onclick="_call('chooseRole','spectator')" style="margin-top:.5rem;">👀 I'm Just Spectating</button>
-      <button class="btn btn-ghost" onclick="_call('showHostLogin')" style="margin-top:.5rem;border-color:rgba(255,45,120,.3);color:var(--pink);">🔐 I Am the Host</button>
+      <button class="btn btn-pink" onclick="chooseRole('player')">🎮 I Want to Play</button>
+      <button class="btn btn-purple" onclick="chooseRole('spectator')" style="margin-top:.5rem;">👀 I'm Just Spectating</button>
+      <button class="btn btn-ghost" onclick="showHostLogin()" style="margin-top:.5rem;border-color:rgba(255,45,120,.3);color:var(--pink);">🔐 I Am the Host</button>
       <div id="host-login-box" style="display:none;margin-top:.6rem;padding:.8rem;background:rgba(255,45,120,.06);border:1px solid rgba(255,45,120,.25);border-radius:var(--r);">
         <div class="field">
           <label>Host PIN</label>
           <input type="password" id="quick-pin-input" placeholder="Enter PIN" maxlength="4" style="text-align:center;letter-spacing:.3em;font-size:1.2rem;" onkeydown="if(event.key==='Enter')quickHostLogin()" />
         </div>
         <div id="quick-pin-msg" class="msg"></div>
-        <button class="btn btn-pink" onclick="_call('quickHostLogin')" style="margin-top:.4rem;">ENTER HOST PANEL</button>
+        <button class="btn btn-pink" onclick="quickHostLogin()" style="margin-top:.4rem;">ENTER HOST PANEL</button>
       </div>
     </div>
   </div>
@@ -357,7 +357,7 @@
 
   <!-- Logout button — visible once signed in -->
   <div style="max-width:500px;margin:.5rem auto 0;padding:0 1rem;">
-    <button id="logout-btn" onclick="_call('logOut')">↩ Log Out / Switch Name</button>
+    <button id="logout-btn" onclick="logOut()">↩ Log Out / Switch Name</button>
   </div>
 
 </div>
@@ -400,7 +400,7 @@
         <input type="password" id="pin-input" placeholder="••••" maxlength="4" onkeydown="if(event.key==='Enter')checkPin()" />
       </div>
       <div id="pin-msg" class="msg"></div>
-      <button class="btn btn-pink" onclick="_call('checkPin')">UNLOCK HOST PANEL</button>
+      <button class="btn btn-pink" onclick="checkPin()">UNLOCK HOST PANEL</button>
     </div>
   </div>
 
@@ -417,15 +417,15 @@
         <div id="signup-list"><span style="font-family:var(--mono);font-size:.7rem;color:var(--muted);">No players yet.</span></div>
         <div id="host-msg" class="msg"></div>
         <!-- Start button -->
-        <button class="btn btn-green" id="start-btn" onclick="_call('startTournament')" style="display:none;">🎮 START TOURNAMENT</button>
+        <button class="btn btn-green" id="start-btn" onclick="startTournament()" style="display:none;">🎮 START TOURNAMENT</button>
         <!-- Round controls — appear once tournament starts -->
         <div id="round-ctrl-inline" style="display:none;">
           <div id="round-info" class="msg info" style="margin-bottom:.6rem;"></div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;">
-            <button class="btn btn-yellow" id="next-round-btn" onclick="_call('startNextRound')" style="display:none;">▶ NEXT ROUND</button>
-            <button class="btn btn-pink" id="undo-btn" onclick="_call('undoLastResult')" style="display:none;">↩ UNDO</button>
+            <button class="btn btn-yellow" id="next-round-btn" onclick="startNextRound()" style="display:none;">▶ NEXT ROUND</button>
+            <button class="btn btn-pink" id="undo-btn" onclick="undoLastResult()" style="display:none;">↩ UNDO</button>
           </div>
-          <button class="btn btn-green" onclick="_call('showCelebration')" style="margin-top:.5rem;">🏆 SHOW WINNER SCREEN</button>
+          <button class="btn btn-green" onclick="showCelebration()" style="margin-top:.5rem;">🏆 SHOW WINNER SCREEN</button>
         </div>
         <!-- Match list hidden inside toggle -->
         <details style="margin-top:.6rem;">
@@ -444,7 +444,7 @@
             <label>Full name</label>
             <input type="text" id="host-add-name" placeholder="Enter full name" maxlength="40" onkeydown="if(event.key==='Enter')hostAddPlayer()" />
           </div>
-          <button class="btn btn-cyan" onclick="_call('hostAddPlayer')" style="width:auto;padding:.75rem 1.2rem;">ADD</button>
+          <button class="btn btn-cyan" onclick="hostAddPlayer()" style="width:auto;padding:.75rem 1.2rem;">ADD</button>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;">
           <label style="cursor:pointer;display:flex;align-items:center;gap:.5rem;">
@@ -500,8 +500,8 @@
             </div>
             <div id="edit-msg" class="msg"></div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.5rem;">
-              <button class="btn btn-yellow" onclick="_call('saveEditPerson')">💾 SAVE</button>
-              <button class="btn btn-pink" onclick="_call('deleteEditPerson')">🗑️ REMOVE</button>
+              <button class="btn btn-yellow" onclick="saveEditPerson()">💾 SAVE</button>
+              <button class="btn btn-pink" onclick="deleteEditPerson()">🗑️ REMOVE</button>
             </div>
           </div>
         </div>
@@ -546,9 +546,9 @@
           </div>
           <div id="sim-msg" class="msg"></div>
           <div id="sim-log" style="display:none;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:.8rem;max-height:180px;overflow-y:auto;font-family:var(--mono);font-size:.65rem;color:var(--text);line-height:1.9;margin-bottom:.5rem;"></div>
-          <button class="btn btn-yellow" id="sim-setup-btn" onclick="_call('simSetup')">🎲 POPULATE SIMULATION</button>
-          <button class="btn" id="sim-run-btn" onclick="_call('simRunRound')" style="display:none;margin-top:.5rem;background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;">▶ AUTO-PLAY NEXT ROUND</button>
-          <button class="btn btn-ghost" id="sim-clear-btn" onclick="_call('simClear')" style="margin-top:.5rem;">🗑 CLEAR ALL DATA</button>
+          <button class="btn btn-yellow" id="sim-setup-btn" onclick="simSetup()">🎲 POPULATE SIMULATION</button>
+          <button class="btn" id="sim-run-btn" onclick="simRunRound()" style="display:none;margin-top:.5rem;background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;">▶ AUTO-PLAY NEXT ROUND</button>
+          <button class="btn btn-ghost" id="sim-clear-btn" onclick="simClear()" style="margin-top:.5rem;">🗑 CLEAR ALL DATA</button>
         </div>
       </div>
     </details>
@@ -640,28 +640,9 @@
 
 <footer>VPRCA Arcade Challenge 2026 · Double Elimination Tournament</footer>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script>
-// Bridge — allows onclick attributes to call functions defined in the module
-// Functions are assigned to window inside the module; this bridge ensures
-// onclick calls are deferred until the module has loaded
-function _call(fn, ...args) {
-  if (typeof window[fn] === 'function') {
-    window[fn](...args);
-  } else {
-    // Queue call until module loads
-    window._pendingCalls = window._pendingCalls || [];
-    window._pendingCalls.push([fn, args]);
-  }
-}
-// Process any queued calls when module sets a function
-const _origDefineProperty = Object.defineProperty;
-</script>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {
-  getFirestore,collection,doc,getDoc,setDoc,updateDoc,
-  onSnapshot,getDocs,writeBatch
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const HOST_PIN = "1804";
 const firebaseConfig = {
@@ -672,8 +653,31 @@ const firebaseConfig = {
   messagingSenderId: "506639550495",
   appId:             "1:506639550495:web:861bfd5018da95eefa6d2a"
 };
-const app = initializeApp(firebaseConfig);
-const db  = getFirestore(app);
+const app = firebase.initializeApp(firebaseConfig);
+const db  = firebase.firestore();
+
+// ── Firebase compat wrappers ──────────────────────────
+function collection(db, col) { return db.collection(col); }
+function doc(db, col, id) { 
+  if (typeof col === 'string' && id !== undefined) {
+    return db.collection(col).doc(id);
+  }
+  // Handle doc(db, 'col/id') format
+  return db.doc(col);
+}
+function getDoc(ref) { return ref.get(); }
+function setDoc(ref, data, opts) { 
+  if (opts && opts.merge) return ref.set(data, {merge:true});
+  return ref.set(data); 
+}
+function updateDoc(ref, data) { return ref.update(data); }
+function deleteDoc(ref) { return ref.delete(); }
+function getDocs(ref) { return ref.get(); }
+function writeBatch(db) { return db.batch(); }
+function onSnapshot(ref, cb) { return ref.onSnapshot(cb); }
+// Firestore batch compat: batch.set/update/delete work same way
+
+
 
 const BASE_PLAYERS = [
   "Andy Tucker","Bethany Spurrier","Brian Mershon","Carma West","Chip Rice",
@@ -1214,8 +1218,7 @@ async function populateCelebration(players) {
       <span class="cel-pts">${s.correctPredictions||0}<span style="font-size:.55rem;color:var(--muted);"> ✅</span></span>
       <span class="cel-meta">Correct picks</span>
     </div>`;
-  }).join('') || '<div style="padding:1rem;font-family:var(--mono);font-size:.7rem;color:var(--muted);text-align:center;">No spectators</div>'; else {
-  }
+  }).join('') || '<div style="padding:1rem;font-family:var(--mono);font-size:.7rem;color:var(--muted);text-align:center;">No spectators</div>';
 
   document.getElementById('celebration').classList.add('show');
   startFireworks();
@@ -1387,11 +1390,11 @@ window.deleteEditPerson = async () => {
 
   try {
     if (editPersonRole === 'player') {
-      const { deleteDoc } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+      // deleteDoc available via compat wrapper
       await deleteDoc(doc(db,'players',editPersonName));
       await deleteDoc(doc(db,'signups',editPersonName));
     } else {
-      const { deleteDoc } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+      // deleteDoc available via compat wrapper
       await deleteDoc(doc(db,'spectators',editPersonName));
     }
     document.getElementById('edit-panel').style.display = 'none';
@@ -1523,7 +1526,7 @@ window.simClear = async () => {
   btn.disabled = true; btn.textContent = 'Clearing…';
 
   try {
-    const { deleteDoc } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+    // deleteDoc available via compat wrapper
 
     const collections = ['signups','players','spectators','matches','votes'];
     for (const col of collections) {
@@ -1576,7 +1579,7 @@ function renderVoteMatches() {
       <div class="match-tag ${m.bracket}">${m.bracket==='winners'?'🏆 Winners':'💀 Losers'} · Round ${m.round}</div>
       <div class="match-players"><div class="match-player">${m.p1}</div><div class="match-vs">VS</div><div class="match-player">${m.p2}</div></div>
       ${mv?`<div class="msg success" style="display:block;margin-top:.5rem;">✅ You picked: ${mv}</div>`
-         :`<div class="vote-row"><button class="vote-btn" onclick="_call('voteOnMatch','${m.id}','${m.p1}')">${m.p1}</button><button class="vote-btn" onclick="_call('voteOnMatch','${m.id}','${m.p2}')">${m.p2}</button></div>`}
+         :`<div class="vote-row"><button class="vote-btn" onclick="voteOnMatch('${m.id}','${m.p1}')">${m.p1}</button><button class="vote-btn" onclick="voteOnMatch('${m.id}','${m.p2}')">${m.p2}</button></div>`}
     </div>`;
   }).join('');
 }
@@ -1606,8 +1609,8 @@ function renderPlayerMatch() {
     </div>
     <p style="font-size:.75rem;color:var(--muted);text-align:center;margin:.5rem 0;">After your game, log the result:</p>
     <div class="outcome-group">
-      <label class="oc-label" onclick="_call('logResult','${myMatch.id}','${myName}','${opp}')"><div class="oc-pill win">⚡ I Won</div></label>
-      <label class="oc-label" onclick="_call('logResult','${myMatch.id}','${opp}','${myName}')"><div class="oc-pill loss">💀 I Lost</div></label>
+      <label class="oc-label" onclick="logResult('${myMatch.id}','${myName}','${opp}')"><div class="oc-pill win">⚡ I Won</div></label>
+      <label class="oc-label" onclick="logResult('${myMatch.id}','${opp}','${myName}')"><div class="oc-pill loss">💀 I Lost</div></label>
     </div>`;
 }
 
@@ -1770,7 +1773,7 @@ window.logOut = async () => {
   if (!confirm('Log out and remove yourself from the list? You can sign back in with a different name.')) return;
   if (myName && myRole) {
     try {
-      const { deleteDoc } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+      // deleteDoc available via compat wrapper
       if (myRole === 'player') {
         await deleteDoc(doc(db,'signups',myName)).catch(()=>{});
         await deleteDoc(doc(db,'players',myName)).catch(()=>{});
@@ -1895,13 +1898,7 @@ setTimeout(restoreSession, 300);
 // Init — populate dropdown now that all functions are defined
 populateMainSelect();
 
-// Process any onclick calls that fired before module loaded
-if (window._pendingCalls) {
-  window._pendingCalls.forEach(([fn, args]) => {
-    if (typeof window[fn] === 'function') window[fn](...args);
-  });
-  window._pendingCalls = [];
-}
+
 </script>
 </body>
 </html>
