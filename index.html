@@ -796,10 +796,10 @@ window.chooseRole = async (role) => {
   // Check not already registered as the other role
   if (role === 'player') {
     const specSnap = await getDoc(doc(db,'spectators',name));
-    if (specSnap.exists()) { showMsg('role-msg','You already joined as a spectator.','error'); return; }
+    if (specSnap.exists) { showMsg('role-msg','You already joined as a spectator.','error'); return; }
   } else {
     const sigSnap = await getDoc(doc(db,'signups',name));
-    if (sigSnap.exists()) { showMsg('role-msg','You are signed up as a player!','error'); return; }
+    if (sigSnap.exists) { showMsg('role-msg','You are signed up as a player!','error'); return; }
   }
 
   myName = name; myRole = role;
@@ -1090,7 +1090,7 @@ window.startNextRound = async () => {
 window.logResult = async (matchId, winnerName, loserName) => {
   const mRef=doc(db,'matches',matchId);
   const snap=await getDoc(mRef);
-  if(!snap.exists()||snap.data().status==='complete'){alert('Already logged.');return;}
+  if(!snap.exists||snap.data().status==='complete'){alert('Already logged.');return;}
   const m=snap.data();
   const batch=writeBatch(db);
   batch.update(mRef,{winner:winnerName,loser:loserName,status:'complete',reportedBy:myName||'player'});
@@ -1098,7 +1098,7 @@ window.logResult = async (matchId, winnerName, loserName) => {
 
   // Winner stays in same bracket, advances one round
   const wSnap=await getDoc(doc(db,'players',winnerName));
-  const wd=wSnap.exists()?wSnap.data():{totalPoints:0,wins:0,losses:0,bracket:'winners',round:1};
+  const wd=wSnap.exists?wSnap.data():{totalPoints:0,wins:0,losses:0,bracket:'winners',round:1};
   batch.set(doc(db,'players',winnerName),{
     ...wd, name:winnerName,
     totalPoints:(wd.totalPoints||0)+2,
@@ -1110,7 +1110,7 @@ window.logResult = async (matchId, winnerName, loserName) => {
 
   // Loser — first loss drops to losers bracket, second loss = eliminated
   const lSnap=await getDoc(doc(db,'players',loserName));
-  const ld=lSnap.exists()?lSnap.data():{totalPoints:0,wins:0,losses:0,bracket:'winners',round:1};
+  const ld=lSnap.exists?lSnap.data():{totalPoints:0,wins:0,losses:0,bracket:'winners',round:1};
   const newL=(ld.losses||0)+1;
   const elim=newL>=2;
   // If losing from winners bracket → go to losers bracket at same round
@@ -1135,11 +1135,11 @@ window.logResult = async (matchId, winnerName, loserName) => {
 window.undoLastResult = async () => {
   if(!lastResultId){showMsg('host-msg','Nothing to undo.','error');return;}
   const mRef=doc(db,'matches',lastResultId);
-  const mSnap=await getDoc(mRef);if(!mSnap.exists())return;
+  const mSnap=await getDoc(mRef);if(!mSnap.exists)return;
   const m=mSnap.data();const batch=writeBatch(db);
   batch.update(mRef,{winner:null,loser:null,status:'pending',reportedBy:null});
-  if(m.winner){const ws=await getDoc(doc(db,'players',m.winner));if(ws.exists()){const wd=ws.data();batch.update(doc(db,'players',m.winner),{totalPoints:Math.max(0,(wd.totalPoints||0)-2),wins:Math.max(0,(wd.wins||0)-1),round:m.round,bracket:m.bracket});}}
-  if(m.loser){const ls=await getDoc(doc(db,'players',m.loser));if(ls.exists()){const ld=ls.data();batch.update(doc(db,'players',m.loser),{totalPoints:Math.max(0,(ld.totalPoints||0)-1),losses:Math.max(0,(ld.losses||0)-1),bracket:m.bracket,round:m.round,eliminated:false});}}
+  if(m.winner){const ws=await getDoc(doc(db,'players',m.winner));if(ws.exists){const wd=ws.data();batch.update(doc(db,'players',m.winner),{totalPoints:Math.max(0,(wd.totalPoints||0)-2),wins:Math.max(0,(wd.wins||0)-1),round:m.round,bracket:m.bracket});}}
+  if(m.loser){const ls=await getDoc(doc(db,'players',m.loser));if(ls.exists){const ld=ls.data();batch.update(doc(db,'players',m.loser),{totalPoints:Math.max(0,(ld.totalPoints||0)-1),losses:Math.max(0,(ld.losses||0)-1),bracket:m.bracket,round:m.round,eliminated:false});}}
   await batch.commit();lastResultId=null;showMsg('host-msg','Result undone. ✅','success');
 };
 
@@ -1151,7 +1151,7 @@ async function scoreVotes(matchId, winnerName) {
     if(v.matchId===matchId&&v.vote===winnerName){
       const sRef=doc(db,'spectators',v.spectatorName);
       const sSnap=await getDoc(sRef);
-      if(sSnap.exists())await updateDoc(sRef,{correctPredictions:(sSnap.data().correctPredictions||0)+1});
+      if(sSnap.exists)await updateDoc(sRef,{correctPredictions:(sSnap.data().correctPredictions||0)+1});
     }
   });
 }
@@ -1169,7 +1169,7 @@ async function checkChampion() {
 
 async function populateCelebration(players) {
   const stSnap = await getDoc(doc(db,'tournament','state'));
-  const st = stSnap.exists() ? stSnap.data() : {};
+  const st = stSnap.exists ? stSnap.data() : {};
   const ca = 0;
   const champName = st.champion || (players.find(p=>!p.eliminated)||{}).name || '';
 
@@ -1321,7 +1321,7 @@ window.loadEditPerson = async () => {
     playerFields.style.display = 'block';
     specFields.style.display = 'none';
     const snap = await getDoc(doc(db,'players',name));
-    if (snap.exists()) {
+    if (snap.exists) {
       const d = snap.data();
       document.getElementById('edit-points').value  = d.totalPoints || 0;
       document.getElementById('edit-wins').value    = d.wins || 0;
@@ -1335,7 +1335,7 @@ window.loadEditPerson = async () => {
     playerFields.style.display = 'none';
     specFields.style.display = 'block';
     const snap = await getDoc(doc(db,'spectators',name));
-    if (snap.exists()) {
+    if (snap.exists) {
       const d = snap.data();
       document.getElementById('edit-predictions').value = d.correctPredictions || 0;
       document.getElementById('edit-spec-guess').value  = d.guess != null ? d.guess : '';
@@ -1549,7 +1549,7 @@ window.saveAnswer = async () => {};
 window.voteOnMatch = async (matchId, votedFor) => {
   if(!myName||myRole!=='spectator'||myVotes[matchId])return;
   const mSnap=await getDoc(doc(db,'matches',matchId));
-  if(!mSnap.exists()||mSnap.data().status!=='pending'){alert('Voting closed.');return;}
+  if(!mSnap.exists||mSnap.data().status!=='pending'){alert('Voting closed.');return;}
   const voteId=`${matchId}_${myName.replace(/\W/g,'_')}`;
   await setDoc(doc(db,'votes',voteId),{matchId,spectatorName:myName,vote:votedFor,createdAt:Date.now()});
   myVotes[matchId]=votedFor;
@@ -1811,7 +1811,7 @@ function restoreSession() {
 
 // ── Firestore listeners ────────────────────────────────
 onSnapshot(doc(db,'tournament','state'), snap => {
-  if(!snap.exists())return;
+  if(!snap.exists)return;
   tState=snap.data();
 
   if(tState.status==='complete'&&tState.champion){
