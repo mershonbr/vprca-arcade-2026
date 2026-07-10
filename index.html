@@ -812,11 +812,11 @@ window.chooseRole = async (role) => {
     await setDoc(doc(db,'signups',name),{name,signedUpAt:Date.now(),late:isLate},{merge:true});
     if (isLate) {
       await setDoc(doc(db,'players',name),{
-        name,totalPoints:1,wins:0,losses:1,bracket:'losers',eliminated:false,round:2,guess:null,late:true
+        name,totalPoints:1,wins:0,losses:1,bracket:'losers',eliminated:false,round:2,late:true
       },{merge:true});
     }
   } else {
-    await setDoc(doc(db,'spectators',name),{name,joinedAt:Date.now(),correctPredictions:0,guess:null},{merge:true});
+    await setDoc(doc(db,'spectators',name),{name,joinedAt:Date.now(),correctPredictions:0},{merge:true});
   }
 
   // Show nav bar and logout button now that user is signed in
@@ -824,18 +824,9 @@ window.chooseRole = async (role) => {
   document.getElementById('how-to-play').style.display = 'none';
   document.getElementById('logout-btn').style.display = 'block';
 
-  // Check if already guessed
-  const collection_name = role === 'player' ? 'players' : 'spectators';
-  const existing = await getDoc(doc(db, collection_name === 'players' ? 'signups' : 'spectators', name));
-
-  if (myGuess !== null) {
-    // Already guessed — skip to attract
-    showStep('attract');
-    updateAttractBadge();
-    checkIfShouldSkipAttract();
-  } else {
-    showStep('attract'); updateAttractBadge(); checkIfShouldSkipAttract();
-  }
+  showStep('attract');
+  updateAttractBadge();
+  checkIfShouldSkipAttract();
 };
 
 // ── Submit guess ───────────────────────────────────────
@@ -845,8 +836,7 @@ function updateAttractBadge() {
   const badge = document.getElementById('a-badge');
   if (!badge || !myName) return;
   const roleLabel = myRole === 'spectator' ? 'Spectator' : 'Player';
-  const guessLabel = myGuess !== null ? ` · Guess: ${myGuess}` : '';
-  badge.textContent = `${roleLabel}: ${myName}${guessLabel}`;
+  badge.textContent = `${roleLabel}: ${myName}`;
 }
 
 function checkIfShouldSkipAttract() {
@@ -987,7 +977,7 @@ window.hostAddPlayer = async () => {
 
   if (role === 'spectator') {
     // Add as spectator — no tournament restrictions
-    await setDoc(doc(db,'spectators',name), {name, joinedAt:Date.now(), correctPredictions:0, guess:null}, {merge:true});
+    await setDoc(doc(db,'spectators',name), {name, joinedAt:Date.now(), correctPredictions:0}, {merge:true});
     showMsg('add-msg', `${name} added as spectator. ✅`, 'success');
   } else {
     // Add as player
@@ -995,7 +985,7 @@ window.hostAddPlayer = async () => {
     const isLate = status === 'active';
     await setDoc(doc(db,'signups',name), {name, signedUpAt:Date.now(), late:isLate}, {merge:true});
     if (isLate) {
-      await setDoc(doc(db,'players',name), {name,totalPoints:1,wins:0,losses:1,bracket:'losers',eliminated:false,round:2,guess:null,late:true}, {merge:true});
+      await setDoc(doc(db,'players',name), {name,totalPoints:1,wins:0,losses:1,bracket:'losers',eliminated:false,round:2,late:true}, {merge:true});
       showMsg('add-msg', `${name} added to Losers Bracket (late join). ⚠️`, 'warning');
     } else {
       showMsg('add-msg', `${name} added as player. ✅`, 'success');
@@ -1011,7 +1001,7 @@ window.startTournament = async () => {
   if(players.length<2){showMsg('host-msg','Need at least 2 players.','error');return;}
   const shuffled=[...players].sort(()=>Math.random()-.5);
   const batch=writeBatch(db);
-  shuffled.forEach(name=>batch.set(doc(db,'players',name),{name,totalPoints:0,wins:0,losses:0,bracket:'winners',eliminated:false,round:1,guess:null},{merge:true}));
+  shuffled.forEach(name=>batch.set(doc(db,'players',name),{name,totalPoints:0,wins:0,losses:0,bracket:'winners',eliminated:false,round:1},{merge:true}));
   const pairs=[...shuffled];let byePlayer=null;
   if(pairs.length%2!==0)byePlayer=pairs.pop();
   for(let i=0;i<pairs.length;i+=2){
@@ -1782,7 +1772,7 @@ window.logOut = async () => {
       }
     } catch(err){ console.error('Logout:',err); }
   }
-  myName=null;myRole=null;myGuess=null;myVotes={};
+  myName=null;myRole=null;myVotes={};
   localStorage.removeItem('myName');localStorage.removeItem('myRole');
   localStorage.removeItem('myVotes');
   stopAttractCanvas();
@@ -1792,8 +1782,6 @@ window.logOut = async () => {
   document.getElementById('main-name-select').value='';
   document.getElementById('main-custom-field').style.display='none';
   document.getElementById('main-custom-name').value='';
-  document.getElementById('guess-entry').style.display='block';
-  document.getElementById('guess-locked-display').style.display='none';
   showStep('role');
 };
 
@@ -1808,23 +1796,14 @@ function restoreSession() {
   document.getElementById('how-to-play').style.display = 'none';
   document.getElementById('logout-btn').style.display = 'block';
 
-  if (myGuess !== null) {
-    // Show locked guess in guess step visually but skip straight to attract/active
-    document.getElementById('guess-locked-val').textContent = myGuess;
-    document.getElementById('guess-locked-display').style.display = 'block';
-    document.getElementById('guess-entry').style.display = 'none';
-  }
-
   // Determine which step to show based on tournament state
   if (tState?.status === 'active') {
     if (myRole === 'player') showStep('active-player');
     else { showStep('active-spec'); renderVoteMatches(); }
-  } else if (myGuess !== null) {
+  } else {
     showStep('attract');
     updateAttractBadge();
     startAttractCanvas();
-  } else {
-    showStep('attract'); updateAttractBadge(); checkIfShouldSkipAttract();
   }
   // Hide role selector since already registered
   document.getElementById('step-role').style.display = 'none';
