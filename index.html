@@ -312,11 +312,18 @@
       <div id="role-msg" class="msg"></div>
       <button class="btn btn-pink" onclick="chooseRole('player')">🎮 I Want to Play</button>
       <button class="btn btn-purple" onclick="chooseRole('spectator')" style="margin-top:.5rem;">👀 I'm Just Spectating</button>
+      <button class="btn btn-ghost" onclick="showHostLogin()" style="margin-top:.5rem;border-color:rgba(255,45,120,.3);color:var(--pink);">🔐 I Am the Host</button>
+      <div id="host-login-box" style="display:none;margin-top:.6rem;padding:.8rem;background:rgba(255,45,120,.06);border:1px solid rgba(255,45,120,.25);border-radius:var(--r);">
+        <div class="field">
+          <label>Host PIN</label>
+          <input type="password" id="quick-pin-input" placeholder="Enter PIN" maxlength="4" style="text-align:center;letter-spacing:.3em;font-size:1.2rem;" onkeydown="if(event.key==='Enter')quickHostLogin()" />
+        </div>
+        <div id="quick-pin-msg" class="msg"></div>
+        <button class="btn btn-pink" onclick="quickHostLogin()" style="margin-top:.4rem;">ENTER HOST PANEL</button>
+      </div>
     </div>
   </div>
 
-
-  <!-- ATTRACT
 
   <!-- ATTRACT SCREEN (waiting room) -->
   <div id="attract-wrap">
@@ -690,7 +697,10 @@ function populateMainSelect(excludePlayers=[]) {
   sel.appendChild(notListed);
   if (cur) try { sel.value = cur; } catch(e){}
 }
-populateMainSelect();
+// Populate after DOM ready
+setTimeout(() => {
+  populateMainSelect();
+}, 0);
 
 document.getElementById('main-name-select').addEventListener('change', function() {
   document.getElementById('main-custom-field').style.display =
@@ -704,6 +714,34 @@ function resolvedName() {
 }
 
 // ── Screen nav ─────────────────────────────────────────
+// ── Host login from home screen ───────────────────────
+window.showHostLogin = () => {
+  const box = document.getElementById('host-login-box');
+  box.style.display = box.style.display === 'none' ? 'block' : 'none';
+  if (box.style.display === 'block') {
+    setTimeout(() => document.getElementById('quick-pin-input').focus(), 100);
+  }
+};
+
+window.quickHostLogin = () => {
+  const pin = document.getElementById('quick-pin-input').value;
+  if (pin !== HOST_PIN) {
+    showMsg('quick-pin-msg', 'Incorrect PIN.', 'error');
+    return;
+  }
+  myName  = 'Host';
+  myRole  = 'host';
+  localStorage.setItem('myName', 'Host');
+  localStorage.setItem('myRole', 'host');
+  document.getElementById('main-nav').style.display = 'flex';
+  document.getElementById('how-to-play').style.display = 'none';
+  document.getElementById('step-role').style.display = 'none';
+  document.getElementById('logout-btn').style.display = 'block';
+  document.getElementById('host-pin-gate').style.display = 'none';
+  document.getElementById('host-panel').style.display = 'block';
+  showScreen('s-host');
+};
+
 window.showScreen = (id) => {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
