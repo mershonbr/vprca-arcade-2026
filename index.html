@@ -1581,10 +1581,22 @@ function renderPlayerMatch() {
   const body=document.getElementById('player-match-body');
   if(!myMatch){
     card.style.display='none';
-    // If tournament active and no pending match, show waiting message
     if(tState?.status==='active'){
       card.style.display='block';
-      body.innerHTML=`<div class="msg info" style="display:block;">✅ Your match this round is complete. Waiting for next round to begin.</div>`;
+      // Check if player is eliminated
+      const allPlayers = window._cachedPlayers || [];
+      const me = allPlayers.find(p => p.name === myName);
+      if(me && me.eliminated){
+        body.innerHTML=`<div class="msg error" style="display:block;">❌ You have been eliminated. Check the standings to see your final rank!</div>`;
+      } else {
+        body.innerHTML=`
+          <div class="msg info" style="display:block;margin-bottom:.8rem;">✅ Your match is complete! Waiting for the next round to begin.</div>
+          <div style="font-family:var(--mono);font-size:.68rem;color:var(--muted);text-align:center;line-height:1.7;">
+            The host will start the next round shortly.<br>
+            Your new match will appear here automatically.<br>
+            <strong style="color:var(--cyan);">No need to refresh.</strong>
+          </div>`;
+      }
     }
     return;
   }
@@ -1597,7 +1609,9 @@ function renderPlayerMatch() {
       <div class="match-vs">VS</div>
       <div class="match-player">${opp}</div>
     </div>
-    <p style="font-size:.75rem;color:var(--muted);text-align:center;margin:.5rem 0;">After your game, log the result:</p>
+    <div style="background:rgba(255,230,0,.08);border:1px solid rgba(255,230,0,.3);border-radius:var(--r);padding:.6rem .8rem;margin:.4rem 0;font-family:var(--mono);font-size:.65rem;color:var(--yellow);text-align:center;line-height:1.6;">
+      ⚡ Play your game, then come back to this screen and log your result
+    </div>
     <div class="outcome-group">
       <label class="oc-label" onclick="logResult('${myMatch.id}','${myName}','${opp}')"><div class="oc-pill win">⚡ I Won</div></label>
       <label class="oc-label" onclick="logResult('${myMatch.id}','${opp}','${myName}')"><div class="oc-pill loss">💀 I Lost</div></label>
@@ -1787,26 +1801,73 @@ window.logOut = async () => {
 
 function restoreSession() {
   if (!myName || !myRole) return;
+
   // Restore name in dropdown
   const sel = document.getElementById('main-name-select');
-  if ([...sel.options].some(o => o.value === myName)) sel.value = myName;
+  if (sel && [...sel.options].some(o => o.value === myName)) sel.value = myName;
 
-  // Show nav bar and logout button since user is already signed in
+  // Show nav bar and logout button
   document.getElementById('main-nav').style.display = 'flex';
   document.getElementById('how-to-play').style.display = 'none';
+  document.getElementById('step-role').style.display = 'none';
   document.getElementById('logout-btn').style.display = 'block';
 
-  // Determine which step to show based on tournament state
-  if (tState?.status === 'active') {
-    if (myRole === 'player') showStep('active-player');
-    else { showStep('active-spec'); renderVoteMatches(); }
-  } else {
-    showStep('attract');
-    updateAttractBadge();
-    startAttractCanvas();
+  // Show a reconnecting message immediately so user knows app is loading
+  showReconnecting();
+
+  // Wait for Firestore state to load (retry up to 3s)
+  let attempts = 0;
+  const tryRestore = setInterval(() => {
+    attempts++;
+    if (tState || attempts > 15) {
+      clearInterval(tryRestore);
+      applySessionState();
+    }
+  }, 200);
+}
+
+function showReconnecting() {
+  // Show attract screen with reconnecting message while state loads
+  document.getElementById('attract-wrap').style.display = 'block';
+  const badge = document.getElementById('a-badge');
+  if (badge) badge.textContent = `Welcome back, ${myName}! Reconnecting…`;
+  const blink = document.querySelector('.a-blink');
+  if (blink) blink.textContent = '— Restoring your session —';
+  startAttractCanvas();
+}
+
+function applySessionState() {
+  if (!myName || !myRole) return;
+
+  if (myRole === 'host') {
+    stopAttractCanvas();
+    document.getElementById('attract-wrap').style.display = 'none';
+    document.getElementById('host-pin-gate').style.display = 'none';
+    document.getElementById('host-panel').style.display = 'block';
+    showScreen('s-host');
+    return;
   }
-  // Hide role selector since already registered
-  document.getElementById('step-role').style.display = 'none';
+
+  if (tState?.status === 'active') {
+    // Tournament is running — go straight to match or vote screen
+    stopAttractCanvas();
+    if (myRole === 'player') {
+      showStep('active-player');
+      renderPlayerMatch();
+    } else {
+      showStep('active-spec');
+      renderVoteMatches();
+    }
+  } else if (tState?.status === 'complete') {
+    // Tournament over — show standings
+    stopAttractCanvas();
+    showScreen('s-standings');
+  } else {
+    // Waiting for host — show attract screen
+    updateAttractBadge();
+    const blink = document.querySelector('.a-blink');
+    if (blink) blink.textContent = '— Waiting for host to start —';
+  }
 }
 
 // ── Firestore listeners ────────────────────────────────
@@ -1826,6 +1887,16 @@ onSnapshot(doc(db,'tournament','state'), snap => {
       stopAttractCanvas();
       if(myRole==='player'){showStep('active-player');renderPlayerMatch();}
       else{showStep('active-spec');renderVoteMatches();}
+    }
+  }
+
+  // If user just rescanned QR and session is restoring, apply state now
+  if (typeof applySessionState === 'function' && myName && myRole) {
+    const attract = document.getElementById('attract-wrap');
+    const badge = document.getElementById('a-badge');
+    if (attract && attract.style.display !== 'none' && 
+        badge && badge.textContent.includes('Reconnecting')) {
+      applySessionState();
     }
   }
 });
